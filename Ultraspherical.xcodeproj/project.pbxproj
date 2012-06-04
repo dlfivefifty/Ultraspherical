@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB76157CCC3D00C466D4 /* main.cpp */; };
 		17EBCB79157CCC3D00C466D4 /* Ultraspherical.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */; };
-		17EBCB84157CCD3600C466D4 /* BandedMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB83157CCD3600C466D4 /* BandedMatrix.cpp */; };
+		17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */; };
 		17EBCB89157CCFAC00C466D4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17EBCB88157CCFAC00C466D4 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,8 +30,8 @@
 		17EBCB72157CCC3D00C466D4 /* Ultraspherical */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ultraspherical; sourceTree = BUILT_PRODUCTS_DIR; };
 		17EBCB76157CCC3D00C466D4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Ultraspherical.1; sourceTree = "<group>"; };
-		17EBCB83157CCD3600C466D4 /* BandedMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BandedMatrix.cpp; sourceTree = "<group>"; };
-		17EBCB87157CCDDB00C466D4 /* BandedMatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BandedMatrix.h; path = ../BandedMatrix.h; sourceTree = "<group>"; };
+		17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilledBandedMatrix.cpp; sourceTree = "<group>"; };
+		17EBCB87157CCDDB00C466D4 /* FilledBandedMatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FilledBandedMatrix.h; path = ../FilledBandedMatrix.h; sourceTree = "<group>"; };
 		17EBCB88157CCFAC00C466D4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,9 +67,9 @@
 			isa = PBXGroup;
 			children = (
 				17EBCB76157CCC3D00C466D4 /* main.cpp */,
-				17EBCB87157CCDDB00C466D4 /* BandedMatrix.h */,
+				17EBCB87157CCDDB00C466D4 /* FilledBandedMatrix.h */,
 				17EBCB88157CCFAC00C466D4 /* Accelerate.framework */,
-				17EBCB83157CCD3600C466D4 /* BandedMatrix.cpp */,
+				17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */,
 				17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */,
 			);
 			path = Ultraspherical;
@@ -127,7 +127,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */,
-				17EBCB84157CCD3600C466D4 /* BandedMatrix.cpp in Sources */,
+				17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +154,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/solver/Projects/Ultraspherical/boost_1_49_0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -174,6 +175,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/solver/Projects/Ultraspherical/boost_1_49_0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
