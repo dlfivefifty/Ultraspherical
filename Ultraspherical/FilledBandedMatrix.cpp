@@ -135,6 +135,7 @@ FilledRow FilledBandedMatrix::createRow(int k)
 {
     FilledRow newrow;
     
+    double w = 1;
     
     if (k == 0) {
         newrow.push_back(1);
@@ -143,14 +144,14 @@ FilledRow FilledBandedMatrix::createRow(int k)
         newrow.setFill(1);
     }
     else if (k == 1) {
+        newrow.push_back(w);
         newrow.push_back(1);
-        newrow.push_back(1);
-        newrow.push_back(-.5);
+        newrow.push_back(-.5*w);
         newrow.setFill(0);
     } else {
-        newrow.push_back(.5);
+        newrow.push_back(.5*w);
         newrow.push_back(k);
-        newrow.push_back(-.5);        
+        newrow.push_back(-.5*w);        
         newrow.setFill(0);        
     }
 

@@ -13,18 +13,18 @@
 #include <stdlib.h>
 
 
-void printvec(vector<double> c)
-{
-    cout <<"c: ";
-    vector<double>::iterator it;
-    
-    for(it = c.begin(); it < c.end(); it++)
-    {
-        cout << *it << ", ";
-    }
-    
-    cout << endl;
-}
+//void printvec(vector<double> c)
+//{
+//    cout <<"c: ";
+//    vector<double>::iterator it;
+//    
+//    for(it = c.begin(); it < c.end(); it++)
+//    {
+//        cout << *it << ", ";
+//    }
+//    
+//    cout << endl;
+//}
 
 
 
@@ -36,11 +36,11 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     int col = -1;
     int row1;
     
-    printvec(c);
+//    printvec(c);
     
     while (error > 10E-17) {
-        cout<<"B: "<<endl;B.print();        
-    printvec(c);   
+//        cout<<"B: "<<endl;B.print();        
+//    printvec(c);   
 
         
         col++;
@@ -80,10 +80,10 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 
     }
     
-	std:cout<<"R: "<<endl;
-    B.print();
+//	std:cout<<"R: "<<endl;
+//    B.print();
     
-    printvec(c);       
+//    printvec(c);       
     
     
     vector<double> r = c;
@@ -105,7 +105,8 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
         }
     }
     
-    printvec(r);
     
-    return c;
+//    printvec(r);
+    
+    return r;
 }
