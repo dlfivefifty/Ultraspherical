@@ -27,6 +27,7 @@ void printvec(vector<double> c)
 }
 
 
+
 vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 {  
     B.increaseUpper(-B.lower());
@@ -79,7 +80,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 
     }
     
-std:cout<<"R: "<<endl;
+	std:cout<<"R: "<<endl;
     B.print();
     
     printvec(c);       
@@ -88,17 +89,23 @@ std:cout<<"R: "<<endl;
     vector<double> r = c;
     
     r[col] = c[col]/B.getEntry(col, col);
-//    double s = r[col];
-//    int rbnd;    
-//    for(int row = col - 1; i >= 0; col--)
-//    {
-//        if(row + B.upper() >= c.size())
-//        {
-//            rbnd = c.size();
-////            r[row] = (c[row] - B.getEntry(row1, <#int#>)
-//        }
-//    }
+    double s = r[col];
+    int rbnd;    
+    for(int row = col - 1; row >= 0; row--)
+    {
+        rbnd = B.rightIndex(row);
+        if(rbnd >= c.size()) {
+            rbnd = c.size()-1;
+            
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,r))/B.getEntry(row,row);
+        } else {            
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,r) - s*B.getEntry(row,rbnd+1))/B.getEntry(row,row);
+            
+            s+=r[rbnd];
+        }
+    }
     
+    printvec(r);
     
     return c;
 }

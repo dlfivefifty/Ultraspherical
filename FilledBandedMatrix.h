@@ -58,6 +58,9 @@ public:
     
     
     void applyGivens(int,int,double,double);    
+    
+    
+    double rowDot(int,int,int,vector<double>);
 };
 
 

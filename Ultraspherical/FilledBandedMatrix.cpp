@@ -225,3 +225,16 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
         setEntry(row2, j, val2);         
     }
 }
+
+
+double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> r)
+{
+    double ret = 0;
+    
+    for(int j = colm; j <=colM; j++)
+    {
+        ret+=getEntry(row,j)*r[j];
+    }
+    
+    return ret;
+}
