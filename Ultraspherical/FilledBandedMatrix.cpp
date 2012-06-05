@@ -37,6 +37,11 @@ void FilledRow::setFill(double val)
     fill = val;
 }
 
+double FilledRow::getFill()
+{
+    return fill;
+}
+
 void FilledRow::push_back(double val)
 {    
     entries.push_back(val);
@@ -64,7 +69,7 @@ int FilledBandedMatrix::upper()
 {
     // Returns zero if the band ends on the diagonal
     // 1 if there is one superdiagonal...
-    return rows.front().size() + index - 1;
+    return rows.front().size() - index - 1;
 }
 
 void FilledBandedMatrix::increaseUpper()
@@ -190,6 +195,8 @@ void FilledBandedMatrix::print()
 
 void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
 {
+    cout <<"rightind: "<<rightIndex(row1)<<endl;
+    
     for(int j = leftIndex(row2); j <= rightIndex(row1); j++)
     {
         double en1 = getEntry(row1, j);
@@ -199,7 +206,9 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
         double val2 = -b*en1+a*en2;            
         
         setEntry(row1, j, val1);
-        setEntry(row2, j, val2);        
+        setEntry(row2, j, val2);  
+        
+        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
     }
     
     double en1 = getEntry(row1, rightIndex(row1)+1);

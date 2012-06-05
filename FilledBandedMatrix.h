@@ -24,7 +24,8 @@ public:
     void setEntry(int,double);  
     void push_back(double);
     void setFill(double);
-    void increaseSize();        
+    void increaseSize();       
+    double getFill();
 };
 
 

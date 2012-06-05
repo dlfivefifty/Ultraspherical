@@ -24,19 +24,29 @@ int main(int argc, const char * argv[])
     bnd.increaseSize();
     bnd.increaseSize();
     
+    bnd.increaseUpper();
+    
+    cout<<"B: "<<endl;
         bnd.print();
     
-    vector<double> b;
-    b.push_back(1);
-    vector<double> c = QRSolve(bnd,b);
+    cout<<"GB: "<<endl;    
+    bnd.applyGivens(0,1,0,1);
+    bnd.print();
     
     
-    cout<<"b "<<b.size()<<endl;
-    cout<<"c "<<c.size()<<endl;
-    
-    
-    cout<<bnd.size()<<endl;
-    
+//    
+//    
+//    vector<double> b;
+//    b.push_back(1);
+//    vector<double> c = QRSolve(bnd,b);
+//    
+//    
+//    cout<<"b "<<b.size()<<endl;
+//    cout<<"c "<<c.size()<<endl;
+//    
+//    
+//    cout<<bnd.size()<<endl;
+//    
     
     
     return 0;
