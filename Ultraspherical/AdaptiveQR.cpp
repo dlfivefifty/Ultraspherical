@@ -9,8 +9,22 @@
 #include "AdaptiveQR.h"
 
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
+void printvec(vector<double> c)
+{
+    cout <<"c: ";
+    vector<double>::iterator it;
+    
+    for(it = c.begin(); it < c.end(); it++)
+    {
+        cout << *it << ", ";
+    }
+    
+    cout << endl;
+}
 
 
 vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
@@ -21,12 +35,17 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     int col = -1;
     int row1;
     
+    printvec(c);
     
     while (error > 10E-17) {
+        cout<<"B: "<<endl;B.print();        
+    printvec(c);   
+
+        
         col++;
         row1 = col;
         
-        error = 0;
+        error = fabs(c[row1]);
         
         for(int row2 = row1 + 1; row2 < B.columnSize(col); row2++)
         {
@@ -34,7 +53,9 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
             if(row2 >= c.size()) {
                 c.push_back(0);
             }
-            
+            if(row2 >= B.size()) {
+                B.increaseSize();
+            }
             
             double a = B.getEntry(row1, col);
             double b = B.getEntry(row2, col);
@@ -43,21 +64,41 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
             a = a/norm;
             b = b/norm;
             
+            double c1 = c[row1];
+            double c2 = c[row2];
             
-            c[row1] = a*c[row1] + b*c[row2];
-            c[row2] = -b*c[row1] + a*c[row2];
+            c[row1] = a*c1 + b*c2;
+            c[row2] = -b*c1 + a*c2;
             
-            error = max(error,c[row1]);
-            error = max(error,c[row2]);
+            error = max(error,fabs(c[row1]));
+            error = max(error,fabs(c[row2]));
             
             
-            B.applyGivens(row1,row2,a,b);            
+            B.applyGivens(row1,row2,a,b);   
         }
 
     }
     
 std:cout<<"R: "<<endl;
     B.print();
+    
+    printvec(c);       
+    
+    
+    vector<double> r = c;
+    
+    r[col] = c[col]/B.getEntry(col, col);
+//    double s = r[col];
+//    int rbnd;    
+//    for(int row = col - 1; i >= 0; col--)
+//    {
+//        if(row + B.upper() >= c.size())
+//        {
+//            rbnd = c.size();
+////            r[row] = (c[row] - B.getEntry(row1, <#int#>)
+//        }
+//    }
+    
     
     return c;
 }

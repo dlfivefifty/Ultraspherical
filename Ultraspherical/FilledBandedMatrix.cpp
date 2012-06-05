@@ -195,7 +195,7 @@ void FilledBandedMatrix::print()
 
 void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
 {
-    cout <<"rightind: "<<rightIndex(row1)<<endl;
+//    cout <<"rightind: "<<rightIndex(row1)<<endl;
     
     for(int j = leftIndex(row2); j <= rightIndex(row1); j++)
     {
@@ -208,7 +208,7 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
         setEntry(row1, j, val1);
         setEntry(row2, j, val2);  
         
-        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
+//        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
     }
     
     double en1 = getEntry(row1, rightIndex(row1)+1);
