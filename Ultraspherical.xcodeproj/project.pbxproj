@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17444F57157DDC2900E55C83 /* AdaptiveQR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */; };
 		17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB76157CCC3D00C466D4 /* main.cpp */; };
 		17EBCB79157CCC3D00C466D4 /* Ultraspherical.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */; };
 		17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */; };
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		17444F54157DDC1F00E55C83 /* AdaptiveQR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdaptiveQR.h; sourceTree = "<group>"; };
+		17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptiveQR.cpp; sourceTree = "<group>"; };
 		17EBCB72157CCC3D00C466D4 /* Ultraspherical */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ultraspherical; sourceTree = BUILT_PRODUCTS_DIR; };
 		17EBCB76157CCC3D00C466D4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Ultraspherical.1; sourceTree = "<group>"; };
@@ -70,6 +73,8 @@
 				17EBCB87157CCDDB00C466D4 /* FilledBandedMatrix.h */,
 				17EBCB88157CCFAC00C466D4 /* Accelerate.framework */,
 				17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */,
+				17444F54157DDC1F00E55C83 /* AdaptiveQR.h */,
+				17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */,
 				17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */,
 			);
 			path = Ultraspherical;
@@ -128,6 +133,7 @@
 			files = (
 				17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */,
 				17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */,
+				17444F57157DDC2900E55C83 /* AdaptiveQR.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

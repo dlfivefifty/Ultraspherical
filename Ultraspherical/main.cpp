@@ -6,29 +6,39 @@
 //  Copyright (c) 2012 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#include <iostream>
-#include <boost/numeric/ublas/banded.hpp>
-#include <boost/numeric/ublas/io.hpp>
+
+#include "FilledBandedMatrix.h"
+
+#include "AdaptiveQR.h"
+
+
 
 int main(int argc, const char * argv[])
-{
-
-    using namespace boost::numeric::ublas;
-//    banded_matrix<double> m (6, 6, 1, 1);
-//    for (signed i = 0; i < signed (m.size1 ()); ++ i)
-//        for (signed j = std::max (i - 1, 0); j < std::min (i + 2, signed (m.size2 ())); ++ j)
-//            m (i, j) = 3 * i + j;
-//    std::cout << m << std::endl;
-//    std::cout << m.lower() << std::endl;
-//    std::cout << m.upper() << std::endl;
+{    
+    FilledBandedMatrix bnd(-1,1);
     
-    banded_matrix<double> m (6, 6);
+    bnd.increaseSize();
+    bnd.increaseSize();
+    bnd.increaseSize();
+    bnd.increaseSize();
+    bnd.increaseSize();
+    bnd.increaseSize();
     
-    m.resize(6,6);
-    m(3,3) = 3;
+        bnd.print();
     
-    std::cout << m(3,3) << std::endl;
-
+    vector<double> b;
+    b.push_back(1);
+    vector<double> c = QRSolve(bnd,b);
+    
+    
+    cout<<"b "<<b.size()<<endl;
+    cout<<"c "<<c.size()<<endl;
+    
+    
+    cout<<bnd.size()<<endl;
+    
+    
+    
     return 0;
 }
 
