@@ -1,0 +1,230 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17444F57157DDC2900E55C83 /* AdaptiveQR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */; };
+		17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB76157CCC3D00C466D4 /* main.cpp */; };
+		17EBCB79157CCC3D00C466D4 /* Ultraspherical.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */; };
+		17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */; };
+		17EBCB89157CCFAC00C466D4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17EBCB88157CCFAC00C466D4 /* Accelerate.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		17EBCB70157CCC3D00C466D4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				17EBCB79157CCC3D00C466D4 /* Ultraspherical.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		17444F54157DDC1F00E55C83 /* AdaptiveQR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdaptiveQR.h; sourceTree = "<group>"; };
+		17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AdaptiveQR.cpp; sourceTree = "<group>"; };
+		17EBCB72157CCC3D00C466D4 /* Ultraspherical */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ultraspherical; sourceTree = BUILT_PRODUCTS_DIR; };
+		17EBCB76157CCC3D00C466D4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Ultraspherical.1; sourceTree = "<group>"; };
+		17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilledBandedMatrix.cpp; sourceTree = "<group>"; };
+		17EBCB87157CCDDB00C466D4 /* FilledBandedMatrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FilledBandedMatrix.h; path = ../FilledBandedMatrix.h; sourceTree = "<group>"; };
+		17EBCB88157CCFAC00C466D4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		17EBCB6F157CCC3D00C466D4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17EBCB89157CCFAC00C466D4 /* Accelerate.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		17EBCB67157CCC3C00C466D4 = {
+			isa = PBXGroup;
+			children = (
+				17EBCB75157CCC3D00C466D4 /* Ultraspherical */,
+				17EBCB73157CCC3D00C466D4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		17EBCB73157CCC3D00C466D4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				17EBCB72157CCC3D00C466D4 /* Ultraspherical */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		17EBCB75157CCC3D00C466D4 /* Ultraspherical */ = {
+			isa = PBXGroup;
+			children = (
+				17EBCB76157CCC3D00C466D4 /* main.cpp */,
+				17EBCB87157CCDDB00C466D4 /* FilledBandedMatrix.h */,
+				17EBCB88157CCFAC00C466D4 /* Accelerate.framework */,
+				17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */,
+				17444F54157DDC1F00E55C83 /* AdaptiveQR.h */,
+				17444F56157DDC2900E55C83 /* AdaptiveQR.cpp */,
+				17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */,
+			);
+			path = Ultraspherical;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		17EBCB71157CCC3D00C466D4 /* Ultraspherical */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17EBCB7C157CCC3D00C466D4 /* Build configuration list for PBXNativeTarget "Ultraspherical" */;
+			buildPhases = (
+				17EBCB6E157CCC3D00C466D4 /* Sources */,
+				17EBCB6F157CCC3D00C466D4 /* Frameworks */,
+				17EBCB70157CCC3D00C466D4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Ultraspherical;
+			productName = Ultraspherical;
+			productReference = 17EBCB72157CCC3D00C466D4 /* Ultraspherical */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		17EBCB69157CCC3C00C466D4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "School of Mathematics and Statistics, The University of Sydney";
+			};
+			buildConfigurationList = 17EBCB6C157CCC3C00C466D4 /* Build configuration list for PBXProject "Ultraspherical" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 17EBCB67157CCC3C00C466D4;
+			productRefGroup = 17EBCB73157CCC3D00C466D4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				17EBCB71157CCC3D00C466D4 /* Ultraspherical */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		17EBCB6E157CCC3D00C466D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17EBCB77157CCC3D00C466D4 /* main.cpp in Sources */,
+				17EBCB84157CCD3600C466D4 /* FilledBandedMatrix.cpp in Sources */,
+				17444F57157DDC2900E55C83 /* AdaptiveQR.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		17EBCB7A157CCC3D00C466D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/solver/Projects/Ultraspherical/boost_1_49_0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		17EBCB7B157CCC3D00C466D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/solver/Projects/Ultraspherical/boost_1_49_0;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		17EBCB7D157CCC3D00C466D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		17EBCB7E157CCC3D00C466D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17EBCB6C157CCC3C00C466D4 /* Build configuration list for PBXProject "Ultraspherical" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17EBCB7A157CCC3D00C466D4 /* Debug */,
+				17EBCB7B157CCC3D00C466D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		17EBCB7C157CCC3D00C466D4 /* Build configuration list for PBXNativeTarget "Ultraspherical" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17EBCB7D157CCC3D00C466D4 /* Debug */,
+				17EBCB7E157CCC3D00C466D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 17EBCB69157CCC3C00C466D4 /* Project object */;
+}
