@@ -90,16 +90,20 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     
     r[col] = c[col]/B.getEntry(col, col);
     double s = r[col];
-    int rbnd;    
-    for(int row = col - 1; row >= 0; row--)
+    int rbnd;  
+    int csize = col+1;
+    int upp = B.upper();
+
+    for(int row = csize - 1; row >= 0; row--)
     {
-        rbnd = B.rightIndex(row);
-        if(rbnd >= c.size()) {
-            rbnd = c.size()-1;
+        rbnd = row+upp;
+        if(rbnd >= csize) {
+            rbnd = csize-1;
             
-            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,r))/B.getEntry(row,row);
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r))/B.getEntry(row,row);
         } else {            
-            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,r) - s*B.getEntry(row,rbnd+1))/B.getEntry(row,row);
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r) - s*B.getEntry(row,rbnd+1))/B.getEntry(row,row);
+            
             
             s+=r[rbnd];
         }

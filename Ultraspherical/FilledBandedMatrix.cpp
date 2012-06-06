@@ -56,6 +56,7 @@ void FilledRow::increaseSize()
 FilledBandedMatrix::FilledBandedMatrix(int low,int up)
 {
     index = -low;
+    rowSize = up-low+1;
 }
 
 
@@ -69,7 +70,7 @@ int FilledBandedMatrix::upper()
 {
     // Returns zero if the band ends on the diagonal
     // 1 if there is one superdiagonal...
-    return rows.front().size() - index - 1;
+    return rowSize - index - 1;
 }
 
 void FilledBandedMatrix::increaseUpper()
@@ -79,6 +80,8 @@ void FilledBandedMatrix::increaseUpper()
     {
         it->increaseSize();
     }
+    
+    rowSize++;
 }
 
 void FilledBandedMatrix::increaseUpper(int k)
@@ -87,6 +90,7 @@ void FilledBandedMatrix::increaseUpper(int k)
     {
         increaseUpper();
     }
+    rowSize+=k;
 }
 
 int FilledBandedMatrix::size()
@@ -138,20 +142,26 @@ FilledRow FilledBandedMatrix::createRow(int k)
     double w = 1;
     
     if (k == 0) {
-        newrow.push_back(1);
-        newrow.push_back(1);
-        newrow.push_back(1);
+        for(int i = 0; i < rowSize; i++) {
+            newrow.push_back(1);
+        }
         newrow.setFill(1);
     }
     else if (k == 1) {
         newrow.push_back(w);
         newrow.push_back(1);
         newrow.push_back(-.5*w);
+        for(int i = 3; i < rowSize; i++) {  
+            newrow.push_back(0);
+        }
         newrow.setFill(0);
     } else {
         newrow.push_back(.5*w);
         newrow.push_back(k);
-        newrow.push_back(-.5*w);        
+        newrow.push_back(-.5*w);  
+        for(int i = 3; i < rowSize; i++) {  
+            newrow.push_back(0);
+        }        
         newrow.setFill(0);        
     }
 
@@ -228,13 +238,18 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, double a, double b)
 }
 
 
-double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> r)
+double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> *r)
 {
     double ret = 0;
     
+    FilledRow fr = rows[row];
+    
+    
+    
+    
     for(int j = colm; j <=colM; j++)
     {
-        ret+=getEntry(row,j)*r[j];
+        ret+=fr[j - row + index]*(*r)[j];
     }
     
     return ret;

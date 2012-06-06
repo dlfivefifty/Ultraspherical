@@ -53,7 +53,7 @@ int main(int argc, const char * argv[])
 //    
     vector<double> b;
     
-    for(int i = 0; i < 30000; i++)
+    for(long i = 0; i < 200000; i++)
         b.push_back(1);
     
     vector<double> c = QRSolve(bnd,b);
@@ -63,7 +63,7 @@ int main(int argc, const char * argv[])
     cout<<"time: "<<tottime<<endl;    
     cout<<"size: "<<c.size()<<endl;
     
-    cout<<"size/time: "<<c.size()/(tottime*10000)<<endl;    
+    cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
 //    printvec(c);
     
     
