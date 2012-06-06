@@ -13,4 +13,8 @@
 
 vector<double> QRSolve(FilledBandedMatrix,vector<double>);
 
+void printvec(vector<double>);
+
+
 #endif
+

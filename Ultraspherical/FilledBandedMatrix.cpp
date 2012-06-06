@@ -11,6 +11,17 @@
 
 #include <math.h>
 
+
+
+
+FilledBandedMatrix::FilledBandedMatrix(int low,int up)
+{
+    index = -low;
+    rowSize = up-low+1;
+    
+    increaseSize();
+}
+
 int FilledRow::size()
 {
     return entries.size();
@@ -53,11 +64,6 @@ void FilledRow::increaseSize()
 }
 
 
-FilledBandedMatrix::FilledBandedMatrix(int low,int up)
-{
-    index = -low;
-    rowSize = up-low+1;
-}
 
 
 int FilledBandedMatrix::lower()
@@ -90,7 +96,6 @@ void FilledBandedMatrix::increaseUpper(int k)
     {
         increaseUpper();
     }
-    rowSize+=k;
 }
 
 int FilledBandedMatrix::size()
@@ -139,7 +144,7 @@ FilledRow FilledBandedMatrix::createRow(int k)
 {
     FilledRow newrow;
     
-    double w = 1;
+    double w = 15;
     
     if (k == 0) {
         for(int i = 0; i < rowSize; i++) {

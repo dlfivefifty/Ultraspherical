@@ -12,18 +12,7 @@
 #include "AdaptiveQR.h"
 #include <time.h>
 
-void printvec(vector<double> c)
-{
-    cout <<"c: ";
-    vector<double>::iterator it;
-    
-    for(it = c.begin(); it < c.end(); it++)
-    {
-        cout << *it << ", ";
-    }
-    
-    cout << endl;
-}
+
 
 
 int main(int argc, const char * argv[])
@@ -31,18 +20,18 @@ int main(int argc, const char * argv[])
     FilledBandedMatrix bnd(-1,1);
     clock_t t1; clock_t t2;
     t1 = clock();
+
     
-    bnd.increaseSize();
-    bnd.increaseSize();
-    bnd.increaseSize();
-    bnd.increaseSize();
-    bnd.increaseSize();
-    bnd.increaseSize();
+    
     
     bnd.increaseUpper();
+//    bnd.increaseSize();
+//    bnd.increaseSize();
+//    bnd.increaseSize();    
     
-//    cout<<"B: "<<endl;
-//        bnd.print();
+    
+    cout<<"B: "<<endl;
+        bnd.print();
 //    
 //    cout<<"GB: "<<endl;    
 //    bnd.applyGivens(0,1,0,1);
@@ -53,7 +42,7 @@ int main(int argc, const char * argv[])
 //    
     vector<double> b;
     
-    for(long i = 0; i < 200000; i++)
+    for(long i = 0; i < 1; i++)
         b.push_back(1);
     
     vector<double> c = QRSolve(bnd,b);
@@ -64,7 +53,7 @@ int main(int argc, const char * argv[])
     cout<<"size: "<<c.size()<<endl;
     
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
-//    printvec(c);
+    printvec(c);
     
     
     return 0;

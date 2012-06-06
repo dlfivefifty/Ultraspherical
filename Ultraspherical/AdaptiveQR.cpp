@@ -13,18 +13,18 @@
 #include <stdlib.h>
 
 
-//void printvec(vector<double> c)
-//{
-//    cout <<"c: ";
-//    vector<double>::iterator it;
-//    
-//    for(it = c.begin(); it < c.end(); it++)
-//    {
-//        cout << *it << ", ";
-//    }
-//    
-//    cout << endl;
-//}
+void printvec(vector<double> c)
+{
+    cout <<"c: ";
+    vector<double>::iterator it;
+    
+    for(it = c.begin(); it < c.end(); it++)
+    {
+        cout << *it << ", ";
+    }
+    
+    cout << endl;
+}
 
 
 
@@ -50,6 +50,9 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
         
         for(int row2 = row1 + 1; row2 < B.columnSize(col); row2++)
         {
+//            printvec(c);
+//            cout<<"B: "<<endl;
+//            B.print();            
             
             if(row2 >= c.size()) {
                 c.push_back(0);
