@@ -114,9 +114,10 @@ int FilledRow::rightIndex()
 
 
 
-FilledBandedMatrix::FilledBandedMatrix(int low)
+FilledBandedMatrix::FilledBandedMatrix(int low,FilledRow (*rgen)(int))
 {
     lowerIndex = low;
+    rowGenerator = rgen;
     
     increaseSize();
 }
@@ -174,33 +175,7 @@ double FilledBandedMatrix::getEntry(int i,int j)
 
 FilledRow FilledBandedMatrix::createRow(int k)
 {
-    
-    
-    double w = 1;
-    
-    if (k == 0) {
-        FilledRow newrow(0);        
-        newrow.setFill(1);
-        return newrow;
-    }
-    else if (k == 1) {
-        FilledRow newrow(0);               
-        newrow.push_back(w);
-        newrow.push_back(1);
-        newrow.push_back(-.5*w);
-        newrow.setFill(0);
-        
-        return newrow;
-    } else {
-        FilledRow newrow(k-1);       
-        
-        newrow.push_back(.5*w);
-        newrow.push_back(k);
-        newrow.push_back(-.5*w);       
-        newrow.setFill(0);        
-        
-        return newrow;
-    }
+    return (*rowGenerator)(k);
 }
 
 void FilledBandedMatrix::increaseSize()

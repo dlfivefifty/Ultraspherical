@@ -42,10 +42,11 @@ class FilledBandedMatrix
 {
     vector<FilledRow> rows;
     int lowerIndex;
+    FilledRow (*rowGenerator)(int);
     
     
 public:
-    FilledBandedMatrix(int);
+    FilledBandedMatrix(int, FilledRow (*)(int));
     int lower();
     void dropFirst(int row);
     int size();
