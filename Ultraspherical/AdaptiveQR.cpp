@@ -85,7 +85,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
             
             r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r))/B.getEntry(row,row);
         } else {            
-            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r) - s*B.getEntry(row,rbnd+1))/B.getEntry(row,row);
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r) - s*B[row].getFill())/B.getEntry(row,row);
             
             
             s+=r[rbnd];

@@ -47,7 +47,6 @@ class FilledBandedMatrix
 public:
     FilledBandedMatrix(int);
     int lower();
-    int upper();
     void dropFirst(int row);
     int size();
     int columnSize();
