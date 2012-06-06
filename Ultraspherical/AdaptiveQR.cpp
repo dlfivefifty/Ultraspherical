@@ -30,7 +30,7 @@ void printvec(vector<double> c)
 
 vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 {  
-    B.increaseUpper(-B.lower());
+//    B.increaseUpper(-B.lower());
     
     double error = 1;
     int col = -1;
@@ -61,24 +61,10 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
                 B.increaseSize();
             }
             
-            double a = B.getEntry(row1, col);
-            double b = B.getEntry(row2, col);
-            double norm = sqrt(a*a + b*b);
-            
-            a = a/norm;
-            b = b/norm;
-            
-            double c1 = c[row1];
-            double c2 = c[row2];
-            
-            c[row1] = a*c1 + b*c2;
-            c[row2] = -b*c1 + a*c2;
+            B.applyGivens(row1,row2,&c);           
             
             error = max(error,fabs(c[row1]));
             error = max(error,fabs(c[row2]));
-            
-            
-            B.applyGivens(row1,row2,a,b);   
         }
 
     }
@@ -95,7 +81,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     double s = r[col];
     int rbnd;  
     int csize = col+1;
-    int upp = B.upper();
+    int upp = B.back().upper();
 
     for(int row = csize - 1; row >= 0; row--)
     {

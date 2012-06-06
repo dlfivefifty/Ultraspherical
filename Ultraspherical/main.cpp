@@ -55,6 +55,8 @@ int main(int argc, const char * argv[])
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
     printvec(c);
     
+//    
+//    cout<<"lam " <<lam(10)<<endl;
     
     return 0;
 }
