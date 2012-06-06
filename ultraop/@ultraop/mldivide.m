@@ -1,7 +1,10 @@
 function u = mldivide(N,rhs,varargin)
-% MLDIVIDE(N,RHS) This solves the linear system N*u=RHS where N
+% \ mldivide, backslash
+%
+% MLDIVIDE(N,RHS) solves the linear system N*u=RHS, for u,  where N
 % is a ultraop object and rhs is either a scalar or a chebfun
-% object.
+% object. If rhs is a scalar then the rhs is converted into constant valued
+% chebfun.
 
 cfs = N.num;
 if(N.order==1)

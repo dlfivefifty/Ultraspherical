@@ -1,16 +1,20 @@
-function y = mtimes(N,y)
-% Computes N*y.
-if(~isa(y,'chebfun'))
+function f = mtimes(N,f)
+% * mtimes, forward action of an ultraop
+%
+% N*f returns the chebfun resulting from applying the operator N to the
+% chebfun f. 
+
+if(~isa(f,'chebfun'))
     error('Ultraop:mtimes','Not a chebfun\n');
 else
-    cy=fliplr(chebpoly(y));
-    ly=length(cy);
+    cf=fliplr(chebpoly(yf));
+    lf=length(cf);
     %cy = prolong(cy,ly);
-    y = realisation(N,ly)*cy';
+    f = realisation(N,lf)*cf';
     %y = truncate(y,eps);
     for s = N.order-1:-1:0
-        y=transMat(ly,s)\y;
+        f=transMat(lf,s)\f;
     end
-    y = chebfun(flipud(y),'coeffs');
+    f = chebfun(flipud(f),'coeffs');
 end
 end

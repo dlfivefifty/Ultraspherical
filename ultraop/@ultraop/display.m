@@ -1,5 +1,6 @@
 function display(N)
 % DISPLAY Pretty-print a ultraop.
+%
 % DISPLAY is called automatically when a statement that results in a ultraop
 % output is not terminated with a semicolon.
 

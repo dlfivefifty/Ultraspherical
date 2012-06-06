@@ -1,3 +1,10 @@
+% SUBSREF,  subassign for an ultraop object. 
+% 
+% N(n) returned an n by n discretisation of the ultraop N. 
+% 
+% N.property returns the value of the property for the ultraop N. 
+
+
 function y=subsref(N,int)
 % Implement a special subscripted assignment
 switch int(1).type
