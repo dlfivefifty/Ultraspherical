@@ -30,18 +30,13 @@ void printvec(vector<double> c)
 
 vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 {  
-//    B.increaseUpper(-B.lower());
     
     double error = 1;
     int col = -1;
     int row1;
     
-//    printvec(c);
     
     while (error > 10E-17) {
-//        cout<<"B: "<<endl;B.print();        
-//    printvec(c);   
-
         
         col++;
         row1 = col;
@@ -50,9 +45,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
         
         for(int row2 = row1 + 1; row2 < B.columnSize(col); row2++)
         {
-//            printvec(c);
-//            cout<<"B: "<<endl;
-//            B.print();            
+            
             
             if(row2 >= c.size()) {
                 c.push_back(0);
@@ -61,18 +54,20 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
                 B.increaseSize();
             }
             
-            B.applyGivens(row1,row2,&c);           
+            
+            
+            B.applyGivens(row1,row2,&c);   
             
             error = max(error,fabs(c[row1]));
-            error = max(error,fabs(c[row2]));
+            error = max(error,fabs(c[row2]));            
         }
-
+        
     }
     
-//	std:cout<<"R: "<<endl;
-//    B.print();
+    //	std:cout<<"R: "<<endl;
+    //    B.print();
     
-//    printvec(c);       
+    //    printvec(c);       
     
     
     vector<double> r = c;
@@ -81,11 +76,10 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     double s = r[col];
     int rbnd;  
     int csize = col+1;
-    int upp = B.back().upper();
-
+    
     for(int row = csize - 1; row >= 0; row--)
     {
-        rbnd = row+upp;
+        rbnd = B.rightIndex(row);
         if(rbnd >= csize) {
             rbnd = csize-1;
             
@@ -99,7 +93,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
     }
     
     
-//    printvec(r);
+    //    printvec(r);
     
     return r;
 }

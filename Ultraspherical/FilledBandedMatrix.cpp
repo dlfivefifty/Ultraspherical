@@ -11,7 +11,6 @@
 
 #include <math.h>
 
-
 #define SHIFTROW(j)(j - index)
 #define FILLROWQ(j)(j - index >= size())
 
@@ -29,6 +28,8 @@ int FilledRow::size()
 
 double FilledRow::operator[](int j)
 {
+    //    cout<<"size(): "<<entries.size()<<endl;
+    
     if (FILLROWQ(j))
         return fill;
     else if(SHIFTROW(j) < 0)
@@ -40,9 +41,8 @@ double FilledRow::operator[](int j)
 
 void FilledRow::setEntry(int j,double val)
 {
-    setEntry(j, val,false);
+    setEntry(j,val,false);
 }
-
 void FilledRow::setEntry(int j,double val,bool increasesize)
 {    
     if(SHIFTROW(j) < 0)
@@ -51,15 +51,17 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
     if(increasesize == false) {
         if(FILLROWQ(j))
             throw "Set increasesize to true to change fill rows";
-    
+        
     }
     else {
         increaseSize(j);
     }
     
     
-
-    entries[j] = val;
+    if(SHIFTROW(j) > size())
+        setFill(val);
+    else
+        entries[SHIFTROW(j)] = val;
 }
 
 void FilledRow::setFill(double val)
@@ -82,12 +84,21 @@ void FilledRow::increaseSize()
     push_back(fill);
 }
 
-
 // increases Size so that row[k] is not a fill row
 void FilledRow::increaseSize(int k)
 {
     for(int i  = size(); i <= SHIFTROW(k); i++)
         increaseSize();
+}
+
+void FilledRow::dropFirst()
+{
+    if(size() == 0)
+        throw "No first to drop";
+    
+    entries.erase(entries.begin());
+    
+    index++;
 }
 
 
@@ -103,49 +114,23 @@ int FilledRow::rightIndex()
 
 
 
-
-FilledBandedMatrix::FilledBandedMatrix(int low, int up)
+FilledBandedMatrix::FilledBandedMatrix(int low)
 {
     lowerIndex = low;
-//    upper = up;
+    
     increaseSize();
 }
 
 
 
 
-
 int FilledBandedMatrix::lower()
 {
-// Returns zero if the band starts on the diagonal
-// -1 if there is one subdiagonal...
+    // Returns zero if the band starts on the diagonal
+    // -1 if there is one subdiagonal...
     return lowerIndex;
 }
-//int FilledBandedMatrix::upper()
-//{
-//    // Returns zero if the band ends on the diagonal
-//    // 1 if there is one superdiagonal...
-//    return rowSize - index - 1;
-//}
-//
-//void FilledBandedMatrix::increaseUpper()
-//{
-//    vector<FilledRow>::iterator it;
-//    for(it = rows.begin(); it < rows.end(); it++)
-//    {
-//        it->increaseSize();
-//    }
-//    
-//    rowSize++;
-//}
 
-//void FilledBandedMatrix::increaseUpper(int k)
-//{
-//    for(int j = k; j >0; j--)
-//    {
-//        increaseUpper();
-//    }
-//}
 
 int FilledBandedMatrix::size()
 {
@@ -154,7 +139,7 @@ int FilledBandedMatrix::size()
 
 int FilledBandedMatrix::columnSize()
 {
-    return rows.back().rightIndex();
+    return rows.back().leftIndex();
 }
 
 int FilledBandedMatrix::columnSize(int col)
@@ -178,10 +163,20 @@ FilledRow FilledBandedMatrix::operator[] (int i)
     return rows[i];
 }
 
+double FilledBandedMatrix::getEntry(int i,int j)
+{    
+    if(i >= size()) 
+        return 0;
+    else
+        return rows[i][j];
+    
+}
 
 FilledRow FilledBandedMatrix::createRow(int k)
-{    
-    double w = 15;
+{
+    
+    
+    double w = 1;
     
     if (k == 0) {
         FilledRow newrow(0);        
@@ -189,7 +184,7 @@ FilledRow FilledBandedMatrix::createRow(int k)
         return newrow;
     }
     else if (k == 1) {
-        FilledRow newrow(0);                
+        FilledRow newrow(0);               
         newrow.push_back(w);
         newrow.push_back(1);
         newrow.push_back(-.5*w);
@@ -197,14 +192,15 @@ FilledRow FilledBandedMatrix::createRow(int k)
         
         return newrow;
     } else {
-        FilledRow newrow(k - 1);                
+        FilledRow newrow(k-1);       
+        
         newrow.push_back(.5*w);
         newrow.push_back(k);
-        newrow.push_back(-.5*w);  
+        newrow.push_back(-.5*w);       
         newrow.setFill(0);        
         
-        return newrow;        
-    }    
+        return newrow;
+    }
 }
 
 void FilledBandedMatrix::increaseSize()
@@ -212,32 +208,37 @@ void FilledBandedMatrix::increaseSize()
     rows.push_back(createRow(size()));
 }
 
+void FilledBandedMatrix::dropFirst(int row)
+{
+    rows[row].dropFirst();
+}
+
 
 void FilledBandedMatrix::setEntry(int i,int j,double val)
+{
+    setEntry(i,j,false);
+}
+
+void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
 {    
     for(int k = size(); k <= i; k++)
     {
         rows.push_back(createRow(k));
     }
     
-    rows[i].setEntry(j,val);
+    rows[i].setEntry(j,val,increasesize);    
 }
 
-
-FilledRow FilledBandedMatrix::back()
-{
-    return rows.back();
-}
 
 
 void FilledBandedMatrix::print()
 {
-
+    
     for(int i = 0; i < size(); i++)
     {
         for(int j = 0; j < columnSize(); j++)
         {
-            cout << rows[i][j];
+            cout << getEntry(i,j);
             cout << " ";
         }
         cout << endl;
@@ -245,74 +246,59 @@ void FilledBandedMatrix::print()
 }
 
 
-
-
-
 void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
 {
+    int col1 = row1;    
     if(leftIndex(row2) < leftIndex(row1))
         throw "Givens should be applied left to right and top to bottom, in order";    
+    if (leftIndex(row2) > col1)
+        throw "Cannot change elements to the left";
+    if (rightIndex(row1) > rightIndex(row2))
+        throw "Probably a bug: rightIndex(row1) > rightIndex(row2)";
+    if (row2 > size())
+        throw "Probably a bug: row2 > size";
     
     
-    int col1 = leftIndex(row1);
-    
-    double a = rows[row1][col1];
-    double b = rows[row2][col1];
+    double a = (rows[row1])[col1];
+    double b = (rows[row2])[col1];
     double norm = sqrt(a*a + b*b);
     
     a = a/norm;
     b = b/norm;
     
-// TODO make Givens a static? function    
-// update vector
+    // @TODO make Givens a static? function    
+    // update vector
     
     double en1 = (*c)[row1];
     double en2 = (*c)[row2];
     
     (*c)[row1] = a*en1 + b*en2;
-    (*c)[row2] = -b*en1 + a*en2;    
+    (*c)[row2] = -b*en1 + a*en2;  
     
-
-// update first row, deleting zeroed column    
+    en1 = getEntry(row1, col1);
+    en2 = getEntry(row2, col1);
     
-    en1 = rows[row1][col1];
-    en2 = rows[row2][col1];
-    
-    double val1 = a*en1+b*en2;
-    double val2 = -b*en1+a*en2;            
-    
-    setEntry(row1, j, val1);
-    setEntry(row2, j, val2);      
+    setEntry(row1, col1,  a*en1 + b*en2,true);
+    dropFirst(row2);
     
     
     
     for(int j = col1 + 1; j <= rightIndex(row2); j++)
     {
-        en1 = rows[row1][j];
-        en2 = rows[row2][j];
+        en1 = getEntry(row1, j);
+        en2 = getEntry(row2, j);
         
-        double val1 = a*en1+b*en2;
-        double val2 = -b*en1+a*en2;            
+        setEntry(row1, j,  a*en1 + b*en2,true);
+        setEntry(row2, j, -b*en1 + a*en2,true);  
         
-        setEntry(row1, j, val1);
-        setEntry(row2, j, val2);  
-        
-//        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
+        //        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
     }
     
-    double en1 = rows[row1][rightIndex(row1)+1];
-    double en2 = rows[row2][rightIndex(row1)+1]; 
-
+    en1 = (rows[row1]).getFill();
+    en2 = (rows[row2]).getFill();
     
-    double val1 = a*en1+b*en2;
-    double val2 = -b*en1+a*en2;            
-
-    
-    for(int j = rightIndex(row1)+1; j <= rightIndex(row2)+1; j++)
-    {        
-        setEntry(row1, j, val1);
-        setEntry(row2, j, val2);         
-    }
+    (rows[row1]).setFill( a*en1 + b*en2);
+    (rows[row2]).setFill(-b*en1 + a*en2);  
 }
 
 

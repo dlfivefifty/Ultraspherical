@@ -23,15 +23,16 @@ public:
     FilledRow(int);
     int size();
     double operator[] (int);
-    void setEntry(int,double,bool);      
     void setEntry(int,double);  
+    void setEntry(int,double,bool);      
     void push_back(double);
     void setFill(double);
     void increaseSize();       
-    void increaseSize(int);           
+    void increaseSize(int);     
+    void dropFirst();  
     double getFill();
-    int rightIndex();
     int leftIndex();
+    int rightIndex();    
 };
 
 
@@ -39,36 +40,30 @@ public:
 
 class FilledBandedMatrix
 {
-    vector<FilledRow> rows;   
+    vector<FilledRow> rows;
     int lowerIndex;
-//    int upper;
+    
     
 public:
-    FilledBandedMatrix(int,int);
+    FilledBandedMatrix(int);
     int lower();
-//    int upper();
-//    void increaseUpper();
-//    void increaseUpper(int);    
+    int upper();
+    void dropFirst(int row);
     int size();
     int columnSize();
     int columnSize(int);
     FilledRow createRow(int);
     void increaseSize();    
-//    double getEntry(int,int);
-    FilledRow back();    
-    
-    
+    double getEntry(int,int);
     void setEntry(int,int,double);    
+    void setEntry(int,int,double,bool);        
     FilledRow operator[] (int);
     void print();
-    
-
     
     int leftIndex(int);
     int rightIndex(int);    
     
     
-// apply GIvens to two rows, and vector rhs at same time    
     void applyGivens(int,int,vector<double> *);    
     
     

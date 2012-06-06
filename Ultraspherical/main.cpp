@@ -17,29 +17,29 @@
 
 int main(int argc, const char * argv[])
 {    
-    FilledBandedMatrix bnd(-1,1);
+    FilledBandedMatrix bnd(-1);
     clock_t t1; clock_t t2;
     t1 = clock();
-
     
     
     
-    bnd.increaseUpper();
-//    bnd.increaseSize();
-//    bnd.increaseSize();
-//    bnd.increaseSize();    
+    
+    
+    //    bnd.increaseSize();
+    //    bnd.increaseSize();
+    //    bnd.increaseSize();    
     
     
     cout<<"B: "<<endl;
-        bnd.print();
-//    
-//    cout<<"GB: "<<endl;    
-//    bnd.applyGivens(0,1,0,1);
-//    bnd.print();
+    bnd.print();
+    //    
+    //    cout<<"GB: "<<endl;    
+    //    bnd.applyGivens(0,1,0,1);
+    //    bnd.print();
     
     
-//    
-//    
+    //    
+    //    
     vector<double> b;
     
     for(long i = 0; i < 1; i++)
@@ -55,8 +55,6 @@ int main(int argc, const char * argv[])
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
     printvec(c);
     
-//    
-//    cout<<"lam " <<lam(10)<<endl;
     
     return 0;
 }
