@@ -1,4 +1,4 @@
-function A = realisation(N,cfs)
+function [A bcvalues] = realisation(N,cfs)
 % REALISATION(N,CFS) This provides a realisation of the coeffop
 % object with size CFS. It returns a sparse matrix which can be
 % used to solve a collocation problem with CFS collocation
@@ -56,73 +56,114 @@ for j=1:N.order
     %A =  diag(1./(1:cfs))*(A+M1);
 end
 
-%Set boundary conditions.
-if(N.order==1)
-    if(~isempty(N.lbc))
-        %LBC matrix row.
-        if(iscell(N.lbc))
-            if(strcmpi(N.lbc{2},'dirichlet'))
-                BCrow = kron(ones(1,cfs),[1 -1]);
-                BCrow = BCrow(1:cfs);
-                %BCrow = BCrow(1:cfs).*(1./(1:cfs));
-            elseif(strcmpi(N.lbc{2},'neumann'))
-                BCrow = (0:cfs-1).^2.*(-1).^(1:cfs);
-            end
-        else
-            BCrow = kron(ones(1,cfs),[1 -1]);
-            BCrow = BCrow(1:cfs);
-            %BCrow = BCrow(1:cfs).*(1./(1:cfs));
-        end
-        %wipe one row of A and insert BCrow.
-        A(cfs,:)=BCrow;
-    elseif(~isempty(N.rbc))
-        %RBC matrix row.
-        if(iscell(N.rbc))
-            if(strcmpi(N.rbc{2},'dirichlet'))
-                BCrow = ones(1,cfs);
-            elseif(strcmpi(N.rbc{2},'neumann'))
-                BCrow = (0:cfs-1).^2;
-            end
-        else
-            BCrow = ones(1,cfs);
-        end
-        %wipe one row of A and insert BCrow.
-        A(cfs,:)=BCrow;
-    end
-    
-    
-elseif(N.order==2)
-    % both lbc and rbc must not be empty.
-    if(iscell(N.lbc))
-        if(strcmpi(N.lbc{2},'dirichlet'))
-            LBC = kron(ones(1,cfs),[1 -1]);
-            LBC = LBC(1:cfs);
-        elseif(strcmpi(N.lbc{2},'neumann'))
-            LBC = (0:cfs-1).^2.*(-1).^(1:cfs);
-        end
-        A(cfs-1,:)=LBC;
-    elseif(~isempty(N.lbc))
-        LBC = kron(ones(1,cfs),[1 -1]);
-        LBC = LBC(1:cfs);
-        A(cfs-1,:)=LBC;
-    end
-    %RBC matrix row.
-    if(iscell(N.rbc))
-        if(strcmpi(N.rbc{2},'dirichlet'))
-            RBC = ones(1,cfs);
-        elseif(strcmpi(N.rbc{2},'neumann'))
-            RBC = (0:cfs-1).^2;
-        end
-    elseif(~isempty(N.rbc))
-        RBC = ones(1,cfs);
-        A(cfs,:)=RBC;
-    end
-    %wipe two rows of A.
-    
-elseif(N.order>2)
-    %Need to set N.order boundary conditions.
-    %choose them at the chebyshev points?
-    BC=cos(bsxfun(@times,(0:cfs-1),acos(chebpts(N.order))));
-    A(cfs-N.order+1:cfs,:)=BC;
+% %Set boundary conditions.
+% if(N.order==1)
+%     if(~isempty(N.lbc))
+%         %LBC matrix row.
+%         if(iscell(N.lbc))
+%             if(strcmpi(N.lbc{2},'dirichlet'))
+%                 BCrow = kron(ones(1,cfs),[1 -1]);
+%                 BCrow = BCrow(1:cfs);
+%                 %BCrow = BCrow(1:cfs).*(1./(1:cfs));
+%             elseif(strcmpi(N.lbc{2},'neumann'))
+%                 BCrow = (0:cfs-1).^2.*(-1).^(1:cfs);
+%             end
+%         else
+%             BCrow = kron(ones(1,cfs),[1 -1]);
+%             BCrow = BCrow(1:cfs);
+%             %BCrow = BCrow(1:cfs).*(1./(1:cfs));
+%         end
+%         %wipe one row of A and insert BCrow.
+%         A(cfs,:)=BCrow;
+%     elseif(~isempty(N.rbc))
+%         %RBC matrix row.
+%         if(iscell(N.rbc))
+%             if(strcmpi(N.rbc{2},'dirichlet'))
+%                 BCrow = ones(1,cfs);
+%             elseif(strcmpi(N.rbc{2},'neumann'))
+%                 BCrow = (0:cfs-1).^2;
+%             end
+%         else
+%             BCrow = ones(1,cfs);
+%         end
+%         %wipe one row of A and insert BCrow.
+%         A(cfs,:)=BCrow;
+%     end
+%     
+%     
+% elseif(N.order==2)
+%     % both lbc and rbc must not be empty.
+%     if(iscell(N.lbc))
+%         if(strcmpi(N.lbc{2},'dirichlet'))
+%             LBC = kron(ones(1,cfs),[1 -1]);
+%             LBC = LBC(1:cfs);
+%         elseif(strcmpi(N.lbc{2},'neumann'))
+%             LBC = (0:cfs-1).^2.*(-1).^(1:cfs);
+%         end
+%         A(cfs-1,:)=LBC;
+%     elseif(~isempty(N.lbc))
+%         LBC = kron(ones(1,cfs),[1 -1]);
+%         LBC = LBC(1:cfs);
+%         A(cfs-1,:)=LBC;
+%     end
+%     %RBC matrix row.
+%     if(iscell(N.rbc))
+%         if(strcmpi(N.rbc{2},'dirichlet'))
+%             RBC = ones(1,cfs);
+%         elseif(strcmpi(N.rbc{2},'neumann'))
+%             RBC = (0:cfs-1).^2;
+%         end
+%     elseif(~isempty(N.rbc))
+%         RBC = ones(1,cfs);
+%         A(cfs,:)=RBC;
+%     end
+%     %wipe two rows of A.
+%     
+% elseif(N.order>2)
+%     %Need to set N.order boundary conditions.
+%     %choose them at the chebyshev points?
+%     BC=cos(bsxfun(@times,(0:cfs-1),acos(chebpts(N.order))));
+%     A(cfs-N.order+1:cfs,:)=BC;
+% end
+
+if isempty(N.lbc) && isempty(N.rbc), bcvalues=[]; return; end; 
+
+bcvalues=[];
+rbcrow = cfs;
+
+if ~isempty(N.rbc)
+    if isa(N.rbc,'double')
+        A(rbcrow,:) = ones(1,cfs); rbcrow=rbcrow-1;
+        bcvalues = [bcvalues N.rbc];
+    elseif isa(N.lbc,'function_handle')
+        [Wa Wb r] = recoverCoeffsBC(N);
+        rows = BCrows(Wa,Wb,cfs);
+        A(end-length(r)+1:end,:) = rows;
+        bcvalues = r;
+        return; 
+    else
+        error('RBC:INPUT','RBC not of correct type');
+    end   
 end
+
+
+if ~isempty(N.lbc)
+    if isa(N.lbc,'double')
+        A(rbcrow,:) = (-1).^(0:cfs-1); 
+        bcvalues = [bcvalues N.lbc];
+    elseif isa(N.lbc,'function_handle')
+        [Wa Wb r] = recoverCoeffsBC(N);
+        rows = BCrows(Wa,Wb,cfs);
+        A(end-length(r)+1:end,:) = rows;
+        bcvalues = r;
+        return; 
+    else
+        error('LBC:INPUT','LBC not of correct type');
+    end       
+end
+        
+
+
+
+
 end

@@ -15,10 +15,12 @@ while k<nargin
         N.order = varargin{k};
         k=k+2;
     elseif(strcmpi('lbc',varargin{k-1}))
-        N.lbc = varargin{k};
+%         N.lbc = varargin{k};
+        N.lbc = tidylbcs(varargin{k});
         k=k+2;
     elseif(strcmpi('rbc',varargin{k-1}))
-        N.rbc = varargin{k};
+%         N.rbc = varargin{k};
+        N.rbc = tidyrbcs(varargin{k});
         k=k+2;
     else
         k=k+1;
@@ -32,7 +34,6 @@ if(iscell(DE))
         DEcheb(:,j) = chebfun(DE{j});
         % compute the true polynomial interpolant.
         DEcheb(:,j) = chebfun(DE{j},length(DEcheb(:,j)));
-        %DEcheb(:,j) = chebfun(DE{j},2*length(DEcheb(:,j)));
     end
     N.DEcoeffs = DEcheb; DE = DEcheb;
 elseif isa(DE,'function_handle')
@@ -43,15 +44,38 @@ elseif isa(DE,'function_handle')
         error('ULTRAOP:CTOR:INPUT','Chebop must be linear.');
     end
     DE = recoverCoeffs(DE); DE=DE{:}; DE = DE(:,end:-1:1);
+%     % collect lbc and rbc. 
+%     if ~isempty(DE.lbc)
+%         N.lbc = tidylbcs(DE.lbc);
+%     end
+%     if ~isempty(DE.rbc)
+%         N.rbc = tidyrbcs(DE.rbc);
+%     end
 elseif isa(DE,'linop')
     % construct the ultraop from a linop. 
     DE = recoverCoeffs(DE); DE=DE{:}; DE = DE(:,end:-1:1);
+    % collect lbc and rbc. 
+    if ~isempty(DE.lbc)
+        N.lbc = tidylbcs(DE.lbc);
+    end
+    if ~isempty(DE.rbc)
+        N.rbc = tidyrbcs(DE.rbc);
+    end
 elseif isa(DE,'chebop')
     % construct the ultraop from a linear chebop. 
     if(~islinear(DE))
         error('ULTRAOP:CTOR:INPUT','Chebop must be linear.');
+    else
+       DE = linop(DE); 
     end
     DE = recoverCoeffs(DE); DE=DE{:}; DE = DE(:,end:-1:1);
+    % collect lbc and rbc. 
+    if ~isempty(DE.lbc)
+        N.lbc = tidylbcs(DE.lbc);
+    end
+    if ~isempty(DE.rbc)
+        N.rbc = tidyrbcs(DE.rbc);
+    end
 else
     error('ULTRAOP:CTOR:INPUT','Can only construct a ultraop from a cell array of function handles, linop or chebop');
 end
@@ -88,3 +112,43 @@ if(N.order>0)
 end
 N.DEcoeffs = DE;
 end
+
+
+function [lbcfh] = tidylbcs(lbc)
+% assigns the boundary conditions. Returns them as function handle.
+
+if isdouble(lbc)
+    if numel(lbc)==1
+        lbcfh = @(u) u(-1) - lbc; 
+    else
+       error('LBC:Input','Left boundary condition is not of robin-type'); 
+    end
+elseif isa(lbc,'function_handle')
+    lbcfh = lbc; % assume that it is in the correct format. 
+else
+   error('LBC:Input','Left boundary condition is not function handle or double'); 
+end
+
+end
+
+function [rbcfh] = tidyrbcs(rbc)
+% assigns the boundary conditions. Returns them as function handle.
+
+if isdouble(rbc)
+    if numel(rbc)==1
+        rbcfh = @(u) u(1) - rbc; 
+    else
+       error('rbc:Input','Left boundary condition is not of robin-type'); 
+    end
+elseif isa(rbc,'function_handle')
+    rbcfh = rbc; % assume that it is in the correct format. 
+else
+   error('rbc:Input','Left boundary condition is not function handle or double'); 
+end
+
+end
+
+
+
+
+

@@ -39,41 +39,44 @@ if(isinf(cfs))
         rhs = transMat(cfs,s)*rhs;
         s=s+1;
     end
-    if(N.order==1)
-        if(~isempty(N.lbc))
-            if(iscell(N.lbc))
-                lvalue = N.lbc{1};
-            else
-                lvalue = N.lbc;
-            end
-            rhs(end) = lvalue;
-        else
-            if(iscell(N.rbc))
-                rvalue = N.rbc{1};
-            else
-                rvalue = N.rbc;
-            end
-            rhs(end) = rvalue;
-        end
-    elseif(N.order==2)
-        % both lbc and rbc must not be empty.
-        if(iscell(N.lbc))
-            lvalue = N.lbc{1};
-        else
-            lvalue = N.lbc;
-        end
-        if(iscell(N.rbc))
-            rvalue = N.rbc{1};
-        else
-            rvalue = N.rbc;
-        end
-        rhs(end-1)=lvalue;
-        rhs(end) = rvalue;
-    elseif(N.order>2)
-        bcvalues = N.lbc;
-        rhs(end-N.order+1:end)=bcvalues;
-    end
-    u = realisation(N,cfs)\rhs;
+%     if(N.order==1)
+%         if(~isempty(N.lbc))
+%             if(iscell(N.lbc))
+%                 lvalue = N.lbc{1};
+%             else
+%                 lvalue = N.lbc;
+%             end
+%             rhs(end) = lvalue;
+%         else
+%             if(iscell(N.rbc))
+%                 rvalue = N.rbc{1};
+%             else
+%                 rvalue = N.rbc;
+%             end
+%             rhs(end) = rvalue;
+%         end
+%     elseif(N.order==2)
+%         % both lbc and rbc must not be empty.
+%         if(iscell(N.lbc))
+%             lvalue = N.lbc{1};
+%         else
+%             lvalue = N.lbc;
+%         end
+%         if(iscell(N.rbc))
+%             rvalue = N.rbc{1};
+%         else
+%             rvalue = N.rbc;
+%         end
+%         rhs(end-1)=lvalue;
+%         rhs(end) = rvalue;
+%     elseif(N.order>2)
+%         bcvalues = N.lbc;
+%         rhs(end-N.order+1:end)=bcvalues;
+%     end
+    [A bcvalues]=realisation(N,cfs);
+    rhs(end-length(bcvalues)+1:end) = bcvalues; 
+    
+    u = A\rhs;
     
     %while(max(abs(u(floor(length(u)/1.2):end)))>eps && cfs<20000)
     while(max(abs(u(end-9:end)))>eps && cfs<60000)
@@ -89,40 +92,41 @@ if(isinf(cfs))
             rhs = transMat(cfs,s)*rhs;
             s=s+1;
         end
-        if(N.order==1)
-            if(~isempty(N.lbc))
-                if(iscell(N.lbc))
-                    lvalue = N.lbc{1};
-                else
-                    lvalue = N.lbc;
-                end
-                rhs(end) = lvalue;
-            else
-                if(iscell(N.rbc))
-                    rvalue = N.rbc{1};
-                else
-                    rvalue = N.rbc;
-                end
-                rhs(end) = rvalue;
-            end
-        elseif(N.order==2)
-            % both lbc and rbc must not be empty.
-            if(iscell(N.lbc))
-                lvalue = N.lbc{1};
-            else
-                lvalue = N.lbc;
-            end
-            if(iscell(N.rbc))
-                rvalue = N.rbc{1};
-            else
-                rvalue = N.rbc;
-            end
-            rhs(end-1)=lvalue;
-            rhs(end) = rvalue;
-        elseif(N.order>2)
-            bcvalues = N.lbc;
-            rhs(end-N.order+1:end)=bcvalues;
-        end
+        rhs(end-length(bcvalues)+1:end) = bcvalues;
+%         if(N.order==1)
+%             if(~isempty(N.lbc))
+%                 if(iscell(N.lbc))
+%                     lvalue = N.lbc{1};
+%                 else
+%                     lvalue = N.lbc;
+%                 end
+%                 rhs(end) = lvalue;
+%             else
+%                 if(iscell(N.rbc))
+%                     rvalue = N.rbc{1};
+%                 else
+%                     rvalue = N.rbc;
+%                 end
+%                 rhs(end) = rvalue;
+%             end
+%         elseif(N.order==2)
+%             % both lbc and rbc must not be empty.
+%             if(iscell(N.lbc))
+%                 lvalue = N.lbc{1};
+%             else
+%                 lvalue = N.lbc;
+%             end
+%             if(iscell(N.rbc))
+%                 rvalue = N.rbc{1};
+%             else
+%                 rvalue = N.rbc;
+%             end
+%             rhs(end-1)=lvalue;
+%             rhs(end) = rvalue;
+%         elseif(N.order>2)
+%             bcvalues = N.lbc;
+%             rhs(end-N.order+1:end)=bcvalues;
+%         end
         %rhs = (1./(1:length(rhs)))'.*rhs;
         A = realisation(N,cfs);%*diag(1./(1:cfs));
         if(cfs<2000), A=full(A);end
@@ -135,11 +139,8 @@ if(isinf(cfs))
 elseif(isfinite(cfs))
     % Non-adaptive call to solver.
     rhs=crhs;
-    %T2U = transMat(2*cfs,0); sT2U = transMat(cfs,0);
-    %U2P = transMat(2*cfs,1); sU2P = transMat(cfs,1);
     
-    % form rhs.
-    
+    % form rhs.   
     rhs = prolong(fliplr(chebpoly(rhs)),cfs);
     rhs = rhs(:);
     
