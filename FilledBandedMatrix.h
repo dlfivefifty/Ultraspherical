@@ -30,6 +30,7 @@ public:
     FilledRow(int);
     FilledRow(int,double);   
     FilledRow(int,double,double (*)(int));  
+    FilledRow(int,double,double (*)(int),int);      
     int size();
     double operator[] (int);
     void setEntry(int,double);  

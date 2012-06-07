@@ -26,20 +26,20 @@ FilledRow defaultRowCreator(int k)
         }
         case 1:
         {
-            FilledRow newrow(0,0,&alternatingFiller);               
-            newrow.push_back(w);
-            newrow.push_back(1);
-            newrow.push_back(-.5*w);
+            FilledRow newrow(0,0,&alternatingFiller,3);               
+            newrow.setEntry(0,w);
+            newrow.setEntry(1,1);
+            newrow.setEntry(2,-.5*w);
         
             return newrow;
         }
         default:
         {
-            FilledRow newrow(k-1,0,&alternatingFiller);       
+            FilledRow newrow(k-1,0,&alternatingFiller,3);       
             
-            newrow.push_back(.5*w);
-            newrow.push_back(k);
-            newrow.push_back(-.5*w);            
+            newrow.setEntry(k-1,.5*w);
+            newrow.setEntry(k,k);
+            newrow.setEntry(k+1,-.5*w);            
             
             return newrow;
         }
@@ -76,7 +76,7 @@ int main(int argc, const char * argv[])
     //    
     vector<double> b;
     
-    for(long i = 0; i < 1; i++)
+    for(long i = 0; i < 100000; i++)
         b.push_back(1);
     
     vector<double> c = QRSolve(bnd,b);
@@ -87,7 +87,7 @@ int main(int argc, const char * argv[])
     cout<<"size: "<<c.size()<<endl;
     
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
-    printvec(c);
+//    printvec(c);
     
     
     return 0;

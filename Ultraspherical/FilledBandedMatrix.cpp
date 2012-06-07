@@ -58,6 +58,15 @@ FilledRow::FilledRow(int ind,double fl,double (*flgen)(int))
     fillGenerator = flgen;
 }
 
+FilledRow::FilledRow(int ind,double fl,double (*flgen)(int),int size)
+{
+    index = ind;
+    fill = fl;
+    fillGenerator = flgen;
+    
+    entries.resize(3);
+}
+
 
 int FilledRow::size()
 {
@@ -295,8 +304,6 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
     setEntry(row1, col1,  a*en1 + b*en2,true);
     dropFirst(row2);
     
-    cout <<"B: "<<endl;
-    print();
     
     
     for(int j = col1 + 1; j <= rightIndex(row2); j++)
