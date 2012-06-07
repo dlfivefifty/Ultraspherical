@@ -29,6 +29,10 @@ public:
     double fillGenerate(int);
     double getEntry(int k);  
     void setFill(double);    
+    
+    static RowFiller leftDirichlet();
+    static RowFiller rightDirichlet();    
+    static vector<RowFiller> dirichlet(int,int);        
 };
 
 

@@ -59,24 +59,45 @@ double RowFiller::fillGenerate(int col)
 }
 
 
-
-FilledRow FilledRow::leftDirichlet()
+RowFiller RowFiller::leftDirichlet()
 {
     RowFiller flr(1,&alternatingFiller);
-    vector<RowFiller> fillers;
-    fillers.push_back(flr);
-    FilledRow newrow(0,fillers);        
-    return newrow;
+    return flr;
+}
+
+RowFiller RowFiller::rightDirichlet()
+{
+    RowFiller flr(1,&oneFiller);
+    return flr;
+}
+
+vector<RowFiller> RowFiller::dirichlet(int a, int b)
+{
+    vector<RowFiller> fil;
+    RowFiller flr1(a,&alternatingFiller);
+    RowFiller flr2(b,&oneFiller);
+    fil.push_back(flr1);
+    fil.push_back(flr2);    
+    
+    return fil;
 }
 
 FilledRow FilledRow::rightDirichlet()
 {
-    RowFiller flr(0,&oneFiller);
     vector<RowFiller> fillers;
-    fillers.push_back(flr);
+    fillers.push_back(RowFiller::rightDirichlet());
     FilledRow newrow(0,fillers);     
     return newrow;
 }
+
+FilledRow FilledRow::leftDirichlet()
+{
+    vector<RowFiller> fillers;
+    fillers.push_back(RowFiller::leftDirichlet());
+    FilledRow newrow(0,fillers);        
+    return newrow;
+}
+
 
 FilledRow::FilledRow(int ind)
 {
