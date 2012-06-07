@@ -30,18 +30,13 @@ void printvec(vector<double> c)
 
 vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
 {  
-//    B.increaseUpper(-B.lower());
     
     double error = 1;
     int col = -1;
     int row1;
     
-//    printvec(c);
     
     while (error > 10E-17) {
-//        cout<<"B: "<<endl;B.print();        
-//    printvec(c);   
-
         
         col++;
         row1 = col;
@@ -50,8 +45,7 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
         
         for(int row2 = row1 + 1; row2 < B.columnSize(col); row2++)
         {
-//            printvec(c);
-//            cout<<"B: "<<endl;
+//    	std:cout<<"B: "<<endl;
 //            B.print();            
             
             if(row2 >= c.size()) {
@@ -61,45 +55,53 @@ vector<double> QRSolve(FilledBandedMatrix B,vector<double> c)
                 B.increaseSize();
             }
             
-            B.applyGivens(row1,row2,&c);           
+            
+            
+            B.applyGivens(row1,row2,&c);   
             
             error = max(error,fabs(c[row1]));
-            error = max(error,fabs(c[row2]));
+            error = max(error,fabs(c[row2]));            
         }
-
+        
     }
     
-//	std:cout<<"R: "<<endl;
-//    B.print();
+
     
-//    printvec(c);       
+    //    printvec(c);       
     
     
     vector<double> r = c;
     
     r[col] = c[col]/B.getEntry(col, col);
-    double s = r[col];
+    
+    vector<double> s;
+    for(int i = 0; i < B[col].fillSize(); i++)
+        s.push_back(B[col].fillGenerate(i,col)*r[col]);
     int rbnd;  
     int csize = col+1;
-    int upp = B.back().upper();
-
+    
     for(int row = csize - 1; row >= 0; row--)
     {
-        rbnd = row+upp;
+        rbnd = B.rightIndex(row);
         if(rbnd >= csize) {
             rbnd = csize-1;
             
             r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r))/B.getEntry(row,row);
-        } else {            
-            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r) - s*B.getEntry(row,rbnd+1))/B.getEntry(row,row);
+        } else {      
+            //scont is the contribution from higher fills
+            double scont = 0;
+            for(int i = 0; i < B[row].fillSize(); i++)  
+                scont += s[i]*B[row].getFill(i);    
+        
+            r[row] = (c[row]-B.rowDot(row,row+1,rbnd,&r) - scont)/B.getEntry(row,row);
             
-            
-            s+=r[rbnd];
+            for(int i = 0; i < B[row].fillSize(); i++)            
+                s[i]+=B[rbnd].fillGenerate(i,rbnd)*r[rbnd];                            
         }
     }
     
     
-//    printvec(r);
+    //    printvec(r);
     
     return r;
 }

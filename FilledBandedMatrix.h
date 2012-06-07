@@ -14,61 +14,89 @@
 
 using namespace std;
 
+
+double oneFiller(int);
+double alternatingFiller(int);
+
+class RowFiller
+{
+    double fill;
+    double (*fillGenerator)(int); 
+public:    
+    RowFiller();    
+    RowFiller(double, double (*)(int));
+    double getFill();
+    double fillGenerate(int);
+    double getEntry(int k);  
+    void setFill(double);    
+    
+    static RowFiller leftDirichlet();
+    static RowFiller rightDirichlet();    
+    static vector<RowFiller> dirichlet(int,int);        
+};
+
+
 class FilledRow
 {
     vector<double> entries;
-    double fill;  
+    vector<RowFiller> fillers;
     int index;
+    
 public:
     FilledRow(int);
+    FilledRow(int,double);   
+    FilledRow(int,vector<RowFiller>);  
+    FilledRow(int,vector<RowFiller>,int);      
     int size();
     double operator[] (int);
-    void setEntry(int,double,bool);      
     void setEntry(int,double);  
+    void setEntry(int,double,bool);      
     void push_back(double);
-    void setFill(double);
     void increaseSize();       
-    void increaseSize(int);           
-    double getFill();
-    int rightIndex();
+    void increaseSize(int);     
+    void dropFirst();  
+    double getFill(int);
+    void setFill(int,double);    
+    int fillSize();
+    double fillGenerate(int,int);
     int leftIndex();
+    int rightIndex();    
+    
+    static FilledRow rightDirichlet();
+    static FilledRow leftDirichlet();    
 };
+
+
 
 
 
 
 class FilledBandedMatrix
 {
-    vector<FilledRow> rows;   
+    vector<FilledRow> rows;
     int lowerIndex;
-//    int upper;
+    FilledRow (*rowGenerator)(int);
+    
     
 public:
-    FilledBandedMatrix(int,int);
+    FilledBandedMatrix(int, FilledRow (*)(int));
     int lower();
-//    int upper();
-//    void increaseUpper();
-//    void increaseUpper(int);    
+    void dropFirst(int row);
     int size();
     int columnSize();
     int columnSize(int);
     FilledRow createRow(int);
     void increaseSize();    
-//    double getEntry(int,int);
-    FilledRow back();    
-    
-    
+    double getEntry(int,int);
     void setEntry(int,int,double);    
+    void setEntry(int,int,double,bool);        
     FilledRow operator[] (int);
     void print();
-    
-
     
     int leftIndex(int);
     int rightIndex(int);    
     
     
-// apply GIvens to two rows, and vector rhs at same time    
     void applyGivens(int,int,vector<double> *);    
     
     
