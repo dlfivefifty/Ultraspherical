@@ -25,9 +25,45 @@ double alternatingFiller(int k)
     return 1-2*(k % 2);
 }
 
+RowFiller::RowFiller()
+{
+    fill = 0;
+    fillGenerator = &oneFiller;
+}
+
+RowFiller::RowFiller(double fil, double (*filr)(int))   
+{
+    fill = fil;
+    fillGenerator = filr;
+}
+
+double RowFiller::getFill()
+{
+    return fill;
+}
+
+void RowFiller::setFill(double val)
+{
+    fill = val;
+}
+
+double RowFiller::getEntry(int k)
+{
+   return  fill*fillGenerator(k);
+}
+
+
+double RowFiller::fillGenerate(int col)
+{
+    return fillGenerator(col);
+}
+
+
+
 FilledRow FilledRow::leftDirichlet()
 {
-    FilledRow newrow(0,1,&alternatingFiller);        
+    RowFiller flr(1,&alternatingFiller);
+    FilledRow newrow(0,flr);        
     return newrow;
 }
 
@@ -40,31 +76,26 @@ FilledRow FilledRow::rightDirichlet()
 FilledRow::FilledRow(int ind)
 {
     index = ind;
-    fill = 0;
-    fillGenerator = &oneFiller;
 }
 
 FilledRow::FilledRow(int ind,double fl)
 {
     index = ind;
-    fill = fl;
-    fillGenerator = &oneFiller;    
+    filler.setFill(fl);
 }
 
-FilledRow::FilledRow(int ind,double fl,double (*flgen)(int))
+FilledRow::FilledRow(int ind,RowFiller flr)
 {
     index = ind;
-    fill = fl;
-    fillGenerator = flgen;
+    filler = flr;    
 }
 
-FilledRow::FilledRow(int ind,double fl,double (*flgen)(int),int size)
+FilledRow::FilledRow(int ind,RowFiller flr,int size)
 {
     index = ind;
-    fill = fl;
-    fillGenerator = flgen;
+    filler = flr;
     
-    entries.resize(3);
+    entries.resize(size);
 }
 
 
@@ -78,7 +109,7 @@ double FilledRow::operator[](int j)
     //    cout<<"size(): "<<entries.size()<<endl;
     
     if (FILLROWQ(j))
-        return fill*fillGenerator(j);
+        return filler.getEntry(j);
     else if(SHIFTROW(j) < 0)
         return 0;
     else
@@ -109,17 +140,17 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
 
 void FilledRow::setFill(double val)
 {
-    fill = val;
+    filler.setFill(val);
 }
 
 double FilledRow::getFill()
 {
-    return fill;
+    return filler.getFill();
 }
 
 double FilledRow::fillGenerate(int col)
 {
-    return fillGenerator(col);
+    return filler.fillGenerate(col);
 }
 
 void FilledRow::push_back(double val)

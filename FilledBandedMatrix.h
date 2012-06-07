@@ -18,19 +18,31 @@ using namespace std;
 double oneFiller(int);
 double alternatingFiller(int);
 
+class RowFiller
+{
+    double fill;
+    double (*fillGenerator)(int); 
+public:    
+    RowFiller();    
+    RowFiller(double, double (*)(int));
+    double getFill();
+    double fillGenerate(int);
+    double getEntry(int k);  
+    void setFill(double);    
+};
+
 
 class FilledRow
 {
     vector<double> entries;
-    double fill;
-    double (*fillGenerator)(int);
+    RowFiller filler;
     int index;
     
 public:
     FilledRow(int);
     FilledRow(int,double);   
-    FilledRow(int,double,double (*)(int));  
-    FilledRow(int,double,double (*)(int),int);      
+    FilledRow(int,RowFiller);  
+    FilledRow(int,RowFiller,int);      
     int size();
     double operator[] (int);
     void setEntry(int,double);  
