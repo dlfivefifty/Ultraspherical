@@ -15,9 +15,47 @@
 #define FILLROWQ(j)(j - index >= size())
 
 
+double oneFiller(int k)
+{
+    return 1;
+}
+
+double alternatingFiller(int k)
+{
+    return 1-2*(k % 2);
+}
+
+FilledRow FilledRow::leftDirichlet()
+{
+    FilledRow newrow(0,1,&alternatingFiller);        
+    return newrow;
+}
+
+FilledRow FilledRow::rightDirichlet()
+{
+    FilledRow newrow(0,1);        
+    return newrow;
+}
+
 FilledRow::FilledRow(int ind)
 {
     index = ind;
+    fill = 0;
+    fillGenerator = &oneFiller;
+}
+
+FilledRow::FilledRow(int ind,double fl)
+{
+    index = ind;
+    fill = fl;
+    fillGenerator = &oneFiller;    
+}
+
+FilledRow::FilledRow(int ind,double fl,double (*flgen)(int))
+{
+    index = ind;
+    fill = fl;
+    fillGenerator = flgen;
 }
 
 
@@ -31,7 +69,7 @@ double FilledRow::operator[](int j)
     //    cout<<"size(): "<<entries.size()<<endl;
     
     if (FILLROWQ(j))
-        return fill;
+        return fill*fillGenerator(j);
     else if(SHIFTROW(j) < 0)
         return 0;
     else
@@ -57,11 +95,7 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
         increaseSize(j);
     }
     
-    
-    if(SHIFTROW(j) > size())
-        setFill(val);
-    else
-        entries[SHIFTROW(j)] = val;
+    entries[SHIFTROW(j)] = val;
 }
 
 void FilledRow::setFill(double val)
@@ -74,6 +108,11 @@ double FilledRow::getFill()
     return fill;
 }
 
+double FilledRow::fillGenerate(int col)
+{
+    return fillGenerator(col);
+}
+
 void FilledRow::push_back(double val)
 {    
     entries.push_back(val);
@@ -81,7 +120,7 @@ void FilledRow::push_back(double val)
 
 void FilledRow::increaseSize()
 {
-    push_back(fill);
+    push_back((*this)[size()]);
 }
 
 // increases Size so that row[k] is not a fill row
@@ -140,7 +179,7 @@ int FilledBandedMatrix::size()
 
 int FilledBandedMatrix::columnSize()
 {
-    return rows.back().leftIndex();
+    return rows.back().rightIndex();
 }
 
 int FilledBandedMatrix::columnSize(int col)
@@ -256,6 +295,8 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
     setEntry(row1, col1,  a*en1 + b*en2,true);
     dropFirst(row2);
     
+    cout <<"B: "<<endl;
+    print();
     
     
     for(int j = col1 + 1; j <= rightIndex(row2); j++)
@@ -269,11 +310,11 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
         //        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
     }
     
-    en1 = (rows[row1]).getFill();
-    en2 = (rows[row2]).getFill();
+    en1 = rows[row1].getFill();
+    en2 = rows[row2].getFill();
     
-    (rows[row1]).setFill( a*en1 + b*en2);
-    (rows[row2]).setFill(-b*en1 + a*en2);  
+    rows[row1].setFill( a*en1 + b*en2);
+    rows[row2].setFill(-b*en1 + a*en2);  
 }
 
 

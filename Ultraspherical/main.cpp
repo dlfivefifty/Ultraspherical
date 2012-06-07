@@ -18,28 +18,31 @@ FilledRow defaultRowCreator(int k)
     
     double w = 1;
     
-    if (k == 0) {
-        FilledRow newrow(0);        
-        newrow.setFill(1);
-        return newrow;
-    }
-    else if (k == 1) {
-        FilledRow newrow(0);               
-        newrow.push_back(w);
-        newrow.push_back(1);
-        newrow.push_back(-.5*w);
-        newrow.setFill(0);
+    switch(k)
+    {
+        case 0:
+        {
+            return FilledRow::leftDirichlet();
+        }
+        case 1:
+        {
+            FilledRow newrow(0,0,&alternatingFiller);               
+            newrow.push_back(w);
+            newrow.push_back(1);
+            newrow.push_back(-.5*w);
         
-        return newrow;
-    } else {
-        FilledRow newrow(k-1);       
-        
-        newrow.push_back(.5*w);
-        newrow.push_back(k);
-        newrow.push_back(-.5*w);       
-        newrow.setFill(0);        
-        
-        return newrow;
+            return newrow;
+        }
+        default:
+        {
+            FilledRow newrow(k-1,0,&alternatingFiller);       
+            
+            newrow.push_back(.5*w);
+            newrow.push_back(k);
+            newrow.push_back(-.5*w);            
+            
+            return newrow;
+        }
     }    
 }
 
@@ -55,9 +58,10 @@ int main(int argc, const char * argv[])
     
     
     
-    //    bnd.increaseSize();
-    //    bnd.increaseSize();
-    //    bnd.increaseSize();    
+        bnd.increaseSize();
+        bnd.increaseSize();
+        bnd.increaseSize();    
+        bnd.increaseSize();    
     
     
     cout<<"B: "<<endl;

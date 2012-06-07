@@ -14,13 +14,22 @@
 
 using namespace std;
 
+
+double oneFiller(int);
+double alternatingFiller(int);
+
+
 class FilledRow
 {
     vector<double> entries;
-    double fill;  
+    double fill;
+    double (*fillGenerator)(int);
     int index;
+    
 public:
     FilledRow(int);
+    FilledRow(int,double);   
+    FilledRow(int,double,double (*)(int));  
     int size();
     double operator[] (int);
     void setEntry(int,double);  
@@ -31,9 +40,15 @@ public:
     void increaseSize(int);     
     void dropFirst();  
     double getFill();
+    double fillGenerate(int);
     int leftIndex();
     int rightIndex();    
+    
+    static FilledRow rightDirichlet();
+    static FilledRow leftDirichlet();    
 };
+
+
 
 
 
