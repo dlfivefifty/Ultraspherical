@@ -18,6 +18,10 @@ FilledRow defaultRowCreator(int k)
     
     double w = 1;
     
+    RowFiller flr(0,&alternatingFiller);    
+    vector<RowFiller> fillers;
+    fillers.push_back(flr);
+    
     switch(k)
     {
         case 0:
@@ -26,8 +30,7 @@ FilledRow defaultRowCreator(int k)
         }
         case 1:
         {
-            RowFiller flr(0,&alternatingFiller);
-            FilledRow newrow(0,flr,3);               
+            FilledRow newrow(0,fillers,3);               
             newrow.setEntry(0,w);
             newrow.setEntry(1,1);
             newrow.setEntry(2,-.5*w);
@@ -36,8 +39,7 @@ FilledRow defaultRowCreator(int k)
         }
         default:
         {
-            RowFiller flr(0,&alternatingFiller);            
-            FilledRow newrow(k-1,flr,3);       
+            FilledRow newrow(k-1,fillers,3);       
             
             newrow.setEntry(k-1,.5*w);
             newrow.setEntry(k,k);

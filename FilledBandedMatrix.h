@@ -35,14 +35,14 @@ public:
 class FilledRow
 {
     vector<double> entries;
-    RowFiller filler;
+    vector<RowFiller> fillers;
     int index;
     
 public:
     FilledRow(int);
     FilledRow(int,double);   
-    FilledRow(int,RowFiller);  
-    FilledRow(int,RowFiller,int);      
+    FilledRow(int,vector<RowFiller>);  
+    FilledRow(int,vector<RowFiller>,int);      
     int size();
     double operator[] (int);
     void setEntry(int,double);  

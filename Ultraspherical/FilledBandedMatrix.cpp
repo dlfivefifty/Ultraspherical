@@ -63,13 +63,18 @@ double RowFiller::fillGenerate(int col)
 FilledRow FilledRow::leftDirichlet()
 {
     RowFiller flr(1,&alternatingFiller);
-    FilledRow newrow(0,flr);        
+    vector<RowFiller> fillers;
+    fillers.push_back(flr);
+    FilledRow newrow(0,fillers);        
     return newrow;
 }
 
 FilledRow FilledRow::rightDirichlet()
 {
-    FilledRow newrow(0,1);        
+    RowFiller flr(0,&oneFiller);
+    vector<RowFiller> fillers;
+    fillers.push_back(flr);
+    FilledRow newrow(0,fillers);     
     return newrow;
 }
 
@@ -78,22 +83,17 @@ FilledRow::FilledRow(int ind)
     index = ind;
 }
 
-FilledRow::FilledRow(int ind,double fl)
+
+FilledRow::FilledRow(int ind,vector<RowFiller> flr)
 {
     index = ind;
-    filler.setFill(fl);
+    fillers = flr;    
 }
 
-FilledRow::FilledRow(int ind,RowFiller flr)
+FilledRow::FilledRow(int ind,vector<RowFiller> flr,int size)
 {
     index = ind;
-    filler = flr;    
-}
-
-FilledRow::FilledRow(int ind,RowFiller flr,int size)
-{
-    index = ind;
-    filler = flr;
+    fillers = flr;
     
     entries.resize(size);
 }
@@ -108,8 +108,13 @@ double FilledRow::operator[](int j)
 {
     //    cout<<"size(): "<<entries.size()<<endl;
     
-    if (FILLROWQ(j))
-        return filler.getEntry(j);
+    if (FILLROWQ(j)) {
+        double ret = 0;
+        for(vector<RowFiller>::iterator it = fillers.begin(); it < fillers.end(); it++)
+            ret+=it->getEntry(j);
+        
+        return ret;
+    }
     else if(SHIFTROW(j) < 0)
         return 0;
     else
@@ -140,17 +145,17 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
 
 void FilledRow::setFill(double val)
 {
-    filler.setFill(val);
+    fillers[0].setFill(val);
 }
 
 double FilledRow::getFill()
 {
-    return filler.getFill();
+    return fillers[0].getFill();
 }
 
 double FilledRow::fillGenerate(int col)
 {
-    return filler.fillGenerate(col);
+    return fillers[0].fillGenerate(col);
 }
 
 void FilledRow::push_back(double val)
