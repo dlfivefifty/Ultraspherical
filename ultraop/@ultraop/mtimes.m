@@ -7,11 +7,9 @@ function f = mtimes(N,f)
 if(~isa(f,'chebfun'))
     error('Ultraop:mtimes','Not a chebfun\n');
 else
-    cf=fliplr(chebpoly(yf));
+    cf=fliplr(chebpoly(f))';
     lf=length(cf);
-    %cy = prolong(cy,ly);
-    f = realisation(N,lf)*cf';
-    %y = truncate(y,eps);
+    f = realisation(N,lf,'nobc')*cf;
     for s = N.order-1:-1:0
         f=transMat(lf,s)\f;
     end

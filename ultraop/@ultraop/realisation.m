@@ -1,4 +1,4 @@
-function [A bcvalues] = realisation(N,cfs)
+function [A bcvalues] = realisation(N,cfs,varargin)
 % REALISATION(N,CFS) This provides a realisation of the coeffop
 % object with size CFS. It returns a sparse matrix which can be
 % used to solve a collocation problem with CFS collocation
@@ -126,6 +126,8 @@ end
 %     A(cfs-N.order+1:cfs,:)=BC;
 % end
 
+if nargin < 3
+    
 if isempty(N.lbc) && isempty(N.rbc), bcvalues=[]; return; end; 
 
 bcvalues=[];
@@ -162,8 +164,6 @@ if ~isempty(N.lbc)
     end       
 end
         
-
-
-
+end
 
 end
