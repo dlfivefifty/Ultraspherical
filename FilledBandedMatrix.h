@@ -48,12 +48,13 @@ public:
     void setEntry(int,double);  
     void setEntry(int,double,bool);      
     void push_back(double);
-    void setFill(double);
     void increaseSize();       
     void increaseSize(int);     
     void dropFirst();  
-    double getFill();
-    double fillGenerate(int);
+    double getFill(int);
+    void setFill(int,double);    
+    int fillSize();
+    double fillGenerate(int,int);
     int leftIndex();
     int rightIndex();    
     

@@ -143,19 +143,24 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
     entries[SHIFTROW(j)] = val;
 }
 
-void FilledRow::setFill(double val)
+void FilledRow::setFill(int i,double val)
 {
-    fillers[0].setFill(val);
+    fillers[i].setFill(val);
 }
 
-double FilledRow::getFill()
+double FilledRow::getFill(int i)
 {
-    return fillers[0].getFill();
+    return fillers[i].getFill();
 }
 
-double FilledRow::fillGenerate(int col)
+int FilledRow::fillSize()
 {
-    return fillers[0].fillGenerate(col);
+    return fillers.size();
+}
+
+double FilledRow::fillGenerate(int i, int col)
+{
+    return fillers[i].fillGenerate(col);
 }
 
 void FilledRow::push_back(double val)
@@ -353,11 +358,17 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
         //        cout<<"j "<<j<<" rowfill " <<rows[row1].getFill()<<endl;
     }
     
-    en1 = rows[row1].getFill();
-    en2 = rows[row2].getFill();
     
-    rows[row1].setFill( a*en1 + b*en2);
-    rows[row2].setFill(-b*en1 + a*en2);  
+    for(int i = 0; i < rows[row1].fillSize(); i++)
+    {
+        en1 = rows[row1].getFill(i);
+        en2 = rows[row2].getFill(i);
+        
+        
+        rows[row1].setFill(i, a*en1 + b*en2);
+        rows[row2].setFill(i, -b*en1 + a*en2);  
+        
+    }
 }
 
 
