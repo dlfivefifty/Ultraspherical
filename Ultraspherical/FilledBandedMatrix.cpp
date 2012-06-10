@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#include "FilledBandedMatrix.h"
+#include "FilledBandedMatrix_extras.h"
 
 
 #include <math.h>
