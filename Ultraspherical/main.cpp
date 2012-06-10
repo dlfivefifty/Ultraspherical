@@ -7,7 +7,8 @@
 //
 
 
-#include "FilledBandedMatrix.h"
+//#include "FilledBandedMatrix.h"
+#include "FilledBandedMatrix_extras.h" // stop multiple definition of RowFiller class. 
 
 #include "AdaptiveQR.h"
 #include <time.h>

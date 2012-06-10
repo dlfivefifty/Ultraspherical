@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#ifndef Ultraspherical_BandedMatrix_h
-#define Ultraspherical_BandedMatrix_h
+#ifndef Ultraspherical_BandedMatrix_extras_h
+#define Ultraspherical_BandedMatrix_extras_h
 
 #include <iostream>
 #include <vector>
