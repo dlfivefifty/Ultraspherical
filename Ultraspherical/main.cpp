@@ -9,8 +9,9 @@
 
 //#include "FilledBandedMatrix.h"
 #include "FilledBandedMatrix_extras.h" // stop multiple definition of RowFiller class. 
+#include "MultiplicationMatrices.h"
 
-#include "mex.h"
+//#include "mex.h"
 #include "AdaptiveQR.h"
 #include <time.h>
 
@@ -154,11 +155,35 @@ int main(int argc, const char * argv[])
     cout<<"size: "<<c.size()<<endl;
     
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
-    
-    
+/*
+    vector<double> a; 
+    a.push_back(1); a.push_back(2); a.push_back(3);     
+
+    vector<double> v = HankelDiff(a,0);
+    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+{
+		cout << *it << " "; 
+};
+cout << "\n"; 
+    v = HankelDiff(a,-1);
+    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+{
+		cout << *it << " "; 
+};
+cout << "\n"; 
+    v = HankelDiff(a,1);
+    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+{
+		cout << *it << " "; 
+};
+cout << "\n"; 
+*/
+
     return 0;
 }
 
+// uncomment below and compile with mex main.cpp to generate MATLAB interface.
+/*
 void mexFunction ( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
 
@@ -171,7 +196,6 @@ main(argc,argv);
 
     //First entry is lower row, it's important!
     FilledBandedMatrix bnd(-2,&D2Dirichlet);
-    clock_t t1; clock_t t2;
         bnd.increaseSize();
         bnd.increaseSize();
         bnd.increaseSize();    
@@ -195,5 +219,5 @@ double * y = mxGetPr(plhs[0]);
 for( int i = 0; i<len; ++i)
     y[i] = c[i];  
 }
-
+*/
 

@@ -15,12 +15,12 @@
 #define FILLROWQ(j)(j - index >= size())
 
 
-double oneFiller(int k)
+double oneFiller(int k) // for Right Dirichlet
 {
     return 1;
 }
 
-double alternatingFiller(int k)
+double alternatingFiller(int k) // for Left Dirichlet
 {
     return 1-2*(k % 2);
 }
