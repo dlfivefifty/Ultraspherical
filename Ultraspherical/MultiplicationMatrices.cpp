@@ -1,5 +1,6 @@
 
 #include "MultiplicationMatrices.h"
+#include <math.h>
 
 // TODO: Better to construct the Hankel vector in reverse so that it can be pop_backed as the ConvertMult vector is formed.
 
@@ -92,25 +93,44 @@ for (vector<double>::iterator it = a.begin()+s+1; it < a.end(); it = it+2)
 
 return mdiag;
 }
+*/
 
-
+// Returns the kth diagonal of Hankel * diff matrix. 
 vector<double> HankelDiff(vector<double> a, int k)
 {
+vector<double> sum;
 vector<double> mdiag; 
-int m; //starting multiple
+double tot=0; 
 int s; //abs(k)
+int len = a.size(); 
 
-m = (k<=0) + (k+1)*(k>0); 
+//m = (k<=0) + (k+1)*(k>0); 
 s = k*(k>=0) + -k*(k<0); 
+int sgn = (s+1) % 2; 
 
-mdiag.push_back(0);
-for (vector<double>::iterator it = a.begin()+s+1; it < a.end(); it = it+2) 
+// make a of odd or even length depending on k. 
+int j=0; 
+while ( ((len+j) % 2 + s) % 2 ) 
 {
-	mdiag.push_back(m*(*it));
-	m=m+1;
+a.push_back(0); 
+j=j+1;
+}
+
+// even/odd sum. 
+for (vector<double>::iterator it = a.begin()+sgn; it<a.end(); it=it+2) 
+{
+	tot = tot + (*it);
+	sum.push_back(tot);  // with diff multipliers.
 };
 
+// apply diff multipliers and flip.
+
+double mult = k*(k>0); 
+for (vector<double>::iterator it = sum.begin()+s-(k>1); it<sum.end()-sgn*(k>0); ++it) 
+{
+	mdiag.push_back(mult*(*it));  // with diff multipliers.
+	mult = mult + 1; 
+};
 return mdiag;
 }
-*/
 
