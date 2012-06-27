@@ -68,10 +68,10 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 BandedOperator/:Dimensions[BandedOperator[A_List,jsh_,___]]:={Length[A],Length[A[[-1]]]+Length[A]-jsh};
 
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;Dimensions[bnd][[2]]]];
-BandedOperator/:MatrixForm[bnd_BandedOperator]:=bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//MatrixForm;
+BandedOperator/:MatrixForm[bnd_BandedOperator]:=MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm;
 
 
-IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,Append[fill,0],rowgen];
+IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,Append[fill,0 Last[fill]],rowgen];
 
 
 
@@ -114,7 +114,7 @@ Bn1=Bn;
 Do[
 vals=G.Bn1[[{row1,row2},i]];
 Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
-Bn1=ReplaceEntry[Bn1,{row2,i},vals[[2]]];
+Bn1=ReplaceEntry[Bn1,{row2,i},vals[[2]],IncreaseSize->True];
 
 ,{i,LeftIndex[Bn1,row2],RightIndex[Bn1,row2]}];
 
@@ -129,7 +129,50 @@ Bn1
 
 
 
-BandedOperator/:c_?ConstantQ BandedOperator[A_List,jsh_,fill_List,rowgen_]:=BandedOperator[c A,jsh,c fill, c rowgen[#]&]
+BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,rowgen_]:=BandedOperator[c A,jsh,c fill, c rowgen[#]&]
+
+
+ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1,Bn2},
+Bn1=Bn;
+Bn2=Bnn;
+
+Do[
+vals=G.{Bn1[[row1,i]],Bn2[[row2,i]]};
+Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
+Bn2=ReplaceEntry[Bn2,{row2,i},vals[[2]],IncreaseSize->True];
+
+,{i,LeftIndex[Bn2,row2],RightIndex[Bn2,row2]}];
+
+
+vals=G.{Bn1[[row1,RightIndex[Bn1,row2]+1]],Bn2[[row2,RightIndex[Bn1,row2]+1]]};
+Bn1=SetFill[Bn1,row1,vals[[1]]];
+Bn2=SetFill[Bn2,row2,vals[[2]]];
+
+{Bn1,Bn2}
+];
+
+(*This is for operator of operators *)
+
+ApplyToRows[G_,BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2},
+Bn1=BDx;
+
+Do[
+{B1,B2}=Bn1[[{row1,row2},i]];
+{B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
+Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
+Bn1=ReplaceEntry[Bn1,{row2,i},B2,IncreaseSize->True];
+
+,{i,LeftIndex[Bn1,row2],RightIndex[Bn1,row2]}];
+
+
+{B1,B2}=Bn1[[{row1,row2},RightIndex[Bn1,row2]+1]];
+{B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
+
+Bn1=SetFill[Bn1,row1,B1];
+Bn1=SetFill[Bn1,row2,B2];
+
+Bn1
+];
 
 
 End[];
