@@ -29,13 +29,17 @@ ApplyToRows;
 LowerIndex;
 LeftIndex;
 RightIndex;
+IncreaseSize;
 Begin["Private`"];
 
 
-BandedOperator/:BandedOperator[A_List,jsh_,fill_List,rowgen_][[i_Integer,j_Integer]]:=\[Piecewise]{
- {A[[i,j-i+jsh]], i<=Length[A]&&1<=j-i+jsh<=Dimensions[A][[2]]},
- {fill[[i]], i<=Length[fill]&&j-i+jsh>Dimensions[A][[2]]},
- {rowgen[i][[j-i+jsh]], 1<=j-i+jsh<=Dimensions[A][[2]]},
+GetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_],i_]:=fill[[i]];
+SetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_],i_,val_]:=BandedOperator[A,jsh,ReplacePart[fill,i->val],rowgen];
+
+BandedOperator/:bnd_BandedOperator[[i_Integer,j_Integer]]:=\[Piecewise]{
+ {First[bnd][[i,j-LeftIndex[bnd,i]+1]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
+ {GetFill[bnd,i], i<=Length[bnd]&&j>RightIndex[bnd,i]},
+ {Last[bnd][i][[j-LeftIndex[bnd,i]+1]], LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
  {0, True}
 };
 BandedOperator/:bnd_BandedOperator[[i_List,j_Integer]]:=bnd[[#,j]]&/@i;
@@ -47,26 +51,13 @@ BandedOperator/:sp_BandedOperator[[im_Integer;;iM_Integer,jm_Integer;;jM_Integer
 	Table[sp[[i,j]],{i,im,iM},{j,jm,jM}]];
 
 
-
-ReplaceEntry[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_],{i_,j_},p_]:=Module[{B,nfil},
-If[i>Length[A],
-ReplaceEntry[bnd//IncreaseLength,{i,j},p]
-,
-If[j-i+jsh<=Dimensions[A][[2]],
-B=A;
-B[[i,j-i+jsh]]=p;
-BandedOperator[B,jsh,fil,rowgen]
-,
-nfil=PadRight[fil,Max[Length[fil],i]];
-nfil[[i]]=p;
-BandedOperator[A,jsh,nfil,rowgen]
-]
-]
-];
 LeftBandwidth[BandedOperator[A_List,jsh_,___]]:=1-jsh;
 RightBandwidth[BandedOperator[A_List,jsh_,___]]:=Length[A[[1]]]-jsh;
 LeftIndex[bnd_BandedOperator,row_]:=Max[row+LeftBandwidth[bnd],1];
-RightIndex[bnd_BandedOperator,row_]:=row+RightBandwidth[bnd];
+RightIndex[bnd_BandedOperator,row_]:=LeftIndex[bnd,row]+\[Piecewise]{
+ {Length[First[bnd][[row]]], row<=Length[bnd]},
+ {Length[Last[bnd][row]], True}
+}-1;
 
 LowerIndex[bnd_BandedMatrix,col_]:=col-LeftBandwidth[bnd];
 
@@ -77,27 +68,61 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 BandedOperator/:Dimensions[BandedOperator[A_List,jsh_,___]]:={Length[A],Length[A[[-1]]]+Length[A]-jsh};
 
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;Dimensions[bnd][[2]]]];
-BandedOperator/:MatrixForm[bnd_BandedOperator]:=bnd//ToArray//MatrixForm;
+BandedOperator/:MatrixForm[bnd_BandedOperator]:=bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//MatrixForm;
 
 
-IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,fill,rowgen];
+IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,Append[fill,0],rowgen];
+
+
+
+IncreaseRightIndex[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_],i_,j_]:=Module[{B},
+If[j<=RightIndex[bnd,i],
+bnd,
+B=A;
+B[[i]]=Append[B[[i]],bnd[[i,RightIndex[bnd,i]+1]]];
+IncreaseRightIndex[BandedOperator[B,jsh,fil,rowgen],i,j]
+]
+];
+
+
+ReplaceEntry[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
+
+If[j<LeftIndex[bnd,i],
+Throw["left of left entry"]];
+
+If[i>Length[A],
+If[!OptionValue[IncreaseSize],
+Throw["Replacing entry past size"]];
+ReplaceEntry[bnd//IncreaseLength,{i,j},p,opts]
+,
+If[j<=RightIndex[bnd,i],
+B=A;
+B[[i,j-LeftIndex[bnd,i]+1]]=p;
+BandedOperator[B,jsh,fil,rowgen]
+,
+If[!OptionValue[IncreaseSize],
+Throw["Replacing entry past size"]];
+
+ReplaceEntry[IncreaseRightIndex[bnd,i,j],{i,j},p,opts]
+]
+]
+];
 
 ApplyToRows[G_,Bn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1},
 Bn1=Bn;
 
 Do[
 vals=G.Bn1[[{row1,row2},i]];
-Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]]];
+Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
 Bn1=ReplaceEntry[Bn1,{row2,i},vals[[2]]];
 
-,{i,LeftIndex[Bn1,row2],RightIndex[Bn1,row1]}];
+,{i,LeftIndex[Bn1,row2],RightIndex[Bn1,row2]}];
 
 
-vals=G.Bn1[[{row1,row2},RightIndex[Bn1,row1]+1]];
-Do[
-Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]]];
-Bn1=ReplaceEntry[Bn1,{row2,i},vals[[2]]];
-,{i,RightIndex[Bn1,row1]+1,RightIndex[Bn1,row2]+1}];
+vals=G.Bn1[[{row1,row2},RightIndex[Bn1,row2]+1]];
+
+Bn1=SetFill[Bn1,row1,vals[[1]]];
+Bn1=SetFill[Bn1,row2,vals[[2]]];
 
 Bn1
 ];
