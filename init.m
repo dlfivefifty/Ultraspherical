@@ -175,5 +175,43 @@ Bn1
 ];
 
 
+ApplyToRows[G_,BDx_BandedOperator,Bd2_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2,Bn2},
+Bn1=BDx;
+Bn2=Bd2;
+
+Do[
+{B1,B2}={Bn1[[row1,i]],Bn2[[row2,i]]};
+{B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
+Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
+Bn2=ReplaceEntry[Bn2,{row2,i},B2,IncreaseSize->True];
+
+,{i,LeftIndex[Bn2,row2],RightIndex[Bn2,row2]}];
+
+
+{B1,B2}={Bn1[[row1,RightIndex[Bn1,row2]+1]],Bn2[[row2,RightIndex[Bn1,row2]+1]]};
+{B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
+
+Bn1=SetFill[Bn1,row1,B1];
+Bn2=SetFill[Bn2,row2,B2];
+
+{Bn1,Bn2}
+];
+
+(*This is for list operators of operators *)
+
+ApplyToRows[G_,BL:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_}]:=Module[{vals,Bn1,B1,B2},
+Bn1=BL;
+
+
+{B1,B2}=Bn1[[{row1,row2}]];
+{B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2},{ssrow1,ssrow2}];
+Bn1[[row1]]=B1;
+Bn1[[row2]]=B2;
+
+Bn1
+];
+
+
+
 End[];
 EndPackage[];
