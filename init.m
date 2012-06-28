@@ -77,7 +77,10 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 BandedOperator/:Dimensions[BandedOperator[A_List,jsh_,___]]:={Length[A],Length[A[[-1]]]+Length[A]-jsh};
 
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;Dimensions[bnd][[2]]]];
-BandedOperator/:MatrixForm[bnd_BandedOperator]:=MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm;
+BandedOperator/:MatrixForm[bnd_BandedOperator]:=
+If[GetRowGenerator[bnd]===Null,
+MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm,
+MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm];
 
 
 IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,Append[fill,0 Last[fill]],rowgen,opts];
@@ -140,7 +143,9 @@ Bn1
 
 
 BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,rowgen_,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, c rowgen[#]&,opts];
+BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,Null,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, Null,opts];
 BandedOperator/: BandedOperator[A_List,jsh_,fill1_List,rowgen1_,opts:OptionsPattern[]]+BandedOperator[B_List,jsh_,fill2_List,rowgen2_,opts:OptionsPattern[]]:=BandedOperator[ A+B,jsh,fill1+fill2,  rowgen1[#]+rowgen2[#]&,opts];
+BandedOperator/: BandedOperator[A_List,jsh_,fill1_List,Null,opts:OptionsPattern[]]+BandedOperator[B_List,jsh_,fill2_List,Null,opts:OptionsPattern[]]:=BandedOperator[ A+B,jsh,fill1+fill2,  Null,opts];
 
 
 ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1,Bn2,i},
