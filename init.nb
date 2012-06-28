@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     44420,       1171]
-NotebookOptionsPosition[     43216,       1124]
-NotebookOutlinePosition[     43574,       1140]
-CellTagsIndexPosition[     43531,       1137]
+NotebookDataLength[     45509,       1198]
+NotebookOptionsPosition[     44301,       1151]
+NotebookOutlinePosition[     44659,       1167]
+CellTagsIndexPosition[     44616,       1164]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -593,25 +593,49 @@ Cell[BoxData[{
   3.549851703098495*^9, 3.549851714903438*^9}, {3.549853323781432*^9, 
   3.549853329019656*^9}}],
 
-Cell[BoxData[
- RowBox[{"BandedOperator", "/:", 
-  RowBox[{
-   RowBox[{"c_", "?", "NumberQ"}], " ", 
-   RowBox[{"BandedOperator", "[", 
-    RowBox[{"A_List", ",", "jsh_", ",", "fill_List", ",", "rowgen_"}], 
-    "]"}]}], ":=", 
-  RowBox[{"BandedOperator", "[", 
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"BandedOperator", "/:", 
    RowBox[{
-    RowBox[{"c", " ", "A"}], ",", "jsh", ",", 
-    RowBox[{"c", " ", "fill"}], ",", " ", 
+    RowBox[{"c_", "?", "NumberQ"}], " ", 
+    RowBox[{"BandedOperator", "[", 
+     RowBox[{"A_List", ",", "jsh_", ",", "fill_List", ",", "rowgen_", ",", 
+      RowBox[{"opts", ":", 
+       RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}]}], ":=", 
+   RowBox[{"BandedOperator", "[", 
     RowBox[{
-     RowBox[{"c", " ", 
-      RowBox[{"rowgen", "[", "#", "]"}]}], "&"}]}], "]"}]}]], "Input",
+     RowBox[{"c", " ", "A"}], ",", "jsh", ",", 
+     RowBox[{"c", " ", "fill"}], ",", " ", 
+     RowBox[{
+      RowBox[{"c", " ", 
+       RowBox[{"rowgen", "[", "#", "]"}]}], "&"}], ",", "opts"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"BandedOperator", "/:", " ", 
+   RowBox[{
+    RowBox[{"BandedOperator", "[", 
+     RowBox[{"A_List", ",", "jsh_", ",", "fill1_List", ",", "rowgen1_", ",", 
+      RowBox[{"opts", ":", 
+       RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], "+", 
+    RowBox[{"BandedOperator", "[", 
+     RowBox[{"B_List", ",", "jsh_", ",", "fill2_List", ",", "rowgen2_", ",", 
+      RowBox[{"opts", ":", 
+       RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}]}], ":=", 
+   RowBox[{"BandedOperator", "[", " ", 
+    RowBox[{
+     RowBox[{"A", "+", "B"}], ",", "jsh", ",", 
+     RowBox[{"fill1", "+", "fill2"}], ",", "  ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"rowgen1", "[", "#", "]"}], "+", 
+       RowBox[{"rowgen2", "[", "#", "]"}]}], "&"}], ",", "opts"}], "]"}]}], 
+  ";"}]}], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.549666178987925*^9, 3.5496662147884417`*^9}, {
   3.549666248709485*^9, 3.5496662603725348`*^9}, {3.549773972202506*^9, 
-  3.549773973201696*^9}, {3.549822934343738*^9, 3.549822935198258*^9}}]
-}, Closed]],
+  3.549773973201696*^9}, {3.549822934343738*^9, 3.549822935198258*^9}, {
+  3.5498594462553062`*^9, 3.5498595264925413`*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -879,32 +903,35 @@ Cell[BoxData[{
             RowBox[{"Bn2", ",", "row2"}], "]"}], ",", 
            RowBox[{"RightIndex", "[", 
             RowBox[{"Bn2", ",", "row2"}], "]"}]}], "}"}]}], "]"}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
        RowBox[{
         RowBox[{"{", 
          RowBox[{"B1", ",", "B2"}], "}"}], "=", 
         RowBox[{"{", 
          RowBox[{
-          RowBox[{"Bn1", "\[LeftDoubleBracket]", 
-           RowBox[{"row1", ",", 
-            RowBox[{
-             RowBox[{"RightIndex", "[", 
-              RowBox[{"Bn1", ",", "row2"}], "]"}], "+", "1"}]}], 
-           "\[RightDoubleBracket]"}], ",", 
-          RowBox[{"Bn2", "\[LeftDoubleBracket]", 
-           RowBox[{"row2", ",", 
-            RowBox[{
-             RowBox[{"RightIndex", "[", 
-              RowBox[{"Bn1", ",", "row2"}], "]"}], "+", "1"}]}], 
-           "\[RightDoubleBracket]"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"GetFill", "[", 
+           RowBox[{"Bn1", ",", "row1"}], "]"}], ",", 
+          RowBox[{"GetFill", "[", 
+           RowBox[{"Bn2", ",", "row2"}], "]"}]}], "}"}]}], ";", 
+       "\[IndentingNewLine]", 
        RowBox[{
         RowBox[{"{", 
          RowBox[{"B1", ",", "B2"}], "}"}], "=", 
-        RowBox[{"ApplyToRows", "[", 
-         RowBox[{"G", ",", "B1", ",", "B2", ",", 
-          RowBox[{"{", 
-           RowBox[{"srow1", ",", "srow2"}], "}"}]}], "]"}]}], ";", 
-       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"ApplyToRows", "[", 
+            RowBox[{"G", ",", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], ",", 
+             RowBox[{
+             "#", "\[LeftDoubleBracket]", "2", "\[RightDoubleBracket]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"srow1", ",", "srow2"}], "}"}]}], "]"}], "&"}], "/@", 
+          RowBox[{"Thread", "[", 
+           RowBox[{"{", 
+            RowBox[{"B1", ",", "B2"}], "}"}], "]"}]}], "//", "Thread"}]}], 
+       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
        RowBox[{"Bn1", "=", 
         RowBox[{"SetFill", "[", 
          RowBox[{"Bn1", ",", "row1", ",", "B1"}], "]"}]}], ";", 
@@ -970,8 +997,8 @@ Cell[BoxData[{
  InitializationCell->True,
  CellChangeTimes->{{3.5498299971204147`*^9, 3.549830002231*^9}, {
   3.5498300620259542`*^9, 3.549830114773*^9}, {3.549830182515881*^9, 
-  3.5498303887293577`*^9}}]
-}, Closed]],
+  3.5498303887293577`*^9}, {3.5498593176211367`*^9, 3.5498593388387737`*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -1150,27 +1177,27 @@ Cell[2489, 64, 11837, 321, 768, "Input",
  InitializationCell->True],
 Cell[14329, 387, 8624, 206, 838, "Input",
  InitializationCell->True],
-Cell[22956, 595, 711, 17, 43, "Input",
- InitializationCell->True]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[23704, 617, 107, 1, 37, "Section"],
-Cell[23814, 620, 7753, 189, 658, "Input",
+Cell[22956, 595, 1699, 41, 118, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[31604, 814, 182, 4, 67, "Section"],
-Cell[31789, 820, 6106, 152, 583, "Input",
- InitializationCell->True]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[37932, 977, 93, 1, 37, "Section"],
-Cell[38028, 980, 4799, 127, 326, "Input",
+Cell[24692, 641, 107, 1, 67, "Section"],
+Cell[24802, 644, 7753, 189, 658, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[42864, 1112, 91, 1, 67, "Section"],
-Cell[42958, 1115, 242, 6, 43, "Input",
+Cell[32592, 838, 182, 4, 67, "Section"],
+Cell[32777, 844, 6203, 155, 568, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[39017, 1004, 93, 1, 67, "Section"],
+Cell[39113, 1007, 4799, 127, 326, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[43949, 1139, 91, 1, 67, "Section"],
+Cell[44043, 1142, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
