@@ -37,6 +37,9 @@ GetFillValue;
 Filler;
 Givens;
 GivensReduce;
+DerivativeOperator;
+ConversionOperator;
+DirichletOperator;
 Begin["Private`"];
 
 
@@ -248,6 +251,28 @@ GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_}]:=Module[{G},
 G=Givens[BDx[[row1]][[srow1,srow1]],BDx[[row2]][[srow2,srow1]],{ssrow1,ssrow2},ssrow1]//N;
 ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}]
 ]
+
+
+DerivativeOperator[1]:=BandedOperator[{{1}},0,{0},{#}&];
+DerivativeOperator[2]:=BandedOperator[{{4}},-1,{0},{2 (#+1)}&];
+DerivativeOperator[2,Filler->fls_]:=BandedOperator[{{1}},0,{0 fls[1]},{#}&,Filler->fls];
+ConversionOperator[1]:=BandedOperator[{{1,0,-1/2}},1,{0},{1/2,0,-1/2}&];
+ConversionOperator[2]:=BandedOperator[{{1,0,-2/3,0,1/6}},1,{0},{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&];
+DirichletOperator[-1]:=BandedOperator[{{1}},1,{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[1]:=BandedOperator[{{1}},1,{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
+
+IdentityOperator:=BandedOperator[{{1,0,0}},1,{0},{1,0,0}&];
+IdentityOperator[Filler->fls_]:=BandedOperator[{{1,0,0}},1,{0 fls[1]},{1,0,0}&,Filler->fls];
+ZeroOperator:=BandedOperator[{{0,0,0}},1,{0},{0,0,0}&];
+ZeroOperator[Filler->fls_]:=BandedOperator[{{0,0,0}},1,{0 fls[1]},{0,0,0}&,Filler->fls];
+
+
+ZeroOperator[1,\[Infinity]]:=BandedOperator[{{0}},1,{0},Null];
+
+DirichletOperator[-1,All]:=BandedOperator[{{IdentityOperator}},1,{{IdentityOperator,ZeroOperator}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[1,All]:=BandedOperator[{{IdentityOperator}},1,{{ZeroOperator,IdentityOperator}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[All,-1]:=BandedOperator[{{DirichletOperator[-1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[-1]}&,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[All,1]:=BandedOperator[{{DirichletOperator[1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[1]}&,Filler->({(-1)^(#-1),1}&)];
 
 
 End[];
