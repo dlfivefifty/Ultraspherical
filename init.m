@@ -157,10 +157,17 @@ Bn2=Bnn;
 
 Do[
 vals=G.{Bn1[[row1,i]],Bn2[[row2,i]]};
-Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
-Bn2=ReplaceEntry[Bn2,{row2,i},vals[[2]],IncreaseSize->True];
 
-,{i,LeftIndex[Bn2,row2],RightIndex[Bn2,row2]}];
+
+
+If[vals[[1]]!=Bn1[[row1,i]],
+Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
+];
+If[vals[[2]]!=Bn2[[row2,i]],
+Bn2=ReplaceEntry[Bn2,{row2,i},vals[[2]],IncreaseSize->True];
+];
+
+,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn2,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn2,row2]]}];
 
 
 vals=G.{GetFill[Bn1,row1],GetFill[Bn2,row2]};
@@ -261,16 +268,23 @@ ConversionOperator[2]:=BandedOperator[{{1,0,-2/3,0,1/6}},1,{0},{1/(2 #),0,-(1/(2
 DirichletOperator[-1]:=BandedOperator[{{1}},1,{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
 DirichletOperator[1]:=BandedOperator[{{1}},1,{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
 
-IdentityOperator:=BandedOperator[{{1,0,0}},1,{0},{1,0,0}&];
+
 IdentityOperator[Filler->fls_]:=BandedOperator[{{1,0,0}},1,{0 fls[1]},{1,0,0}&,Filler->fls];
-ZeroOperator:=BandedOperator[{{0,0,0}},1,{0},{0,0,0}&];
+IdentityOperator[]:=IdentityOperator[Filler->({(-1)^(#-1),1}&)];
+
 ZeroOperator[Filler->fls_]:=BandedOperator[{{0,0,0}},1,{0 fls[1]},{0,0,0}&,Filler->fls];
+ZeroOperator[]:=ZeroOperator[Filler->({(-1)^(#-1),1}&)];
+
+ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{{0}},1,{0 fls[1]},Null,Filler->fls];
+ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->({(-1)^(#-1),1}&)];
 
 
-ZeroOperator[1,\[Infinity]]:=BandedOperator[{{0}},1,{0},Null];
 
-DirichletOperator[-1,All]:=BandedOperator[{{IdentityOperator}},1,{{IdentityOperator,ZeroOperator}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[1,All]:=BandedOperator[{{IdentityOperator}},1,{{ZeroOperator,IdentityOperator}},Null,Filler->({(-1)^(#-1),1}&)];
+
+
+
+DirichletOperator[-1,All]:=BandedOperator[{{IdentityOperator[]}},1,{{IdentityOperator[],ZeroOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[1,All]:=BandedOperator[{{IdentityOperator[]}},1,{{ZeroOperator[],IdentityOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
 DirichletOperator[All,-1]:=BandedOperator[{{DirichletOperator[-1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[-1]}&,Filler->({(-1)^(#-1),1}&)];
 DirichletOperator[All,1]:=BandedOperator[{{DirichletOperator[1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[1]}&,Filler->({(-1)^(#-1),1}&)];
 
