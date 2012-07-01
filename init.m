@@ -43,7 +43,7 @@ DirichletOperator;
 Begin["Private`"];
 
 
-GetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_,___],i_]:=fill[[i]];
+GetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_,___],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
 GetFillValue[BandedOperator[A_List,jsh_,fill_List,rowgen_],{i_,_}]:=fill[[i]];
 GetFillValue[BandedOperator[A_List,jsh_,fill_List,rowgen_,Filler->fls_],{i_,j_}]:=fill[[i]].fls[j];
 SetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_,opts___],i_,val_]:=BandedOperator[A,jsh,ReplacePart[fill,i->val],rowgen,opts];
@@ -148,7 +148,7 @@ Bn1
 BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,rowgen_,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, c rowgen[#]&,opts];
 BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,Null,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, Null,opts];
 BandedOperator/: BandedOperator[A_List,jsh_,fill1_List,rowgen1_,opts:OptionsPattern[]]+BandedOperator[B_List,jsh_,fill2_List,rowgen2_,opts:OptionsPattern[]]:=BandedOperator[ A+B,jsh,fill1+fill2,  rowgen1[#]+rowgen2[#]&,opts];
-BandedOperator/: BandedOperator[A_List,jsh_,fill1_List,Null,opts:OptionsPattern[]]+BandedOperator[B_List,jsh_,fill2_List,Null,opts:OptionsPattern[]]:=BandedOperator[ A+B,jsh,fill1+fill2,  Null,opts];
+BandedOperator/: BandedOperator[A_List,jsh_,fill1_List,Null,opts:OptionsPattern[]]+BandedOperator[B_List,jsh_,fill2_List,Null,opts:OptionsPattern[]]:=BandedOperator[A+B,jsh,fill1+fill2,  Null,opts];
 
 
 ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1,Bn2,i},
@@ -188,7 +188,7 @@ Do[
 Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
 Bn1=ReplaceEntry[Bn1,{row2,i},B2,IncreaseSize->True];
 
-,{i,LeftIndex[Bn1,row2],RightIndex[Bn1,row2]}];
+,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn1,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn1,row2]]}];
 
 
 {B1,B2}={GetFill[Bn1,row1],GetFill[Bn1,row2]};
@@ -201,7 +201,7 @@ Bn1
 ];
 
 
-ApplyToRows[G_,BDx_BandedOperator,Bd2_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2,Bn2},
+ApplyToRows[G_,BDx_BandedOperator,Bd2_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2,Bn2,i},
 Bn1=BDx;
 Bn2=Bd2;
 
@@ -211,7 +211,7 @@ Do[
 Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
 Bn2=ReplaceEntry[Bn2,{row2,i},B2,IncreaseSize->True];
 
-,{i,LeftIndex[Bn2,row2],RightIndex[Bn2,row2]}];
+,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn2,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn2,row2]]}];
 
 {B1,B2}={GetFill[Bn1,row1],GetFill[Bn2,row2]};
 {B1,B2}=ApplyToRows[G,#[[1]],#[[2]],{srow1,srow2}]&/@Thread[{B1,B2}]//Thread;
@@ -257,7 +257,21 @@ ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
 GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_}]:=Module[{G},
 G=Givens[BDx[[row1]][[srow1,srow1]],BDx[[row2]][[srow2,srow1]],{ssrow1,ssrow2},ssrow1]//N;
 ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}]
-]
+];
+
+
+GivensReduce[BDx_,{row1_,row2_},col_]:=Module[{G},
+G=Givens[BDx,BDx,{row1,row2},col]//N;
+ApplyToRows[G,BDx,{row1,row2}]
+];
+GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},col_,scol_]:=Module[{G},
+G=Givens[BDx[[row1,col]],BDx[[row2,col]],{srow1,srow2},scol]//N;
+ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
+];
+GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=Module[{G},
+G=Givens[BDx[[row1]][[srow1,col]],BDx[[row2]][[srow2,col]],{ssrow1,ssrow2},scol]//N;
+ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}]
+];
 
 
 DerivativeOperator[1]:=BandedOperator[{{1}},0,{0},{#}&];
