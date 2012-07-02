@@ -43,6 +43,7 @@ DirichletOperator;
 IdentityOperator;
 ZeroOperator;
 LaplaceOperator;
+ListRowReduce;
 Begin["Private`"];
 
 
@@ -327,6 +328,43 @@ G=Givens[BDx[[row1,col]],BDx[[row2,col]],{srow1,srow2},scol]//N;
 ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
 ];
 GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=ApplyToRows[Givens[BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2},col,scol],BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}];
+
+
+RowReduceMatrix[Bin_,Binn_,{i_,j_},k_]:=Module[{A,a,bB},
+a=Bin[[i,k]];
+bB=Binn[[j,k]];
+({
+ {1, 0},
+ {-bB/a, 1}
+})
+];
+RowReduceMatrix[Bn_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=
+RowReduceMatrix[Bn[[row1]][[srow1,col]],Bn[[row2]][[srow2,col]],{ssrow1,ssrow2},scol]//N;
+
+
+BandedOperator/:RowReduce[BDx_BandedOperator,{row1_,row2_}]:=Module[{G},
+G=RowReduceMatrix[BDx,BDx,{row1,row2},row1]//N;
+ApplyToRows[G,BDx,{row1,row2}]
+];
+BandedOperator/:RowReduce[BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{G},
+G=RowReduceMatrix[BDx[[row1,row1]],BDx[[row2,row1]],{srow1,srow2},srow1]//N;
+ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
+];
+ListRowReduce[BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_}]:=Module[{G},
+G=RowReduceMatrix[BDx[[row1]][[srow1,srow1]],BDx[[row2]][[srow2,srow1]],{ssrow1,ssrow2},ssrow1]//N;
+ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}]
+];
+
+
+BandedOperator/:RowReduce[BDx_BandedOperator,{row1_,row2_},col_]:=Module[{G},
+G=RowReduceMatrix[BDx,BDx,{row1,row2},col]//N;
+ApplyToRows[G,BDx,{row1,row2}]
+];
+BandedOperator/:RowReduce[BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_},col_,scol_]:=Module[{G},
+G=RowReduceMatrix[BDx[[row1,col]],BDx[[row2,col]],{srow1,srow2},scol]//N;
+ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
+];
+ListRowReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=ApplyToRows[RowReduceMatrix[BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2},col,scol],BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}];
 
 
 DerivativeOperator[2,Filler->fls_]:=BandedOperator[{{0,0,4}},1,{0 fls[1]},{0,0,2 (#+1)}&,Filler->fls];
