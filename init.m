@@ -195,7 +195,7 @@ BandedOperator[First[bnA]+First[bnB],jsh,bnA[[3]]+bnB[[3]],  PadRight[rowgen1[#]
 
 RowZeroQ[0,_]:=True;
 RowZeroQ[bnd_BandedOperator,row_]:=If[row<=Length[bnd],
-	{First[bnd],GetFill[bnd,row]},
+	{First[bnd][[row]],GetFill[bnd,row]},
 {GetRowGenerator[bnd][row]}]//Flatten//Abs//Total//NZeroQ;
 
 
@@ -329,11 +329,16 @@ ApplyToRows[G,BDx,{row1,row2},{srow1,srow2}]
 GivensReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=ApplyToRows[Givens[BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2},col,scol],BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2}];
 
 
-DerivativeOperator[1]:=BandedOperator[{{0,1}},1,{0},{0,#}&];
-DerivativeOperator[2]:=BandedOperator[{{0,0,4}},1,{0},{0,0,2 (#+1)}&];
+DerivativeOperator[2,Filler->fls_]:=BandedOperator[{{0,0,4}},1,{0 fls[1]},{0,0,2 (#+1)}&,Filler->fls];
 DerivativeOperator[1,Filler->fls_]:=BandedOperator[{{1}},0,{0 fls[1]},{#}&,Filler->fls];
-ConversionOperator[1]:=BandedOperator[{{1,0,-1/2}},1,{0},{1/2,0,-1/2}&];
-ConversionOperator[2]:=BandedOperator[{{1,0,-2/3,0,1/6}},1,{0},{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&];
+DerivativeOperator[1]:=DerivativeOperator[1,Filler->({(-1)^(#-1),1}&)];
+DerivativeOperator[2]:=DerivativeOperator[2,Filler->({(-1)^(#-1),1}&)];
+
+ConversionOperator[1,Filler->fls_]:=BandedOperator[{{1,0,-1/2}},1,{0 fls[1]},{1/2,0,-1/2}&,Filler->fls];
+ConversionOperator[1]:=ConversionOperator[1,Filler->({(-1)^(#-1),1}&)];
+ConversionOperator[2,Filler->fls_]:=BandedOperator[{{1,0,-2/3,0,1/6}},1,{0 fls[1]},{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->fls];
+ConversionOperator[2]:=ConversionOperator[2,Filler->({(-1)^(#-1),1}&)];
+
 DirichletOperator[-1]:=BandedOperator[{{1}},1,{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
 DirichletOperator[1]:=BandedOperator[{{1}},1,{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
 
@@ -366,7 +371,7 @@ DerivativeOperator[0,2]:=BandedOperator[{{4 ConversionOperator[2]}},-1,{ZeroOper
 DerivativeOperator[2,0]:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],-2/3 DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],(-(1/(2 (#+2)))-1/(2 #))DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
 
 
-LaplaceOperator:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],BandedOperator[{(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6}},1,{0},(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6}},1,{0},Function[rw,(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))}]],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
+LaplaceOperator:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],BandedOperator[{(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6}},1,{{0,0}},(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6}},1,{0},Function[rw,(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))}]],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
 
 
 End[];
