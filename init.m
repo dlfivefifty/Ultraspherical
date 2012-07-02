@@ -371,7 +371,7 @@ DerivativeOperator[0,2]:=BandedOperator[{{4 ConversionOperator[2]}},-1,{ZeroOper
 DerivativeOperator[2,0]:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],-2/3 DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],(-(1/(2 (#+2)))-1/(2 #))DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
 
 
-LaplaceOperator:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],BandedOperator[{(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6}},1,{{0,0}},(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6}},1,{0},Function[rw,(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))}]],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
+LaplaceOperator:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],BandedOperator[{(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6}},1,{{0,0}},(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6}},1,{{ZeroOperator[],ZeroOperator[]}},{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6}},1,{{0,0}},Function[rw,(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))}],Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)];
 
 
 End[];

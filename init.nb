@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     91879,       2475]
-NotebookOptionsPosition[     90067,       2408]
-NotebookOutlinePosition[     90424,       2424]
-CellTagsIndexPosition[     90381,       2421]
+NotebookDataLength[     92785,       2502]
+NotebookOptionsPosition[     90973,       2435]
+NotebookOutlinePosition[     91330,       2451]
+CellTagsIndexPosition[     91287,       2448]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2295,7 +2295,10 @@ Cell[BoxData[{
          RowBox[{"DerivativeOperator", "[", "2", "]"}], "/", "6"}]}], "}"}], 
       "}"}], ",", "1", ",", 
      RowBox[{"{", 
-      RowBox[{"ZeroOperator", "[", "]"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"ZeroOperator", "[", "]"}], ",", 
+        RowBox[{"ZeroOperator", "[", "]"}]}], "}"}], "}"}], ",", 
      RowBox[{
       RowBox[{"{", 
        RowBox[{
@@ -2329,7 +2332,9 @@ Cell[BoxData[{
                RowBox[{
                 RowBox[{"-", "2"}], "/", "3"}], ",", "0", ",", 
                RowBox[{"1", "/", "6"}]}], "}"}]}]}], "}"}], ",", "1", ",", 
-          RowBox[{"{", "0", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "0"}], "}"}], "}"}], ",", 
           RowBox[{"Function", "[", 
            RowBox[{"rw", ",", 
             RowBox[{
@@ -2368,15 +2373,36 @@ Cell[BoxData[{
                 FractionBox["1", 
                  RowBox[{"2", 
                   RowBox[{"(", 
-                   RowBox[{"rw", "+", "2"}], ")"}]}]]}], "}"}]}]}]}], "]"}]}],
-          "]"}], ",", 
+                   RowBox[{"rw", "+", "2"}], ")"}]}]]}], "}"}]}]}]}], "]"}], 
+          ",", 
+          RowBox[{"Filler", "\[Rule]", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"(", 
+                 RowBox[{"-", "1"}], ")"}], "^", 
+                RowBox[{"(", 
+                 RowBox[{"#", "-", "1"}], ")"}]}], ",", "1"}], "}"}], "&"}], 
+            ")"}]}]}], "]"}], ",", 
         RowBox[{"ZeroOperator", "[", "]"}], ",", 
         FractionBox[
          RowBox[{"DerivativeOperator", "[", "2", "]"}], 
          RowBox[{"2", 
           RowBox[{"(", 
-           RowBox[{"#", "+", "2"}], ")"}]}]]}], "}"}], "&"}]}], "]"}]}], 
-  ";"}]}], "Input",
+           RowBox[{"#", "+", "2"}], ")"}]}]]}], "}"}], "&"}], ",", 
+     RowBox[{"Filler", "\[Rule]", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"-", "1"}], ")"}], "^", 
+           RowBox[{"(", 
+            RowBox[{"#", "-", "1"}], ")"}]}], ",", "1"}], "}"}], "&"}], 
+       ")"}]}]}], "]"}]}], ";"}]}], "Input",
  InitializationCell->True,
  CellChangeTimes->{{3.550122452643403*^9, 3.550122480910864*^9}, {
   3.550122574777398*^9, 3.550122624935754*^9}, {3.550122657779542*^9, 
@@ -2388,7 +2414,8 @@ Cell[BoxData[{
   3.550125245405364*^9, 3.550125274555833*^9}, {3.550125327605113*^9, 
   3.5501253976174927`*^9}, {3.550125431562579*^9, 3.5501254394278297`*^9}, {
   3.550125706552293*^9, 3.550125706916587*^9}, {3.550126203868326*^9, 
-  3.550126249079026*^9}, {3.550190374550264*^9, 3.5501903835582438`*^9}}]
+  3.550126249079026*^9}, {3.550190374550264*^9, 3.550190397382245*^9}, {
+  3.5501905449613533`*^9, 3.5501905618263063`*^9}}]
 }, Open  ]]
 }, Open  ]],
 
@@ -2468,13 +2495,13 @@ Cell[74581, 1967, 4387, 127, 133, "Input",
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[79005, 2099, 201, 3, 34, "Subsection"],
-Cell[79209, 2104, 10457, 286, 409, "Input",
+Cell[79209, 2104, 11363, 313, 448, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[89715, 2396, 91, 1, 67, "Section"],
-Cell[89809, 2399, 242, 6, 43, "Input",
+Cell[90621, 2423, 91, 1, 67, "Section"],
+Cell[90715, 2426, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
