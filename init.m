@@ -44,6 +44,7 @@ IdentityOperator;
 ZeroOperator;
 LaplaceOperator;
 ListRowReduce;
+RightHandSide;
 Begin["Private`"];
 
 
@@ -152,7 +153,7 @@ ReplaceEntry[IncreaseRightIndex[bnd,i,j],{i,j},p,opts]
 ]
 ];
 
-ApplyToRows[G_,Bn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1},
+ApplyToRows[G_,Bn_BandedOperator,{row1_,row2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,rhs},
 Bn1=Bn;
 
 Do[
@@ -168,7 +169,15 @@ vals=G.{GetFill[Bn1,row1],GetFill[Bn1,row2]};
 Bn1=SetFill[Bn1,row1,vals[[1]]];
 Bn1=SetFill[Bn1,row2,vals[[2]]];
 
-Bn1
+If[OptionValue[RightHandSide]===Null,
+Bn1,
+rhs=OptionValue[RightHandSide];
+If[Max[row1,row2]>Length[rhs],
+rhs=PadRight[rhs,Max[row1,row2]];
+];
+rhs[[{row1,row2}]]=G.rhs[[{row1,row2}]];
+{Bn1,rhs}
+]
 ];
 
 
@@ -200,7 +209,7 @@ RowZeroQ[bnd_BandedOperator,row_]:=If[row<=Length[bnd],
 {GetRowGenerator[bnd][row]}]//Flatten//Abs//Total//NZeroQ;
 
 
-ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_}]:=Module[{vals,Bn1,Bn2,i},
+ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,Bn2,i,rhs1,rhs2},
 Bn1=Bn;
 Bn2=Bnn;
 
@@ -225,12 +234,24 @@ vals=G.{GetFill[Bn1,row1],GetFill[Bn2,row2]};
 Bn1=SetFill[Bn1,row1,vals[[1]]];
 Bn2=SetFill[Bn2,row2,vals[[2]]];
 
-{Bn1,Bn2}
+
+If[OptionValue[RightHandSide]===Null,
+{Bn1,Bn2},
+{rhs1,rhs2}=OptionValue[RightHandSide];
+
+rhs1=PadRight[rhs1,Max[row1,Length[rhs1]]];
+rhs2=PadRight[rhs2,Max[row2,Length[rhs2]]];
+
+{rhs1[[row1]],rhs2[[row2]]}=G.{rhs1[[row1]],rhs2[[row2]]};
+{{Bn1,Bn2},{rhs1,rhs2}}
+]
+
+
 ];
 
 (*This is for operator of operators *)
 
-ApplyToRows[G_,BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2,i},
+ApplyToRows[G_,BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,B1,B2,i,rhs,rhs1,rhs2},
 Bn1=BDx;
 
 Do[
@@ -248,13 +269,25 @@ Bn1=ReplaceEntry[Bn1,{row2,i},B2,IncreaseSize->True];
 Bn1=SetFill[Bn1,row1,B1];
 Bn1=SetFill[Bn1,row2,B2];
 
-Bn1
+If[OptionValue[RightHandSide]===Null,
+Bn1,
+rhs=OptionValue[RightHandSide];
+
+rhs1=PadRight[rhs[[row1]],Max[row1,Length[rhs[[row1]]]]];
+rhs2=PadRight[rhs[[row2]],Max[row2,Length[rhs[[row2]]]]];
+
+{rhs1[[row1]],rhs2[[row2]]}=G.{rhs1[[row1]],rhs2[[row2]]};
+rhs[[row1]]=rhs1;
+rhs[[row2]]=rhs2;
+
+{Bn1,rhs}
+]
 ];
 
 
 
 
-ApplyToRows[G_,BDx_BandedOperator,Bd2_BandedOperator,{row1_,row2_},{srow1_,srow2_}]:=Module[{vals,Bn1,B1,B2,Bn2,i},
+ApplyToRows[G_,BDx_BandedOperator,Bd2_BandedOperator,{row1_,row2_},{srow1_,srow2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,B1,B2,Bn2,i,rhs1,rhs2,srhs1,srhs2},
 Bn1=BDx;
 Bn2=Bd2;
 
@@ -274,7 +307,22 @@ Bn2=ReplaceEntry[Bn2,{row2,i},B2,IncreaseSize->True];
 Bn1=SetFill[Bn1,row1,B1];
 Bn2=SetFill[Bn2,row2,B2];
 
-{Bn1,Bn2}
+If[OptionValue[RightHandSide]===Null,
+{Bn1,Bn2},
+{rhs1,rhs2}=OptionValue[RightHandSide];
+
+rhs1=PadRight[rhs1,Max[row1,Length[rhs1]],{{}}];
+rhs2=PadRight[rhs2,Max[row2,Length[rhs2]],{{}}];
+
+srhs1=PadRight[rhs1[[row1]],Max[srow1,Length[rhs1[[row1]]]]];
+srhs2=PadRight[rhs2[[row2]],Max[srow2,Length[rhs2[[row2]]]]];
+
+{srhs1[[srow1]],srhs2[[srow2]]}=G.{srhs1[[srow1]],srhs2[[srow2]]};
+rhs1[[row1]]=srhs1;
+rhs2[[row2]]=srhs2;
+
+{{Bn1,Bn2},{rhs1,rhs2}}
+]
 ];
 
 (*This is for list operators of operators *)
@@ -282,11 +330,14 @@ Bn2=SetFill[Bn2,row2,B2];
 ApplyToRows[G_,BL:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_}]:=Module[{vals,Bn1,B1,B2},
 Bn1=BL;
 
-
+If[row1===row2,
+Bn1[[row1]]=ApplyToRows[G,B1[[row1]],{srow1,srow2},{ssrow1,ssrow2}];
+,
 {B1,B2}=Bn1[[{row1,row2}]];
 {B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2},{ssrow1,ssrow2}];
 Bn1[[row1]]=B1;
 Bn1[[row2]]=B2;
+];
 
 Bn1
 ];
