@@ -25,6 +25,8 @@ double alternatingFiller(int k) // for Left Dirichlet
     return 1-2*(k % 2);
 }
 
+
+
 RowFiller::RowFiller()
 {
     fill = 0;
@@ -119,6 +121,13 @@ FilledRow::FilledRow(int ind,vector<RowFiller> flr,int size)
     entries.resize(size);
 }
 
+FilledRow::FilledRow(int ind,vector<double> entrs,vector<RowFiller> flr)
+{
+    index = ind;
+    fillers = flr;
+    
+    entries = entrs;
+}
 
 int FilledRow::size()
 {
@@ -229,7 +238,7 @@ FilledBandedMatrix::FilledBandedMatrix(int low,FilledRow (*rgen)(int))
     lowerIndex = low;
     rowGenerator = rgen;
     
-    increaseSize();
+//    increaseSize();
 }
 
 
@@ -260,27 +269,43 @@ int FilledBandedMatrix::columnSize(int col)
 
 int FilledBandedMatrix::leftIndex(int row)
 {
-    return max(0,rows[row].leftIndex());
+    return max(0,(*this)[row].leftIndex());
 }
 
 int FilledBandedMatrix::rightIndex(int row)
 {
-    return rows[row].rightIndex();
+    return (*this)[row].rightIndex();
 }
 
 
+FilledRow FilledBandedMatrix::getRow(int i,bool increasesize)
+{    
+    if(i >= size()) {
+        if(increasesize) {
+            increaseSize(i);
+            
+            return rows[i];
+        } else {
+            return createRow(i);
+        }
+    } else {
+        return rows[i];
+    }
+}
+
 FilledRow FilledBandedMatrix::operator[] (int i)
 {
-    return rows[i];
+    return getRow(i,false);
 }
 
 double FilledBandedMatrix::getEntry(int i,int j)
 {    
-    if(i >= size()) 
-        return 0;
-    else
-        return rows[i][j];
-    
+    return (*this)[i][j];
+}
+
+double FilledBandedMatrix::getEntry(int i,int j,bool increasesize)
+{    
+    return getRow(i, increasesize)[j];
 }
 
 FilledRow FilledBandedMatrix::createRow(int k)
@@ -291,6 +316,17 @@ FilledRow FilledBandedMatrix::createRow(int k)
 void FilledBandedMatrix::increaseSize()
 {
     rows.push_back(createRow(size()));
+}
+
+void FilledBandedMatrix::increaseSize(int i)
+{
+    for(int j = size(); j <= i; j++)
+        increaseSize();
+}
+
+void FilledBandedMatrix::push_back(FilledRow row)
+{
+    rows.push_back(row);
 }
 
 void FilledBandedMatrix::dropFirst(int row)
@@ -319,9 +355,9 @@ void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
 void FilledBandedMatrix::print()
 {
     
-    for(int i = 0; i < size(); i++)
-    {
-        for(int j = 0; j < columnSize(); j++)
+    for(int i = 0; i < size()+3; i++)
+    {  
+        for(int j = 0; j <= rightIndex(i)+3; j++)
         {
             cout << getEntry(i,j);
             cout << " ";
@@ -342,6 +378,8 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
         throw "Probably a bug: rightIndex(row1) > rightIndex(row2)";
     if (row2 > size())
         throw "Probably a bug: row2 > size";
+    
+    increaseSize(max(row1,row2));
     
     
     double a = (rows[row1])[col1];

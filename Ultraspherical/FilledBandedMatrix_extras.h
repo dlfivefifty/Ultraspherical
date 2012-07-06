@@ -46,14 +46,15 @@ public:
     FilledRow(int);
     FilledRow(int,double);   
     FilledRow(int,vector<RowFiller>);  
+    FilledRow(int,vector<double>,vector<RowFiller>);  
     FilledRow(int,vector<RowFiller>,int);      
-    int size();
+    int size();    
     double operator[] (int);
     void setEntry(int,double);  
     void setEntry(int,double,bool);      
-    void push_back(double);
+    void push_back(double);      
     void increaseSize();       
-    void increaseSize(int);     
+    void increaseSize(int);       
     void dropFirst();  
     double getFill(int);
     void setFill(int,double);    
@@ -85,16 +86,21 @@ public:
     int size();
     int columnSize();
     int columnSize(int);
-    FilledRow createRow(int);
-    void increaseSize();    
+    virtual FilledRow createRow(int);
+    void increaseSize();   
+    void increaseSize(int);       
     double getEntry(int,int);
+    double getEntry(int,int,bool);    
     void setEntry(int,int,double);    
     void setEntry(int,int,double,bool);        
+    FilledRow getRow(int,bool);        
     FilledRow operator[] (int);
     void print();
     
     int leftIndex(int);
     int rightIndex(int);    
+    
+    void push_back(FilledRow);
     
     
     void applyGivens(int,int,vector<double> *);    
@@ -102,6 +108,8 @@ public:
     
     double rowDot(int,int,int,vector<double> *);
 };
+
+
 
 
 

@@ -5,6 +5,134 @@
 // TODO: Better to construct the Hankel vector in reverse so that it can be pop_backed as the ConvertMult vector is formed.
 
 
+FilledRow zeroRowGenerator(int k)
+{
+    FilledRow zero(0,RowFiller::dirichlet(0, 0));
+    zero.increaseSize();
+    return zero;
+}
+
+
+
+
+ToeplitzMatrix::ToeplitzMatrix(vector<double> a) : FilledBandedMatrix(a.size() - 1, NULL)
+{
+    vector<double> halved;
+    
+    vector<double>::iterator it = a.begin();
+    
+    halved.push_back(*it);
+    for (++it; it < a.end(); it++)
+    {
+        halved.push_back(.5*(*it));
+    }
+    
+    
+    
+    push_back(FilledRow(0,halved,RowFiller::dirichlet(0,0)));
+    
+    it = halved.begin();
+//    it2++;
+    
+    vector<double> halvedadd = halved;
+    
+    
+
+    for(++it; it < halved.end(); it++)
+    {   
+        halvedadd.insert(halvedadd.begin(),*it);
+        push_back(FilledRow(0,halvedadd,RowFiller::dirichlet(0,0)));
+    }   
+    
+    
+    rowEntries = halvedadd;
+}
+
+FilledRow ToeplitzMatrix::createRow(int k)
+{
+    return FilledRow(k-(rowEntries.size()-1)/2,rowEntries,RowFiller::dirichlet(0, 0));
+}
+
+
+MultiplicationMatrix::MultiplicationMatrix(vector<double> a) : FilledBandedMatrix(a.size() - 1, NULL)
+{
+    vector<double> halved;
+    
+    vector<double>::iterator it = a.begin();
+    
+    halved.push_back(*it);
+    for (++it; it < a.end(); it++)
+    {
+        halved.push_back(.5*(*it));
+    }
+    
+    
+    
+    push_back(FilledRow(0,halved,RowFiller::dirichlet(0,0)));
+    
+    it = halved.begin();
+    //    it2++;
+    
+    vector<double> halvedadd = halved;
+    
+    
+    
+    for(++it; it < halved.end(); it++)
+    {   
+        halvedadd.insert(halvedadd.begin(),*it);
+        
+        vector<double> newrow;
+        
+        vector<double>::iterator hankelit = it;
+        
+        for (vector<double>::iterator init = halvedadd.begin(); init < halvedadd.end(); ++init) {
+            if (hankelit < halved.end()) 
+            {
+                newrow.push_back((*init) + (*hankelit));
+                hankelit++;
+            }
+            else
+                newrow.push_back((*init));
+        }
+        
+        
+        push_back(FilledRow(0,newrow,RowFiller::dirichlet(0,0)));
+    }   
+    
+    
+    rowEntries = halvedadd;
+}
+
+FilledRow MultiplicationMatrix::createRow(int k)
+{
+    return FilledRow(k-(rowEntries.size()-1)/2,rowEntries,RowFiller::dirichlet(0, 0));
+}
+
+
+
+
+FilledBandedMatrix hankelOperator(vector<double> a)
+{
+    FilledBandedMatrix ret(a.size(),&zeroRowGenerator);
+    
+    ret.increaseSize();
+    
+    for (vector<double>::iterator it = a.begin(); it != a.end(); ++it) {
+        FilledRow row(0,RowFiller::dirichlet(0, 0));        
+        for (vector<double>::iterator init = it; init != a.end(); ++init) {
+            row.push_back(.5*(*init));
+        };
+        
+        
+        ret.push_back(row);
+    };
+    
+    
+    return ret;
+}
+
+
+
 
 // S_0 * M_0[a]. 
 vector<double> ConvertMult(vector<double> a, int k,int n)

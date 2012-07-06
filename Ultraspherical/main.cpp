@@ -141,7 +141,7 @@ int main(int argc, const char * argv[])
     
     printvec(c);
 //    
-    for(long i = 0; i < 50000; i++)
+    for(long i = 0; i < 20000; i++)
         b.push_back(1);
     
     t1 = clock();
@@ -158,24 +158,29 @@ int main(int argc, const char * argv[])
     vector<double> a; 
     a.push_back(1); a.push_back(2); a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
 
-    vector<double> v = HankelDiff(a,0);
-    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-    {
-		cout << *it << " "; 
-    };
-    cout << "\n"; 
-    v = HankelDiff(a,3);
-    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-    {
-		cout << *it << " "; 
-    };
-    cout << "\n"; 
-    v = HankelDiff(a,2);
-    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-    {
-		cout << *it << " "; 
-    };
-    cout << "\n"; 
+    cout <<"hankel:"<<endl;
+    
+    hankelOperator(a).print();
+    MultiplicationMatrix(a).print();
+    
+//    vector<double> v = ConvertMult(a,5,10);
+//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+//    {
+//		cout << *it << " "; 
+//    };
+//    cout << "\n"; 
+//    v = ConvertHankel(a,1);
+//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+//    {
+//		cout << *it << " "; 
+//    };
+//    cout << "\n"; 
+//    v = ConvertHankel(a,2);
+//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
+//    {
+//		cout << *it << " "; 
+//    };
+//    cout << "\n"; 
 
     return 0;
 }
