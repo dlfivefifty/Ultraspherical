@@ -160,27 +160,9 @@ int main(int argc, const char * argv[])
 
     cout <<"hankel:"<<endl;
     
-    hankelOperator(a).print();
-    MultiplicationMatrix(a).print();
+//    hankelOperator(a).print();
+    ConvertMultiplicationMatrix(a).print();
     
-//    vector<double> v = ConvertMult(a,5,10);
-//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-//    {
-//		cout << *it << " "; 
-//    };
-//    cout << "\n"; 
-//    v = ConvertHankel(a,1);
-//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-//    {
-//		cout << *it << " "; 
-//    };
-//    cout << "\n"; 
-//    v = ConvertHankel(a,2);
-//    for (vector<double>::iterator it = v.begin(); it != v.end(); ++it)
-//    {
-//		cout << *it << " "; 
-//    };
-//    cout << "\n"; 
 
     return 0;
 }

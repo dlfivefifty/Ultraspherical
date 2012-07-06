@@ -14,6 +14,49 @@ FilledRow zeroRowGenerator(int k)
 
 
 
+double applyConversion(vector<double> row,int shift,int k)
+{
+    int ind = shift;
+    
+    double ret = 0;
+
+    if(ind >= (int)row.size())
+        return ret;
+    
+    if( ind >= 0)
+    {
+        if(k == 0)
+            ret = row[ind];
+        else
+            ret = row[ind]*.5/(k+1);
+    }
+    
+    ind+=2;
+    
+    if(ind >= (int)row.size())
+        return ret;
+    
+    if ( ind >= 0)
+        ret += -row[ind]*(.5/(k+3.) + .5/(k+1));
+    
+    ind+=2;
+    
+    if(ind >= (int)row.size())
+        return ret;
+    
+    if(ind >= 0)
+        ret += row[ind]*.5/(k+3);
+    
+    return ret; 
+}
+
+double applyConversion(vector<double> cin,int k)
+{
+    return applyConversion(cin,0, k);
+}
+
+
+
 
 ToeplitzMatrix::ToeplitzMatrix(vector<double> a) : FilledBandedMatrix(a.size() - 1, NULL)
 {
@@ -107,6 +150,107 @@ FilledRow MultiplicationMatrix::createRow(int k)
 {
     return FilledRow(k-(rowEntries.size()-1)/2,rowEntries,RowFiller::dirichlet(0, 0));
 }
+
+
+
+ConvertMultiplicationMatrix::ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(a.size() - 1, NULL)
+{
+    vector<double> halved;
+    
+    vector<double>::iterator it = a.begin();
+    
+    halved.push_back(*it);
+    for (++it; it < a.end(); it++)
+    {
+        halved.push_back(.5*(*it));
+    }
+    
+    
+    
+//    push_back(FilledRow(0,halved,RowFiller::dirichlet(0,0)));
+    
+    it = halved.begin();
+    //    it2++;
+    
+    vector<double> halvedadd = halved;
+    
+    
+    vector<double> firstrow;
+    
+    
+    firstrow.push_back(applyConversion(halved, 0));
+    
+    
+    for(++it; it < halved.end(); it++)
+    {   
+        halvedadd.insert(halvedadd.begin(),*it);
+        firstrow.push_back(applyConversion(halvedadd, 0));        
+    }
+    
+    vector<double> halvedaddwithzeros = halvedadd;
+    for(int i = 0; i < 4; i++)
+    {
+        halvedaddwithzeros.insert(halvedaddwithzeros.begin(), 0);
+        firstrow.push_back(applyConversion(halvedaddwithzeros, 0));                
+    }
+    
+    
+    push_back(FilledRow(0,firstrow,RowFiller::dirichlet(0,0)));    
+    
+    
+
+    
+    
+    for (int strt = 1; strt < a.size(); strt++) {
+        vector<double> newrow;
+        
+        for(int i = a.size() + strt + 3; i >=0; i--)
+        {
+            newrow.push_back(applyConversion(halvedaddwithzeros,i, strt));
+        }
+        
+        push_back(FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
+    }
+    
+    
+    
+//        
+//        
+//        
+//        vector<double>::iterator hankelit = it;
+//        
+//        for (vector<double>::iterator init = halvedadd.begin(); init < halvedadd.end(); ++init) {
+////            if (hankelit < halved.end()) 
+////            {
+////                newrow.push_back((*init) + (*hankelit));
+////                hankelit++;
+////            }
+////            else
+//                newrow.push_back((*init));
+//        }
+//        
+//        
+//        push_back(FilledRow(0,newrow,RowFiller::dirichlet(0,0)));
+//    }   
+
+    
+    
+    rowEntries = halvedadd;
+}
+
+FilledRow ConvertMultiplicationMatrix::createRow(int k)
+{
+    
+
+    vector<double> newrow;
+    
+    for (int i = rowEntries.size()-1; i >= -4; i--) {
+        newrow.push_back(applyConversion(rowEntries,i, k)); 
+    }
+    
+    return FilledRow(k-(rowEntries.size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
+}
+
 
 
 
