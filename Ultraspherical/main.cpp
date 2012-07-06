@@ -158,10 +158,12 @@ int main(int argc, const char * argv[])
     vector<double> a; 
     a.push_back(1); a.push_back(2); a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
 
-    cout <<"hankel:"<<endl;
+    cout <<"toep:"<<endl;
     
 //    hankelOperator(a).print();
-    ConvertMultiplicationMatrix(a).print();
+    ConvertToeplitzMatrix(a).print();
+cout <<"hankel:"<<endl;    
+    ConvertHankelMatrix(a).print();    
     
 
     return 0;

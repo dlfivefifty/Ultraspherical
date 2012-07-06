@@ -25,11 +25,19 @@ public:
     virtual FilledRow createRow(int);
 };
 
-class ConvertMultiplicationMatrix : public FilledBandedMatrix
+class ConvertToeplitzMatrix : public FilledBandedMatrix
 {
     vector<double> rowEntries;
 public:
-    ConvertMultiplicationMatrix(vector<double> a);
+    ConvertToeplitzMatrix(vector<double> a);
+    virtual FilledRow createRow(int);
+};
+
+
+class ConvertHankelMatrix : public FilledBandedMatrix
+{
+public:
+    ConvertHankelMatrix(vector<double> a);
     virtual FilledRow createRow(int);
 };
 
