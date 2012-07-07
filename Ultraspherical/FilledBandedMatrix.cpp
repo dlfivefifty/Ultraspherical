@@ -233,7 +233,7 @@ int FilledRow::rightIndex()
 
 
 
-FilledBandedMatrix::FilledBandedMatrix(int low,FilledRow (*rgen)(int))
+FilledBandedMatrix::FilledBandedMatrix(const int low,FilledRow (*rgen)(int))
 {
     lowerIndex = low;
     rowGenerator = rgen;
@@ -249,6 +249,11 @@ int FilledBandedMatrix::lower()
     // Returns zero if the band starts on the diagonal
     // -1 if there is one subdiagonal...
     return lowerIndex;
+}
+
+void FilledBandedMatrix::setLower(int low)
+{
+    lowerIndex = low;
 }
 
 

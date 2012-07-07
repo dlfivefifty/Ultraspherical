@@ -139,7 +139,8 @@ int main(int argc, const char * argv[])
     
 
     vector<double> a; 
-    a.push_back(1); a.push_back(2); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
+    double omega = 40000;
+    a.push_back(omega); a.push_back(2*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
     
     cout <<"toep:"<<endl;
     
@@ -156,18 +157,20 @@ int main(int argc, const char * argv[])
     
     drbnd.print();        
     
+    cout<<"lower:"<<drbnd.lower()<<endl;
+    
 
 
 //    
-//    for(long i = 0; i < 20000; i++)
-//        b.push_back(1);
-    printvec(b);
+    for(long i = 0; i < 10000; i++)
+        b.push_back(1);
+//    printvec(b);
     t1 = clock();
     
-   vector<double> c = QRSolve(bnd,b);            
+   vector<double> c = QRSolve(&drbnd,b);            
     
     t2 = clock();
-    printvec(c);    
+//    printvec(c);    
     float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
     cout<<"time: "<<tottime<<endl;    
     cout<<"size: "<<c.size()<<endl;

@@ -80,8 +80,9 @@ class FilledBandedMatrix
     
     
 public:
-    FilledBandedMatrix(int, FilledRow (*)(int));
+    FilledBandedMatrix(const int, FilledRow (*)(int));
     int lower();
+    void setLower(int);
     void dropFirst(int row);
     int size();
     int columnSize();

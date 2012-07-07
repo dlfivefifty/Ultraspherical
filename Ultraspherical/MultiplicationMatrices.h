@@ -53,6 +53,7 @@ class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
 {
     vector<double> rowEntries;
 public:
+    DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);
     DirichletD2ConvertMultiplicationMatrix(vector<double> a);
     virtual FilledRow createRow(int);
 };

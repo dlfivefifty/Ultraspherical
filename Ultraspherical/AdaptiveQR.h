@@ -11,7 +11,7 @@
 
 #include "FilledBandedMatrix_extras.h"
 
-vector<double> QRSolve(FilledBandedMatrix,vector<double>);
+vector<double> QRSolve(FilledBandedMatrix *,vector<double>);
 
 void printvec(vector<double>);
 

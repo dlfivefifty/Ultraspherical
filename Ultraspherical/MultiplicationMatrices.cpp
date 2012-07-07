@@ -415,9 +415,15 @@ FilledRow ConvertMultiplicationMatrix::createRow(int k)
 
 
 
+DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other) : FilledBandedMatrix(other)
+{
+    rowEntries = other.rowEntries;
+    setLower(other.lower());
+}
 
 
-DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(a.size() - 1, NULL)
+
+DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(-a.size()-1, NULL)
 {
     vector<double> halved;
     
