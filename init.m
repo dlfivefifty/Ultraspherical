@@ -22,8 +22,6 @@
 BeginPackage["Ultraspherical`","RiemannHilbert`Common`"];
 BandedOperator;
 ReplaceEntry;
-LeftBandwidth;
-RightBandwidth;
 IncreaseLength;
 ApplyToRows;
 LowerIndex;
@@ -48,16 +46,18 @@ RightHandSide;
 Begin["Private`"];
 
 
-GetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_,___],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
-GetFillValue[BandedOperator[A_List,jsh_,fill_List,rowgen_],{i_,_}]:=fill[[i]];
-GetFillValue[BandedOperator[A_List,jsh_,fill_List,rowgen_,Filler->fls_],{i_,j_}]:=fill[[i]].fls[j];
-SetFill[BandedOperator[A_List,jsh_,fill_List,rowgen_,opts___],i_,val_]:=BandedOperator[A,jsh,ReplacePart[fill,i->val],rowgen,opts];
-GetRowGenerator[BandedOperator[A_List,jsh_,fill_List,rowgen_,___]]:=rowgen;
+GetFill[BandedOperator[A_List,fill_List,rowgen_,___],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
+GetFillValue[BandedOperator[A_List,fill_List,rowgen_],{i_,_}]:=fill[[i]];
+GetFillValue[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],{i_,j_}]:=fill[[i]].fls[j];
+SetFill[BandedOperator[A_List,fill_List,rowgen_,opts___],i_,val_]:=BandedOperator[A,ReplacePart[fill,i->val],rowgen,opts];
+GetRowGenerator[BandedOperator[A_List,fill_List,rowgen_,___]]:=rowgen;
+
+GetRow[BandedOperator[A_List,fill_List,rowgen_,___],i_]:=If[i>Length[A],rowgen[i],A[[i]]];
 
 BandedOperator/:bnd_BandedOperator[[i_Integer,j_Integer]]:=\[Piecewise]{
- {First[bnd][[i,j-LeftIndex[bnd,i]+1]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
+ {First[bnd][[i,j]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
  {GetFillValue[bnd,{i,j}], i<=Length[bnd]&&j>RightIndex[bnd,i]},
- {GetRowGenerator[bnd][i][[j-LeftIndex[bnd,i]+1]], LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
+ {GetRowGenerator[bnd][i][[j]], LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
  {0, True}
 };
 BandedOperator/:bnd_BandedOperator[[i_List,j_Integer]]:=bnd[[#,j]]&/@i;
@@ -68,23 +68,15 @@ BandedOperator/:sp_BandedOperator[[im_Integer;;iM_Integer,j_Integer]]:=Module[{i
 BandedOperator/:sp_BandedOperator[[im_Integer;;iM_Integer,jm_Integer;;jM_Integer]]:=Module[{i},
 	Table[sp[[i,j]],{i,im,iM},{j,jm,jM}]];
 
+LeftIndex[bnd_BandedOperator,row_]:=Max[GetRow[bnd,row]//FirstIndex,1];
+RightIndex[bnd_BandedOperator,row_]:=GetRow[bnd,row]//LastIndex;
 
-LeftBandwidth[BandedOperator[A_List,jsh_,___]]:=1-jsh;
-RightBandwidth[BandedOperator[A_List,jsh_,___]]:=Length[A[[1]]]-jsh;
-LeftIndex[bnd_BandedOperator,row_]:=Max[row+LeftBandwidth[bnd],1];
-RightIndex[bnd_BandedOperator,row_]:=LeftIndex[bnd,row]+\[Piecewise]{
- {Length[First[bnd][[row]]], row<=Length[bnd]},
- {Length[GetRowGenerator[bnd][row]], True}
-}-1;
+LowerIndex[bnd_BandedMatrix,col_]:=Throw["not implemented"];
 
-LowerIndex[bnd_BandedMatrix,col_]:=col-LeftBandwidth[bnd];
-
-Bandwidth[bnd_BandedOperator]:=RightBandwidth[bnd]-LeftBandwidth[bnd]+1;
 
 BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
-BandedOperator/:Dimensions[BandedOperator[A_List,jsh_,___]]:={Length[A],Length[A[[-1]]]+Length[A]-jsh};
 
-ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;Dimensions[bnd][[2]]]];
+ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]]];
 BandedOperator/:MatrixForm[bnd_BandedOperator]:=
 If[GetRowGenerator[bnd]===Null,
 MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm,
@@ -101,46 +93,41 @@ IncreaseLength[bnd_BandedOperator,n_]:=If[Length[bnd]>=n,bnd,IncreaseLength[bnd/
 
 (** Set Row Length at i to be at least j **)
 
-IncreaseRightIndex[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_,opts___],i_,j_]:=Module[{B},
+IncreaseRightIndex[bnd:BandedOperator[A_List,fil_List,rowgen_,opts___],i_,j_]:=Module[{B},
 If[j<=RightIndex[bnd,i],
 bnd
 ,
 B=A;
 B[[i]]=Append[B[[i]],bnd[[i,RightIndex[bnd,i]+1]]];
-IncreaseRightIndex[BandedOperator[B,jsh,fil,rowgen,opts],i,j]
+IncreaseRightIndex[BandedOperator[B,fil,rowgen,opts],i,j]
 ]
 ];
 
-IncreaseRowLength[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_,opts___],i_,j_]:=Module[{B},
-If[j<=Length[A[[i]]],
-bnd
+IncreaseRowIndexRange[bnd:BandedOperator[A_List,fil_List,rowgen_,opts___],i_,{li_,lr_}]:=Module[{B},
+If[lr<=Length[A[[i]]],
+B=A;
+B[[i]]=IncreaseIndexRange[B[[i]],{li,lr}];
+BandedOperator[B,fil,rowgen,opts]
 ,
 B=A;
 B[[i]]=Append[B[[i]],bnd[[i,RightIndex[bnd,i]+1]]];
-IncreaseRowLength[BandedOperator[B,jsh,fil,rowgen,opts],i,j]
+IncreaseRowIndexRange[BandedOperator[B,fil,rowgen,opts],i,{li,lr}]
 ]
 ];
 
 
-RowLength[BandedOperator[A_List,jsh_,fil_List,rowgen_,opts___],i_]:=A[[i]]//Length;
-
-IncreaseDimension[bnd_BandedOperator,{m_,n_}]:=Module[{i,Bn},
-Bn=IncreaseLength[bnd,m];
-Do[
-Bn=IncreaseRowLength[Bn,i,n];,
-{i,m}];
-Bn];
+RowLength[BandedOperator[A_List,fil_List,rowgen_,opts___],i_]:=A[[i]]//Length;
 
 IncreaseDimension[bnd_BandedOperator,bnd2_BandedOperator]:=Module[{i,Bn},
 Bn=IncreaseLength[bnd,Length[bnd2]];
 Do[
-Bn=IncreaseRowLength[Bn,i,RowLength[bnd2,i]];,
+Bn=IncreaseRowIndexRange[Bn,i,GetRow[bnd2,i]//IndexRange];,
 {i,Length[bnd2]}];
 Bn];
 
 
 
-ReplaceEntry[bnd:BandedOperator[A_List,jsh_,fil_List,rowgen_,fls:OptionsPattern[]],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
+ReplaceEntry[bnd:BandedOperator[A_List,fil_List,rowgen_,fls:OptionsPattern[]],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
 
 If[j<LeftIndex[bnd,i],
 Throw["left of left entry"]];
