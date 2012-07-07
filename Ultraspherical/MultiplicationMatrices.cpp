@@ -434,11 +434,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     }
     
     
-    
-    
-    
-    it = halved.begin();
-    //    it2++;
+
     
     vector<double> halvedadd = halved;
     
@@ -459,12 +455,15 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     firstrow.push_back(applyConversion(halved, 0)+zeroFirstApplyConversion(halvedremove, 0));
     
     
-    for(++it; it < halved.end(); it++)
+    for(int i = 1; i < halved.size(); i++)
     {   
         halvedremove.erase(halvedremove.begin()); 
         
-        halvedadd.insert(halvedadd.begin(),*it);
-        firstrow.push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove, 0));        
+        halvedadd.insert(halvedadd.begin(),halved[i]);
+        if(i == 2)
+            firstrow.push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove, 0) + 4);        
+        else
+            firstrow.push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove, 0));                    
     }
     
     vector<double> halvedaddwithzeros = halvedadd;
@@ -496,11 +495,17 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     {
         vector<double> newrow;        
         for (int j =0; j < halved.size() - i; j++) {
-            newrow.push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i));            
+            if(j == 2 + i)
+                newrow.push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i) + 4 + 2*i);        
+            else
+                newrow.push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i));                              
         }
         
-        for (int j =halved.size() - i; j < halved.size() + i + 4; j++) {
-            newrow.push_back(applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i));            
+        for (int j =halved.size() - i; j < halved.size() + i + 4; j++) {            
+            if(j == 2 + i)
+                newrow.push_back(applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i) + 4 + 2*i);        
+            else
+                newrow.push_back(applyConversion(halvedaddwithzeros, halved.size() +i + 3 -j,i));                
         }        
         
         
@@ -519,9 +524,16 @@ FilledRow DirichletD2ConvertMultiplicationMatrix::createRow(int k)
     
     vector<double> newrow;
     
-    for (int i = rowEntries.size()-1; i >= -4; i--) {
-        newrow.push_back(applyConversion(rowEntries,i, k-2)); 
-    }
+//    for (int i = rowEntries.size()+3; i >= 0; i--) {
+//        newrow.push_back(applyConversion(rowEntries,i-4, k-2)); 
+//    }
+    
+    for (int i = 0; i <= rowEntries.size()+3; i++) {
+        if(i + k-2-(rowEntries.size()-1)/2 == k)
+            newrow.push_back(applyConversion(rowEntries,rowEntries.size()+3-i-4, k-2) + 4 + 2*(k-2)); 
+        else
+            newrow.push_back(applyConversion(rowEntries,rowEntries.size()+3-i-4, k-2));             
+    }    
     
     return FilledRow(k-2-(rowEntries.size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
 }
