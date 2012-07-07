@@ -165,7 +165,7 @@ int main(int argc, const char * argv[])
 cout <<"hankel:"<<endl;    
     ConvertHankelMatrix(a).print();    
 cout <<"mult:"<<endl;        
-    ConvertMultiplicationMatrix(a).print();    
+    DirichletD2ConvertMultiplicationMatrix(a).print();    
     
     return 0;
 }
