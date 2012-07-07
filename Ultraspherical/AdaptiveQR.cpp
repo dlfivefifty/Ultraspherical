@@ -38,7 +38,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     
     cout<<"colsize"<<B->columnSize(0)<<endl;
     
-    while (error > 10E-17) {
+    while (error > 10E-18) {
         
         col++;
         row1 = col;
@@ -68,7 +68,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     }
     
 
-    
+//    B->print();
 //        printvec(c);       
     
     
@@ -99,8 +99,8 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
 //            
             for(int i = 0; i < (*B)[row].fillSize(); i++)            
             {
-                (*B)[rbnd];
-//                s[i]+=B[rbnd].fillGenerate(i,rbnd)*r[rbnd];                            
+//                (*B)[rbnd];
+                s[i]+=(*B)[rbnd].fillGenerate(i,rbnd)*r[rbnd];                            
             }
         }
     }

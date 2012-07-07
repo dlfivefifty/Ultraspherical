@@ -139,7 +139,7 @@ int main(int argc, const char * argv[])
     
 
     vector<double> a; 
-    double omega = 40000;
+    double omega = 2;
     a.push_back(omega); a.push_back(2*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
     
     cout <<"toep:"<<endl;
@@ -162,7 +162,7 @@ int main(int argc, const char * argv[])
 
 
 //    
-    for(long i = 0; i < 10000; i++)
+    for(long i = 0; i < 2; i++)
         b.push_back(1);
 //    printvec(b);
     t1 = clock();
@@ -170,7 +170,8 @@ int main(int argc, const char * argv[])
    vector<double> c = QRSolve(&drbnd,b);            
     
     t2 = clock();
-//    printvec(c);    
+    printvec(b);
+    printvec(c);    
     float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
     cout<<"time: "<<tottime<<endl;    
     cout<<"size: "<<c.size()<<endl;

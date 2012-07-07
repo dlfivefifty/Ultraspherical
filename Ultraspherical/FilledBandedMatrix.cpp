@@ -362,11 +362,18 @@ void FilledBandedMatrix::print()
     
     for(int i = 0; i < size()+3; i++)
     {  
-        for(int j = 0; j <= rightIndex(i)+3; j++)
+        for(int j = 0; j <= rightIndex(i); j++)
         {
             cout << getEntry(i,j);
             cout << " ";
         }
+        cout <<"F: ";
+        for(int j =  rightIndex(i) + 1; j <= rightIndex(i) + 4; j++)
+        {
+            cout << getEntry(i,j);
+            cout << " ";
+        }        
+        
         cout << endl;
     }
 }
