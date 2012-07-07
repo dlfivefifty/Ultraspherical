@@ -41,6 +41,14 @@ public:
     virtual FilledRow createRow(int);
 };
 
+class ConvertMultiplicationMatrix : public FilledBandedMatrix
+{
+    vector<double> rowEntries;
+public:
+    ConvertMultiplicationMatrix(vector<double> a);
+    virtual FilledRow createRow(int);
+};
+
 
 
 

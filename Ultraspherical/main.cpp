@@ -164,8 +164,9 @@ int main(int argc, const char * argv[])
     ConvertToeplitzMatrix(a).print();
 cout <<"hankel:"<<endl;    
     ConvertHankelMatrix(a).print();    
+cout <<"mult:"<<endl;        
+    ConvertMultiplicationMatrix(a).print();    
     
-
     return 0;
 }
 
