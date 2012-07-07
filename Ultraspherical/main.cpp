@@ -137,35 +137,44 @@ int main(int argc, const char * argv[])
 
     b.push_back(1);
     
-   vector<double> c = QRSolve(bnd,b);    
+
+    vector<double> a; 
+    a.push_back(1); a.push_back(2); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
     
-    printvec(c);
+    cout <<"toep:"<<endl;
+    
+    //    hankelOperator(a).print();
+//    ConvertToeplitzMatrix(a).print();
+//    cout <<"hankel:"<<endl;    
+//    ConvertHankelMatrix(a).print();    
+    cout <<"mult:"<<endl;        
+    
+    DirichletD2ConvertMultiplicationMatrix drbnd(a);
+    
+    
+    drbnd.increaseSize();
+    
+    drbnd.print();        
+    
+
+
 //    
-    for(long i = 0; i < 20000; i++)
-        b.push_back(1);
-    
+//    for(long i = 0; i < 20000; i++)
+//        b.push_back(1);
+    printvec(b);
     t1 = clock();
     
-    c = QRSolve(bnd,b);
+   vector<double> c = QRSolve(bnd,b);            
     
     t2 = clock();
+    printvec(c);    
     float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
     cout<<"time: "<<tottime<<endl;    
     cout<<"size: "<<c.size()<<endl;
     
     cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
 
-    vector<double> a; 
-    a.push_back(1); a.push_back(2); a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
 
-    cout <<"toep:"<<endl;
-    
-//    hankelOperator(a).print();
-    ConvertToeplitzMatrix(a).print();
-cout <<"hankel:"<<endl;    
-    ConvertHankelMatrix(a).print();    
-cout <<"mult:"<<endl;        
-    DirichletD2ConvertMultiplicationMatrix(a).print();    
     
     return 0;
 }

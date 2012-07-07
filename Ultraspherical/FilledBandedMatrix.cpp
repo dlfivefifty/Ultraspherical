@@ -7,7 +7,7 @@
 //
 
 #include "FilledBandedMatrix_extras.h"
-
+#include "MultiplicationMatrices.h"
 
 #include <math.h>
 
