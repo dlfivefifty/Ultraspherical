@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    130241,       3449]
-NotebookOptionsPosition[    128045,       3370]
-NotebookOutlinePosition[    128404,       3386]
-CellTagsIndexPosition[    128361,       3383]
+NotebookDataLength[    130230,       3449]
+NotebookOptionsPosition[    128035,       3370]
+NotebookOutlinePosition[    128393,       3386]
+CellTagsIndexPosition[    128350,       3383]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -3267,7 +3267,7 @@ Cell[BoxData[{
                    RowBox[{
                     RowBox[{"-", "2"}], "/", "3"}], ",", "0", ",", 
                    RowBox[{"1", "/", "6"}]}], "}"}]}]}], ",", "0"}], "]"}], 
-             "}"}], ",", "1", ",", 
+             "}"}], ",", 
             RowBox[{"{", 
              RowBox[{"{", 
               RowBox[{"0", ",", "0"}], "}"}], "}"}], ",", 
@@ -3349,7 +3349,7 @@ BET7cJ6IBdEN3K+Ng4H0jcQr5iD6iMJTLxCtpdMVAKL/KqhFgegJQqzZIHrn
 /axiEL1BeyGYFnrZWAGi+5pX1IJouRU7m0H0xO72NhBtJrexG0TLOLZNANH7
 fqyZDqKTTgbOBtFisZ8XguiGQ5tXgehlDJ/WgegTG96uB6tbE3gRRK8LiQXT
 ISer+UNA4u1KoiD68OyLKcVAOsp6TTqIzjgsVwWipQqtakA0j+EC/7wSYDh0
-zUsD0QvuduWAaD4f3VoQDQCEq5UW
+zUsD0QvuduWAaHEt93oQDQCEq5UZ
   "]]
 }, Open  ]]
 }, Open  ]],
@@ -3369,7 +3369,7 @@ Cell[BoxData[{
 }, Open  ]]
 },
 WindowSize->{1282, 711},
-WindowMargins->{{-46, Automatic}, {72, Automatic}},
+WindowMargins->{{Automatic, 24}, {33, Automatic}},
 FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (February 23, \
 2011)",
 StyleDefinitions->"Default.nb"
@@ -3442,13 +3442,13 @@ Cell[109625, 2855, 5064, 143, 133, "Input",
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[114726, 3003, 201, 3, 34, "Subsection"],
-Cell[114930, 3008, 12714, 344, 483, "Input",
+Cell[114930, 3008, 12704, 344, 483, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[127693, 3358, 91, 1, 67, "Section"],
-Cell[127787, 3361, 242, 6, 43, "Input",
+Cell[127683, 3358, 91, 1, 67, "Section"],
+Cell[127777, 3361, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
