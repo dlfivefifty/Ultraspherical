@@ -154,12 +154,12 @@ int main(int argc, const char * argv[])
 //    drbnd.print();        
     
 //    cout<<"lower:"<<drbnd.lower()<<endl;
-    
+    DirichletD2ConvertMultiplicationMatrix(a).print();
 
 
 //    
         cout<<"{"<<endl;        
-    for(long n = 0; n < 200; n ++)
+    for(long n = 0; n < 2; n ++)
     {
         DirichletD2ConvertMultiplicationMatrix drbnd(a);
         

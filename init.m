@@ -44,6 +44,8 @@ LaplaceOperator;
 ListRowReduce;
 RightHandSide;
 GetRow;
+NullOperatorQ;
+RowZeroQ;
 Begin["Private`"];
 
 
@@ -131,7 +133,7 @@ Bn];
 ReplaceEntry[bnd:BandedOperator[A_List,fil_List,rowgen_,fls:OptionsPattern[]],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
 
 Which[
-(p~NEqual~bnd[[i,j]]),
+(p~NEqual~bnd[[i,j]])===True,
 bnd
 ,
 i>Length[A]&&!OptionValue[IncreaseSize],
@@ -140,7 +142,7 @@ Throw["Replacing entry past size"]
 i>Length[A],
 ReplaceEntry[bnd//IncreaseLength,{i,j},p,opts]
 ,
-(NZeroQ[p]&&j==LeftIndex[bnd,i])&&OptionValue[IncreaseSize],
+True===((NZeroQ[p]&&j==LeftIndex[bnd,i])&&OptionValue[IncreaseSize]),
 (** Shorten list **)
 B=A;
 B[[i]]=Drop[B[[i]],1];
@@ -269,8 +271,8 @@ rhs
 
 RowZeroQ[0,_]:=True;
 RowZeroQ[bnd_BandedOperator,row_]:=If[row<=Length[bnd],
-	{First[bnd][[row]],GetFill[bnd,row]},
-{GetRowGenerator[bnd][row]}]//Flatten//Abs//Total//NZeroQ;
+	{ToList[First[bnd][[row]]],GetFill[bnd,row]},
+{GetRowGenerator[bnd][row]//ToList}]//Flatten//Abs//Total//NZeroQ;
 RowZeroQ[_,_]:=False;
 NZeroQ[bnd_BandedOperator]:=(GetRowGenerator[bnd]===Null)&&NZeroQ[{First[bnd],GetFill[bnd,1]}//Flatten//Abs//Total];
 
@@ -309,7 +311,7 @@ If[OptionValue[RightHandSide]===Null,
 
 (*This is for operator of operators *)
 
-NullOperatorQ[G_,B1_,B2_,{srow1_,srow2_}]:=(((RowZeroQ[B1,srow1]||NZeroQ[B1])&&(RowZeroQ[B2,srow2]||NZeroQ[B2]))||(NZeroQ[G[[1,2]]]&&(G[[2,2]]~NEqual~1)&&RowZeroQ[B1,srow1]));
+NullOperatorQ[G_,B1_,B2_,{srow1_,srow2_}]:=((((RowZeroQ[B1,srow1]||(NZeroQ[B1]))&&(RowZeroQ[B2,srow2]||(NZeroQ[B2])))||((NZeroQ[G[[1,2]]])&&(G[[2,2]]~NEqual~1)&&RowZeroQ[B1,srow1])))===True;
 
 ApplyToRows[G_,BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,B1,B2,i,rhs,rhs1,rhs2},
 Bn1=BDx;

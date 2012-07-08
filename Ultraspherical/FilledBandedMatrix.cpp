@@ -10,6 +10,10 @@
 #include "MultiplicationMatrices.h"
 
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream.h>
+#include <iomanip.h>
 
 #define SHIFTROW(j)(j - index)
 #define FILLROWQ(j)(j - index >= size())
@@ -359,19 +363,18 @@ void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
 
 void FilledBandedMatrix::print()
 {
-    
+
     for(int i = 0; i < size()+3; i++)
     {  
         for(int j = 0; j <= rightIndex(i); j++)
         {
-            cout << getEntry(i,j);
-            cout << " ";
+            
+            cout << setw(10)<<getEntry(i,j);
         }
-        cout <<"F: ";
+//        cout <<"F: ";
         for(int j =  rightIndex(i) + 1; j <= rightIndex(i) + 4; j++)
         {
-            cout << getEntry(i,j);
-            cout << " ";
+            cout <<setw(10) << getEntry(i,j);
         }        
         
         cout << endl;
