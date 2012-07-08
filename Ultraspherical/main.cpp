@@ -172,16 +172,18 @@ int main(int argc, const char * argv[])
         //    printvec(b);
         t1 = clock();
         
-        vector<double> c = QRSolve(&drbnd,b);            
+//        vector<double> c = QRSolve(&drbnd,b);            
         
         t2 = clock();
         //    printvec(b);
         //    printvec(c);    
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
+//        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
     }
         cout<<"}"<<endl;            
         
+    cout << b.size() <<endl;
+    
 //    cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
 
 

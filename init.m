@@ -130,28 +130,33 @@ Bn];
 
 ReplaceEntry[bnd:BandedOperator[A_List,fil_List,rowgen_,fls:OptionsPattern[]],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
 
-If[!(p~NEqual~bnd[[i,j]]),
-If[j<LeftIndex[bnd,i],
-Throw["left of left entry"]];
-
-If[i>Length[A],
-If[!OptionValue[IncreaseSize],
-Throw["Replacing entry past size"]];
+Which[
+(p~NEqual~bnd[[i,j]]),
+bnd
+,
+i>Length[A]&&!OptionValue[IncreaseSize],
+Throw["Replacing entry past size"]
+,
+i>Length[A],
 ReplaceEntry[bnd//IncreaseLength,{i,j},p,opts]
 ,
-If[j<=RightIndex[bnd,i],
+(NZeroQ[p]&&j==LeftIndex[bnd,i])&&OptionValue[IncreaseSize],
+(** Shorten list **)
 B=A;
-B[[i]]=ReplaceEntry[B[[i]],j,p];
+B[[i]]=Drop[B[[i]],1];
 BandedOperator[B,fil,rowgen,fls]
 ,
-If[!OptionValue[IncreaseSize],
-Throw["Replacing entry past size"]];
-
-ReplaceEntry[IncreaseRightIndex[bnd,i,j],{i,j},p,opts]
-]
-]
+j<=RightIndex[bnd,i],
+B=A;
+B[[i]]=ReplaceEntry[B[[i]],j,p,opts];
+BandedOperator[B,fil,rowgen,fls]
 ,
-bnd
+!OptionValue[IncreaseSize],
+Throw["Replacing entry past size"]
+,
+True 
+,
+ReplaceEntry[IncreaseRightIndex[bnd,i,j],{i,j},p,opts]
 ]
 ];
 
