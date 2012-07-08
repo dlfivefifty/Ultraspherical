@@ -55,7 +55,7 @@ GetRowGenerator[BandedOperator[A_List,fill_List,rowgen_,___]]:=rowgen;
 GetRow[BandedOperator[A_List,fill_List,rowgen_,___],i_]:=If[i>Length[A],rowgen[i],A[[i]]];
 
 BandedOperator/:bnd_BandedOperator[[i_Integer,j_Integer]]:=\[Piecewise]{
- {First[bnd][[i,j]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
+ {First[bnd][[i]][[j]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
  {GetFillValue[bnd,{i,j}], i<=Length[bnd]&&j>RightIndex[bnd,i]},
  {GetRowGenerator[bnd][i][[j]], LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
  {0, True}
@@ -83,7 +83,7 @@ MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]]//Matr
 MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm];
 
 
-IncreaseLength[BandedOperator[A_List,jsh_,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],jsh,Append[fill,0 Last[fill]],rowgen,opts];
+IncreaseLength[BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,0 Last[fill]],rowgen,opts];
 
 
 (** Set Length to be at least n **)
@@ -139,8 +139,8 @@ ReplaceEntry[bnd//IncreaseLength,{i,j},p,opts]
 ,
 If[j<=RightIndex[bnd,i],
 B=A;
-B[[i,j-LeftIndex[bnd,i]+1]]=p;
-BandedOperator[B,jsh,fil,rowgen,fls]
+B[[i]]=ReplaceEntry[B[[i]],j,p];
+BandedOperator[B,fil,rowgen,fls]
 ,
 If[!OptionValue[IncreaseSize],
 Throw["Replacing entry past size"]];
@@ -179,24 +179,24 @@ Bn1,
 
 
 
-BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,rowgen_,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, c rowgen[#]&,opts];
-BandedOperator/:c_?NumberQ BandedOperator[A_List,jsh_,fill_List,Null,opts:OptionsPattern[]]:=BandedOperator[c A,jsh,c fill, Null,opts];
-BandedOperator/: (bndA:BandedOperator[A_List,jsh_,fill1_List,Null,opts:OptionsPattern[]])+(bndB:BandedOperator[B_List,jsh_,fill2_List,Null,opts:OptionsPattern[]]):=Module[{bnA,bnB},
+BandedOperator/:c_?NumberQ BandedOperator[A_List,fill_List,rowgen_,opts:OptionsPattern[]]:=BandedOperator[c A,c fill, c rowgen[#]&,opts];
+BandedOperator/:c_?NumberQ BandedOperator[A_List,fill_List,Null,opts:OptionsPattern[]]:=BandedOperator[c A,c fill, Null,opts];
+BandedOperator/: (bndA:BandedOperator[A_List,fill1_List,Null,opts:OptionsPattern[]])+(bndB:BandedOperator[B_List,fill2_List,Null,opts:OptionsPattern[]]):=Module[{bnA,bnB},
 
 bnA=IncreaseDimension[bndA,bndB];
 bnB=IncreaseDimension[bndB,bnA];
 
-BandedOperator[First[bnA]+First[bnB],jsh,bnA[[3]]+bnB[[3]],  Null,opts]
+BandedOperator[First[bnA]+First[bnB],bnA[[3]]+bnB[[3]],  Null,opts]
 
 ];
 
-BandedOperator/:( bndA:BandedOperator[A_List,jsh_,fill1_List,rowgen1_?(!(#===Null)&),opts:OptionsPattern[]])+(bndB:BandedOperator[B_List,jsh_,fill2_List,rowgen2_,opts:OptionsPattern[]]):=Module[{bnA,bnB,rowlength},
+BandedOperator/:( bndA:BandedOperator[A_List,fill1_List,rowgen1_?(!(#===Null)&),opts:OptionsPattern[]])+(bndB:BandedOperator[B_List,fill2_List,rowgen2_,opts:OptionsPattern[]]):=Module[{bnA,bnB,rowlength},
 bnA=IncreaseDimension[bndA,bndB];
 bnB=IncreaseDimension[bndB,bnA];
 
 rowlength=First[bnA][[-1]]//Length;
 
-BandedOperator[First[bnA]+First[bnB],jsh,bnA[[3]]+bnB[[3]],  PadRight[rowgen1[#],rowlength]+PadRight[rowgen2[#],rowlength]&,opts]
+BandedOperator[First[bnA]+First[bnB],bnA[[3]]+bnB[[3]],  PadRight[rowgen1[#],rowlength]+PadRight[rowgen2[#],rowlength]&,opts]
 ];
 
 
@@ -461,27 +461,27 @@ ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},opts]
 ListRowReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_Integer,scol_Integer,opts:OptionsPattern[RightHandSide->Null]]:=ApplyToRows[RowReduceMatrix[BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2},col,scol],BDx,{row1,row2},{srow1,srow2},{ssrow1,ssrow2},opts];
 
 
-DerivativeOperator[2,Filler->fls_]:=BandedOperator[{{0,0,4}},1,{0 fls[1]},{0,0,2 (#+1)}&,Filler->fls];
-DerivativeOperator[1,Filler->fls_]:=BandedOperator[{{1}},0,{0 fls[1]},{#}&,Filler->fls];
+DerivativeOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{0,0,4},0]},{0 fls[1]},ShiftList[{0,0,2 (#+1)},1-#]&,Filler->fls];
+DerivativeOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},-1]},{0 fls[1]},ShiftList[{#},-#]&,Filler->fls];
 DerivativeOperator[1]:=DerivativeOperator[1,Filler->({(-1)^(#-1),1}&)];
 DerivativeOperator[2]:=DerivativeOperator[2,Filler->({(-1)^(#-1),1}&)];
 
-ConversionOperator[1,Filler->fls_]:=BandedOperator[{{1,0,-1/2}},1,{0 fls[1]},{1/2,0,-1/2}&,Filler->fls];
+ConversionOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1,0,-1/2},0]},{0 fls[1]},ShiftList[{1/2,0,-1/2},1-#]&,Filler->fls];
 ConversionOperator[1]:=ConversionOperator[1,Filler->({(-1)^(#-1),1}&)];
-ConversionOperator[2,Filler->fls_]:=BandedOperator[{{1,0,-2/3,0,1/6}},1,{0 fls[1]},{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->fls];
+ConversionOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{1,0,-2/3,0,1/6},0]},{0 fls[1]},ShiftList[{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->fls];
 ConversionOperator[2]:=ConversionOperator[2,Filler->({(-1)^(#-1),1}&)];
 
-DirichletOperator[-1]:=BandedOperator[{{1}},1,{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[1]:=BandedOperator[{{1}},1,{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[-1]:=BandedOperator[{ShiftList[{1},0]},{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
 
 
-IdentityOperator[Filler->fls_]:=BandedOperator[{{1,0,0}},1,{0 fls[1]},{1,0,0}&,Filler->fls];
+IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
 IdentityOperator[]:=IdentityOperator[Filler->({(-1)^(#-1),1}&)];
 
-ZeroOperator[Filler->fls_]:=BandedOperator[{{0,0,0}},1,{0 fls[1]},{0,0,0}&,Filler->fls];
+ZeroOperator[Filler->fls_]:=BandedOperator[{ShiftList[{0,0,0},0]},1,{0 fls[1]},ShiftList[{0,0,0},1-#]&,Filler->fls];
 ZeroOperator[]:=ZeroOperator[Filler->({(-1)^(#-1),1}&)];
 
-ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{{0}},1,{0 fls[1]},Null,Filler->fls];
+ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},1,{0 fls[1]},Null,Filler->fls];
 ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->({(-1)^(#-1),1}&)];
 
 

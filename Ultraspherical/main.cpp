@@ -139,44 +139,50 @@ int main(int argc, const char * argv[])
     
 
     vector<double> a; 
-    double omega = 2;
+    double omega = -10;
     a.push_back(omega); a.push_back(2*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
     
-    cout <<"toep:"<<endl;
+//    cout <<"toep:"<<endl;
     
     //    hankelOperator(a).print();
 //    ConvertToeplitzMatrix(a).print();
 //    cout <<"hankel:"<<endl;    
 //    ConvertHankelMatrix(a).print();    
-    cout <<"mult:"<<endl;        
-    
-    DirichletD2ConvertMultiplicationMatrix drbnd(a);
+//    cout <<"mult:"<<endl;        
     
     
-    drbnd.increaseSize();
+//    drbnd.print();        
     
-    drbnd.print();        
-    
-    cout<<"lower:"<<drbnd.lower()<<endl;
+//    cout<<"lower:"<<drbnd.lower()<<endl;
     
 
 
 //    
-    for(long i = 0; i < 2; i++)
-        b.push_back(1);
-//    printvec(b);
-    t1 = clock();
-    
-   vector<double> c = QRSolve(&drbnd,b);            
-    
-    t2 = clock();
-    printvec(b);
-    printvec(c);    
-    float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-    cout<<"time: "<<tottime<<endl;    
-    cout<<"size: "<<c.size()<<endl;
-    
-    cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
+        cout<<"{"<<endl;        
+    for(long n = 0; n < 200; n ++)
+    {
+        DirichletD2ConvertMultiplicationMatrix drbnd(a);
+        
+        
+        drbnd.increaseSize();
+
+        
+        for(long i = 0; i < 100*n; i++)
+            b.push_back(1);
+        //    printvec(b);
+        t1 = clock();
+        
+        vector<double> c = QRSolve(&drbnd,b);            
+        
+        t2 = clock();
+        //    printvec(b);
+        //    printvec(c);    
+        float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
+        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
+    }
+        cout<<"}"<<endl;            
+        
+//    cout<<"time/size: "<<tottime*300000/b.size()<<endl;    
 
 
     
