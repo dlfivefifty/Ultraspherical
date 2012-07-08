@@ -196,7 +196,7 @@ BandedOperator/: (bndA:BandedOperator[A_List,fill1_List,Null,opts:OptionsPattern
 bnA=IncreaseDimension[bndA,bndB];
 bnB=IncreaseDimension[bndB,bnA];
 
-BandedOperator[First[bnA]+First[bnB],bnA[[3]]+bnB[[3]],  Null,opts]
+BandedOperator[First[bnA]+First[bnB],bnA[[2]]+bnB[[2]],  Null,opts]
 
 ];
 
@@ -504,10 +504,10 @@ DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->({(
 IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
 IdentityOperator[]:=IdentityOperator[Filler->({(-1)^(#-1),1}&)];
 
-ZeroOperator[Filler->fls_]:=BandedOperator[{ShiftList[{0,0,0},0]},1,{0 fls[1]},ShiftList[{0,0,0},1-#]&,Filler->fls];
+ZeroOperator[Filler->fls_]:=BandedOperator[{ShiftList[{0,0,0},0]},{0 fls[1]},ShiftList[{0,0,0},1-#]&,Filler->fls];
 ZeroOperator[]:=ZeroOperator[Filler->({(-1)^(#-1),1}&)];
 
-ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},1,{0 fls[1]},Null,Filler->fls];
+ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},{0 fls[1]},Null,Filler->fls];
 ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->({(-1)^(#-1),1}&)];
 
 
@@ -515,21 +515,21 @@ ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->({(-1)^(#-1),1}&
 
 
 
-DirichletOperator[-1,All]:=BandedOperator[{{IdentityOperator[]}},1,{{IdentityOperator[],ZeroOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[1,All]:=BandedOperator[{{IdentityOperator[]}},1,{{ZeroOperator[],IdentityOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[All,-1]:=BandedOperator[{{DirichletOperator[-1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[-1]}&,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[All,1]:=BandedOperator[{{DirichletOperator[1]}},1,{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},{DirichletOperator[1]}&,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[-1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{IdentityOperator[],ZeroOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{ZeroOperator[],IdentityOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[All,-1]:=BandedOperator[{ShiftList[{DirichletOperator[-1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[-1]},1-#]&,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[All,1]:=BandedOperator[{ShiftList[{DirichletOperator[1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[1]},1-#]&,Filler->({(-1)^(#-1),1}&)];
 
 
-DerivativeOperator[0,1]:=BandedOperator[{{ConversionOperator[1]}},0,{ZeroOperator[]},{(#)ConversionOperator[1]}&];
-DerivativeOperator[1,0]:=BandedOperator[{{DerivativeOperator[1],ZeroOperator[],-DerivativeOperator[1]/2}},1,{ZeroOperator[]},{DerivativeOperator[1]/2,ZeroOperator[],-DerivativeOperator[1]/2}&];
+DerivativeOperator[0,1]:=BandedOperator[{ShiftList[{ConversionOperator[1]},-1]},{ZeroOperator[]},ShiftList[(#){ConversionOperator[1]},-#]&];
+DerivativeOperator[1,0]:=BandedOperator[{ShiftList[{DerivativeOperator[1],ZeroOperator[],-DerivativeOperator[1]/2},0]},{ZeroOperator[]},ShiftList[{DerivativeOperator[1]/2,ZeroOperator[],-DerivativeOperator[1]/2},1-#]&];
 
 
-DerivativeOperator[0,2]:=BandedOperator[{{4 ConversionOperator[2]}},-1,{ZeroOperator[]},{2(#+1)ConversionOperator[2]}&];
-DerivativeOperator[2,0]:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],-2/3 DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/6}},1,{ZeroOperator[]},{DerivativeOperator[2]/(2 #),ZeroOperator[],(-(1/(2 (#+2)))-1/(2 #))DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&];
+DerivativeOperator[0,2]:=BandedOperator[{ShiftList[{4 ConversionOperator[2]},-2]},{ZeroOperator[]},ShiftList[{2(#+1)ConversionOperator[2]},-1-#]&];
+DerivativeOperator[2,0]:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],-2/3 DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/6},0]},{ZeroOperator[]},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],(-(1/(2 (#+2)))-1/(2 #))DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&];
 
 
-LaplaceOperator:=BandedOperator[{{DerivativeOperator[2],ZeroOperator[],BandedOperator[{(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6}},1,{{0,0}},(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6}},1,{{ZeroOperator[],ZeroOperator[]}},{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6}},1,{{0,0}},Function[rw,(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))}],Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/(2(#+2))}&,Filler->({(-1)^(#-1),1}&)];
+LaplaceOperator:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],BandedOperator[{ShiftList[(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6},0]},{{0,0}},ShiftList[(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6},0]},{{ZeroOperator[],ZeroOperator[]}},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{ShiftList[(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6},0]},1,{{0,0}},Function[rw,ShiftList[(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))},1-rw]],Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)];
 
 
 End[];
