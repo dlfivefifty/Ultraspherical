@@ -11,6 +11,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iomanip.h>
 
 
 void printvec(vector<double> c)
@@ -20,7 +21,7 @@ void printvec(vector<double> c)
     
     for(it = c.begin(); it < c.end(); it++)
     {
-        cout << *it << ", ";
+        cout << setprecision(20)<< *it << ", ";
     }
     
     cout << endl;
@@ -38,17 +39,25 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     
 //    cout<<"colsize"<<B->columnSize(0)<<endl;
     
-    while (error > 10E-18) {
+    while (error > 1E-16) {
         
         col++;
         row1 = col;
         
-        error = fabs(c[row1]);
+        error = 0;
+        
+        //fabs(c[row1]);
+        
+        //    cout<< "col: " << col << " colsize: "<<B->columnSize(col)<<endl;        
+        
+        printvec(c);
         
         for(int row2 = row1 + 1; row2 < B->columnSize(col); row2++)
         {
 //    	std:cout<<"B: "<<endl;
-//            B.print();            
+//            B.print();      
+            
+            cout<< "csize: " << c.size() <<endl;             
             
             if(row2 >= c.size()) {
                 c.push_back(0);
@@ -61,8 +70,8 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
             
             B->applyGivens(row1,row2,&c);   
             
-            error = max(error,fabs(c[row1]));
-            error = max(error,fabs(c[row2]));            
+            error = max(error,fabs(c[row1]/B->getEntry(row1,row1)));
+            error = max(error,fabs(c[row2]/B->getEntry(row2,row2)));
         }
         
     }
@@ -73,6 +82,9 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     
     
     vector<double> r = c;
+    
+    
+        printvec(c);    
     
     r[col] = c[col]/B->getEntry(col, col,true);
     

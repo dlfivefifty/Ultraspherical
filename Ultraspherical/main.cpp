@@ -138,7 +138,7 @@ int main(int argc, const char * argv[])
     b.push_back(1);
     
 
-    vector<double> a; 
+
 //    double omega = -10;
 //    a.push_back(omega); a.push_back(2*omega); a.push_back(3*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
   
@@ -168,32 +168,34 @@ int main(int argc, const char * argv[])
 //    drbnd.print();        
     
 //    cout<<"lower:"<<drbnd.lower()<<endl;
-    DirichletD2ConvertMultiplicationMatrix(a).print();
+//    DirichletD2ConvertMultiplicationMatrix(a).print();
 
 
 //    
         cout<<"{"<<endl;        
-    for(long n = 0; n < 10; n ++)
+    for(long w = 10; w < 11; w += 100)
     {
 
+    vector<double> a;         
+    a.push_back(w);// a.push_back(2*omega); a.push_back(3*omega);        
         
         DirichletD2ConvertMultiplicationMatrix drbnd(a);
         
         
         drbnd.increaseSize();
 
-        
-        for(long i = 0; i < 100*n*n; i++)
-            b.push_back(1);
-        //    printvec(b);
+//        
+//        for(long i = 0; i < 100*n*n; i++)
+//            b.push_back(1);
+//        //    printvec(b);
         
         t1 = clock();                
         
         vector<double> c = QRSolve(&drbnd,b);            
         
         t2 = clock();
-        //    printvec(b);
-        //    printvec(c);    
+            printvec(b);
+            printvec(c);    
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
         cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
     }

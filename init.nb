@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    130953,       3465]
-NotebookOptionsPosition[    128761,       3386]
-NotebookOutlinePosition[    129117,       3402]
-CellTagsIndexPosition[    129074,       3399]
+NotebookDataLength[    130915,       3461]
+NotebookOptionsPosition[    128723,       3382]
+NotebookOutlinePosition[    129079,       3398]
+CellTagsIndexPosition[    129036,       3395]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -2020,28 +2020,24 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    RowBox[{
+    RowBox[{"Givens", "[", 
+     RowBox[{
+      RowBox[{"Bn", ":", 
+       RowBox[{"{", "__BandedOperator", "}"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"row1_", ",", "row2_"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"srow1_", ",", "srow2_"}], "}"}], ",", "col_"}], "]"}], ":=", 
     RowBox[{
      RowBox[{"Givens", "[", 
       RowBox[{
-       RowBox[{"Bn", ":", 
-        RowBox[{"{", "__BandedOperator", "}"}]}], ",", 
-       RowBox[{"{", 
-        RowBox[{"row1_", ",", "row2_"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"srow1_", ",", "srow2_"}], "}"}], ",", "col_"}], "]"}], ":=", 
-     
-     RowBox[{
-      RowBox[{"Givens", "[", 
        RowBox[{
-        RowBox[{
-        "Bn", "\[LeftDoubleBracket]", "row1", "\[RightDoubleBracket]"}], ",", 
-        
-        RowBox[{
-        "Bn", "\[LeftDoubleBracket]", "row2", "\[RightDoubleBracket]"}], ",", 
-        
-        RowBox[{"{", 
-         RowBox[{"srow1", ",", "srow2"}], "}"}], ",", "col"}], "]"}], "//", 
-      "N"}]}], ";"}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+       "Bn", "\[LeftDoubleBracket]", "row1", "\[RightDoubleBracket]"}], ",", 
+       RowBox[{
+       "Bn", "\[LeftDoubleBracket]", "row2", "\[RightDoubleBracket]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"srow1", ",", "srow2"}], "}"}], ",", "col"}], "]"}], "//", 
+     "N"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
    RowBox[{
@@ -2215,7 +2211,7 @@ Cell[BoxData[{
    3.550166813511777*^9, 3.5501668776717033`*^9}, {3.550183232417708*^9, 
    3.550183298642459*^9}, 3.5501833733322563`*^9, {3.55037378638031*^9, 
    3.5503738354838657`*^9}, {3.550375880268836*^9, 3.550375880927491*^9}, {
-   3.550700981066902*^9, 3.550701188508637*^9}}]
+   3.550700981066902*^9, 3.550701188508637*^9}, 3.5508068275921717`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -3385,8 +3381,8 @@ Cell[BoxData[{
 }, Open  ]]
 },
 WindowSize->{696, 798},
-WindowMargins->{{73, Automatic}, {Automatic, 0}},
-FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (February 23, \
+WindowMargins->{{Automatic, 738}, {Automatic, 38}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
 2011)",
 StyleDefinitions->"Default.nb"
 ]
@@ -3436,35 +3432,35 @@ Cell[65061, 1652, 14210, 329, 1198, "Input",
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[79308, 1986, 93, 1, 67, "Section"],
-Cell[79404, 1989, 8464, 228, 476, "Input",
+Cell[79404, 1989, 8426, 224, 581, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[87905, 2222, 145, 2, 67, "Section"],
-Cell[88053, 2226, 10406, 263, 551, "Input",
+Cell[87867, 2218, 145, 2, 67, "Section"],
+Cell[88015, 2222, 10406, 263, 746, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[98496, 2494, 96, 1, 67, "Section"],
+Cell[98458, 2490, 96, 1, 67, "Section"],
 Cell[CellGroupData[{
-Cell[98617, 2499, 92, 1, 34, "Subsection"],
-Cell[98712, 2502, 11451, 360, 433, "Input",
+Cell[98579, 2495, 92, 1, 34, "Subsection"],
+Cell[98674, 2498, 11451, 360, 653, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[110200, 2867, 148, 2, 34, "Subsection"],
-Cell[110351, 2871, 5064, 143, 133, "Input",
+Cell[110162, 2863, 148, 2, 34, "Subsection"],
+Cell[110313, 2867, 5064, 143, 253, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[115452, 3019, 201, 3, 34, "Subsection"],
-Cell[115656, 3024, 12704, 344, 483, "Input",
+Cell[115414, 3015, 201, 3, 34, "Subsection"],
+Cell[115618, 3020, 12704, 344, 483, "Input",
  InitializationCell->True]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[128409, 3374, 91, 1, 67, "Section"],
-Cell[128503, 3377, 242, 6, 43, "Input",
+Cell[128371, 3370, 91, 1, 67, "Section"],
+Cell[128465, 3373, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }

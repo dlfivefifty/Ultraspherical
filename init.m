@@ -428,7 +428,7 @@ bB=Binn[[j,k]];
  {-bB, a}
 })/Norm[{a,bB}]
 ];
-Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},col_]:=Givens[Bn[[row1]],Bn[[row2]],{srow1,srow2},col]//N;;
+Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},col_]:=Givens[Bn[[row1]],Bn[[row2]],{srow1,srow2},col]//N;
 
 Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=
 Givens[Bn[[row1]][[srow1,col]],Bn[[row2]][[srow2,col]],{ssrow1,ssrow2},scol]//N;
