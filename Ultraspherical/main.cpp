@@ -139,9 +139,23 @@ int main(int argc, const char * argv[])
     
 
     vector<double> a; 
-    double omega = -10;
-    a.push_back(omega); a.push_back(2*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
-    
+//    double omega = -10;
+//    a.push_back(omega); a.push_back(2*omega); a.push_back(3*omega); //a.push_back(3);  a.push_back(4);  a.push_back(5); a.push_back(6);a.push_back(7);
+  
+
+    //  Cosine
+//    a.push_back(0.7651976865579668);
+//    a.push_back(0.);
+//    a.push_back(-0.22980696986380098);
+//    a.push_back(0.);
+//    a.push_back(0.004953277928219901);
+//    a.push_back(0.);
+//    a.push_back(-0.00004187667600477857);
+//    a.push_back(0.);
+//    a.push_back(1.8844688343861268e-7);
+//    a.push_back(0.);
+//    a.push_back(-5.261244076090109e-10);
+//    a.push_back(0.);a.push_back(9.999074386172517e-13);
 //    cout <<"toep:"<<endl;
     
     //    hankelOperator(a).print();
@@ -159,26 +173,29 @@ int main(int argc, const char * argv[])
 
 //    
         cout<<"{"<<endl;        
-    for(long n = 0; n < 2; n ++)
+    for(long n = 0; n < 10; n ++)
     {
+
+        
         DirichletD2ConvertMultiplicationMatrix drbnd(a);
         
         
         drbnd.increaseSize();
 
         
-        for(long i = 0; i < 100*n; i++)
+        for(long i = 0; i < 100*n*n; i++)
             b.push_back(1);
         //    printvec(b);
-        t1 = clock();
         
-//        vector<double> c = QRSolve(&drbnd,b);            
+        t1 = clock();                
+        
+        vector<double> c = QRSolve(&drbnd,b);            
         
         t2 = clock();
         //    printvec(b);
         //    printvec(c);    
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-//        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
+        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
     }
         cout<<"}"<<endl;            
         
