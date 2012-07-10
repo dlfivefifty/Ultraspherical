@@ -129,11 +129,18 @@ Bn=IncreaseRowIndexRange[Bn,i,GetRow[bnd2,i]//IndexRange];,
 Bn];
 
 
+RowZeroQ[0,_]:=True;
+RowZeroQ[bnd_BandedOperator,row_]:=If[row<=Length[bnd],
+	{ToList[First[bnd][[row]]],GetFill[bnd,row]},
+{GetRowGenerator[bnd][row]//ToList}]//Flatten//Abs//Total//NZeroQ;
+RowZeroQ[_,_]:=False;
+NZeroQ[bnd_BandedOperator]:=(GetRowGenerator[bnd]===Null)&&NZeroQ[{First[bnd],GetFill[bnd,1]}//Flatten//Abs//Total];
+
 
 ReplaceEntry[bnd:BandedOperator[A_List,fil_List,rowgen_,fls:OptionsPattern[]],{i_,j_},p_,opts:OptionsPattern[IncreaseSize->False]]:=Module[{B,nfil},
 
 Which[
-(p~NEqual~bnd[[i,j]])===True,
+((p~NEqual~bnd[[i,j]])===True) ||(NZeroQ[p]&&NZeroQ[bnd[[i,j]]]),
 bnd
 ,
 i>Length[A]&&!OptionValue[IncreaseSize],
@@ -142,7 +149,7 @@ Throw["Replacing entry past size"]
 i>Length[A],
 ReplaceEntry[bnd//IncreaseLength,{i,j},p,opts]
 ,
-True===((NZeroQ[p]&&j==LeftIndex[bnd,i])&&OptionValue[IncreaseSize]),
+(True===((NZeroQ[p]&&j==LeftIndex[bnd,i])&&(Length[A[[i]]]>1))&&OptionValue[IncreaseSize]),
 (** Shorten list **)
 B=A;
 B[[i]]=Drop[B[[i]],1];
@@ -269,32 +276,17 @@ rhs
 
 
 
-RowZeroQ[0,_]:=True;
-RowZeroQ[bnd_BandedOperator,row_]:=If[row<=Length[bnd],
-	{ToList[First[bnd][[row]]],GetFill[bnd,row]},
-{GetRowGenerator[bnd][row]//ToList}]//Flatten//Abs//Total//NZeroQ;
-RowZeroQ[_,_]:=False;
-NZeroQ[bnd_BandedOperator]:=(GetRowGenerator[bnd]===Null)&&NZeroQ[{First[bnd],GetFill[bnd,1]}//Flatten//Abs//Total];
-
 
 ApplyToRows[G_,Bn_BandedOperator,Bnn_BandedOperator,{row1_,row2_},OptionsPattern[RightHandSide->Null]]:=Module[{vals,Bn1,Bn2,i,rhs1,rhs2},
 Bn1=Bn;
 Bn2=Bnn;
 
 Do[
-If[!(NZeroQ[Bn1[[row1,i]]]&&NZeroQ[Bn2[[row2,i]]]),
 vals=G.{Bn1[[row1,i]],Bn2[[row2,i]]};
 
 
-
-If[vals[[1]]!=Bn1[[row1,i]],
 Bn1=ReplaceEntry[Bn1,{row1,i},vals[[1]],IncreaseSize->True];
-];
-If[vals[[2]]!=Bn2[[row2,i]],
 Bn2=ReplaceEntry[Bn2,{row2,i},vals[[2]],IncreaseSize->True];
-];
-];
-
 ,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn2,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn2,row2]]}];
 
 
@@ -356,11 +348,10 @@ Bn2=Bd2;
 
 Do[
 {B1,B2}={Bn1[[row1,i]],Bn2[[row2,i]]};
-If[!NullOperatorQ[G,B1,B2,{srow1,srow2}],
+
 {B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
 Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
 Bn2=ReplaceEntry[Bn2,{row2,i},B2,IncreaseSize->True];
-];
 
 ,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn2,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn2,row2]]}];
 
@@ -423,10 +414,13 @@ Bn1
 Givens[Bin_,Binn_,{i_,j_},k_]:=Module[{A,a,bB},
 a=Bin[[i,k]];
 bB=Binn[[j,k]];
+If[NZeroQ[a]&&NZeroQ[bB],
+IdentityMatrix[2],
 ({
  {a, bB},
  {-bB, a}
 })/Norm[{a,bB}]
+]
 ];
 Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},col_]:=Givens[Bn[[row1]],Bn[[row2]],{srow1,srow2},col]//N;
 
