@@ -41,7 +41,7 @@ public:
 
 class FilledRow
 {
-    vector<double> entries;
+    vector<double> *entries;
     RowFiller **fillers;
     int index;
     
@@ -49,7 +49,7 @@ public:
 //    FilledRow(int);
 //    FilledRow(int,double);   
     FilledRow(int,RowFiller **);  
-    FilledRow(int,vector<double>,RowFiller **);  
+    FilledRow(int,vector<double> *,RowFiller **);  
     FilledRow(int,RowFiller **,int);     
     FilledRow(const FilledRow &);
     ~FilledRow();    

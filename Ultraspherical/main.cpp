@@ -62,69 +62,69 @@
 //}
 
 
-FilledRow D2Dirichlet(int k)
-{
-    
-//    double w = 1;
-    
-    switch(k)
-    {
-        case 0://LeftDir
-        {
-            FilledRow newrow(0,RowFiller::dirichlet(1,0));
-            newrow.increaseSize();//must have an element in first row to use Givens                        
-            return newrow;
-        }
-        case 1://RightDir
-        {
-            FilledRow newrow(0,RowFiller::dirichlet(0,1));
-            newrow.increaseSize();//must have an element in first row to delete            
-            return newrow;
-        }     
-        case 2:
-        {
-            FilledRow newrow(0,RowFiller::dirichlet(0,0));
-            newrow.push_back(1);
-            newrow.push_back(0);            
-            newrow.push_back(4.-2./3.);            
-            newrow.push_back(0);            
-            newrow.push_back(1./6);                        
-            return newrow;    
-        }
-        default:
-        {
-            FilledRow newrow(k-2,RowFiller::dirichlet(0,0));
-            newrow.push_back(1./(2.*(k-1.)));
-            newrow.push_back(0);            
-            newrow.push_back(2.*k-k/(2.*(k-1)+(k-1)*(k-1)));            
-            newrow.push_back(0);            
-            newrow.push_back(1./(2.*(k+1)));                   
-            return newrow;  
-        }
-    }    
-}
+//FilledRow D2Dirichlet(int k)
+//{
+//    
+////    double w = 1;
+//    
+//    switch(k)
+//    {
+//        case 0://LeftDir
+//        {
+//            FilledRow newrow(0,RowFiller::dirichlet(1,0));
+//            newrow.increaseSize();//must have an element in first row to use Givens                        
+//            return newrow;
+//        }
+//        case 1://RightDir
+//        {
+//            FilledRow newrow(0,RowFiller::dirichlet(0,1));
+//            newrow.increaseSize();//must have an element in first row to delete            
+//            return newrow;
+//        }     
+//        case 2:
+//        {
+//            FilledRow newrow(0,RowFiller::dirichlet(0,0));
+//            newrow.push_back(1);
+//            newrow.push_back(0);            
+//            newrow.push_back(4.-2./3.);            
+//            newrow.push_back(0);            
+//            newrow.push_back(1./6);                        
+//            return newrow;    
+//        }
+//        default:
+//        {
+//            FilledRow newrow(k-2,RowFiller::dirichlet(0,0));
+//            newrow.push_back(1./(2.*(k-1.)));
+//            newrow.push_back(0);            
+//            newrow.push_back(2.*k-k/(2.*(k-1)+(k-1)*(k-1)));            
+//            newrow.push_back(0);            
+//            newrow.push_back(1./(2.*(k+1)));                   
+//            return newrow;  
+//        }
+//    }    
+//}
 
 
 int main(int argc, const char * argv[])
 {    
     //First entry is lower row, it's important!
-    FilledBandedMatrix bnd(-2,&D2Dirichlet);
+//    FilledBandedMatrix bnd(-2,&D2Dirichlet);
     clock_t t1; clock_t t2;
 
     
     
     
     
-        bnd.increaseSize();
-        bnd.increaseSize();
-        bnd.increaseSize();    
-        bnd.increaseSize();    
-        bnd.increaseSize(); 
-        bnd.increaseSize();     
+//        bnd.increaseSize();
+//        bnd.increaseSize();
+//        bnd.increaseSize();    
+//        bnd.increaseSize();    
+//        bnd.increaseSize(); 
+//        bnd.increaseSize();     
     
     
-    cout<<"B: "<<endl;
-    bnd.print();
+//    cout<<"B: "<<endl;
+//    bnd.print();
     //    
 //        cout<<"GB: "<<endl;    
 //        bnd.applyGivens(0,1,0,1);

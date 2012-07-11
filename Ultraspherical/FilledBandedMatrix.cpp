@@ -117,6 +117,7 @@ FilledRow::FilledRow(int ind,RowFiller **flr)
 {
     index = ind;
     fillers = flr;
+    entries = new vector<double>;    
 //    (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
 //    for(int i = 0; i < NUMFILLERS; i++)
 //        fillers[i] = flr[i];   
@@ -136,7 +137,7 @@ FilledRow::FilledRow(int ind,RowFiller **flr)
 //    free(flr);    
 //}
 
-FilledRow::FilledRow(int ind,vector<double> entrs,RowFiller **flr)
+FilledRow::FilledRow(int ind,vector<double> *entrs,RowFiller **flr)
 {
     index = ind;
     fillers = flr;
@@ -167,7 +168,7 @@ FilledRow::~FilledRow()
 
 int FilledRow::size()
 {
-    return entries.size();
+    return entries->size();
 }
 
 double FilledRow::operator[](int j)
@@ -184,7 +185,7 @@ double FilledRow::operator[](int j)
     else if(SHIFTROW(j) < 0)
         return 0;
     else
-        return entries[SHIFTROW(j)];
+        return (*entries)[SHIFTROW(j)];
 }
 
 
@@ -206,7 +207,7 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
         increaseSize(j);
     }
     
-    entries[SHIFTROW(j)] = val;
+    (*entries)[SHIFTROW(j)] = val;
 }
 
 void FilledRow::setFill(int i,double val)
@@ -231,7 +232,7 @@ double FilledRow::fillGenerate(int i, int col)
 
 void FilledRow::push_back(double val)
 {    
-    entries.push_back(val);
+    entries->push_back(val);
 }
 
 void FilledRow::increaseSize()
@@ -251,7 +252,7 @@ void FilledRow::dropFirst()
     if(size() == 0)
         throw "No first to drop";
     
-    entries.erase(entries.begin());
+    entries->erase(entries->begin());
     
     index++;
 }
