@@ -35,22 +35,22 @@ public:
     
 //    static RowFiller leftDirichlet();
 //    static RowFiller rightDirichlet();    
-    static RowFiller* dirichlet(int,int);        
+    static RowFiller** dirichlet(int,int);        
 };
 
 
 class FilledRow
 {
     vector<double> entries;
-    RowFiller *fillers;
+    RowFiller **fillers;
     int index;
     
 public:
 //    FilledRow(int);
 //    FilledRow(int,double);   
-    FilledRow(int,RowFiller *);  
-    FilledRow(int,vector<double>,RowFiller *);  
-    FilledRow(int,RowFiller *,int);     
+    FilledRow(int,RowFiller **);  
+    FilledRow(int,vector<double>,RowFiller **);  
+    FilledRow(int,RowFiller **,int);     
     FilledRow(const FilledRow &);
     ~FilledRow();    
     int size();    

@@ -79,13 +79,12 @@ double RowFiller::fillGenerate(int col)
 //    return flr;
 //}
 
-RowFiller* RowFiller::dirichlet(int a, int b)
+RowFiller** RowFiller::dirichlet(int a, int b)
 {
-    RowFiller *fil = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-    RowFiller flr1(a,&alternatingFiller);
-    RowFiller flr2(b,&oneFiller);
-    fil[0] = flr1;
-    fil[1] = flr2;    
+    RowFiller **fil = (RowFiller **) malloc(NUMFILLERS*sizeof(RowFiller*));
+
+    fil[0] = new RowFiller(a,&alternatingFiller);
+    fil[1] = new RowFiller(b,&oneFiller);    
     
     return fil;
 }
@@ -114,14 +113,15 @@ RowFiller* RowFiller::dirichlet(int a, int b)
 //}
 
 
-FilledRow::FilledRow(int ind,RowFiller *flr)
+FilledRow::FilledRow(int ind,RowFiller **flr)
 {
     index = ind;
-    fillers = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-    for(int i = 0; i < NUMFILLERS; i++)
-        fillers[i] = flr[i];   
+    fillers = flr;
+//    (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
+//    for(int i = 0; i < NUMFILLERS; i++)
+//        fillers[i] = flr[i];   
     
-    free(flr);
+//    free(flr);
 }
 //
 //FilledRow::FilledRow(int ind,RowFiller *flr,int size)
@@ -136,12 +136,13 @@ FilledRow::FilledRow(int ind,RowFiller *flr)
 //    free(flr);    
 //}
 
-FilledRow::FilledRow(int ind,vector<double> entrs,RowFiller *flr)
+FilledRow::FilledRow(int ind,vector<double> entrs,RowFiller **flr)
 {
     index = ind;
-    fillers = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-    for(int i = 0; i < NUMFILLERS; i++)
-        fillers[i] = flr[i];   
+    fillers = flr;
+//    fillers = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
+//    for(int i = 0; i < NUMFILLERS; i++)
+//        fillers[i] = flr[i];   
     
     entries = entrs;
     
@@ -150,9 +151,10 @@ FilledRow::FilledRow(int ind,vector<double> entrs,RowFiller *flr)
 
 FilledRow::FilledRow(const FilledRow &ref)
 {
-    fillers = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-    for(int i = 0; i < NUMFILLERS; i++)
-        fillers[i] = ref.fillers[i];    
+    fillers = ref.fillers;
+//    (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
+//    for(int i = 0; i < NUMFILLERS; i++)
+//        fillers[i] = ref.fillers[i];    
     
     index = ref.index;
     entries = ref.entries;
@@ -160,7 +162,7 @@ FilledRow::FilledRow(const FilledRow &ref)
 
 FilledRow::~FilledRow()
 {
-    free(fillers);
+//    free(fillers);
 }
 
 int FilledRow::size()
@@ -175,7 +177,7 @@ double FilledRow::operator[](int j)
     if (FILLROWQ(j)) {
         double ret = 0;
         for(int i = 0; i < NUMFILLERS; i++)
-            ret+=fillers[i].getEntry(j);
+            ret+=fillers[i]->getEntry(j);
         
         return ret;
     }
@@ -209,12 +211,12 @@ void FilledRow::setEntry(int j,double val,bool increasesize)
 
 void FilledRow::setFill(int i,double val)
 {
-    fillers[i].setFill(val);
+    fillers[i]->setFill(val);
 }
 
 double FilledRow::getFill(int i)
 {
-    return fillers[i].getFill();
+    return fillers[i]->getFill();
 }
 
 int FilledRow::fillSize()
@@ -224,7 +226,7 @@ int FilledRow::fillSize()
 
 double FilledRow::fillGenerate(int i, int col)
 {
-    return fillers[i].fillGenerate(col);
+    return fillers[i]->fillGenerate(col);
 }
 
 void FilledRow::push_back(double val)
