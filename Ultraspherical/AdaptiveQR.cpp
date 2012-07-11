@@ -11,7 +11,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iomanip.h>
+#include <iomanip>
 
 
 void printvec(vector<double> c)

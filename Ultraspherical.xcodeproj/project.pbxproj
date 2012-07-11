@@ -36,7 +36,7 @@
 		17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Ultraspherical.1; sourceTree = "<group>"; };
 		17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FilledBandedMatrix.cpp; sourceTree = "<group>"; };
 		17EBCB88157CCFAC00C466D4 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = ../../../../../System/Library/Frameworks/Accelerate.framework; sourceTree = "<group>"; };
-		17FB5EE71598309E0080C627 /* FilledBandedMatrix_extras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilledBandedMatrix_extras.h; sourceTree = "<group>"; };
+		17FB5EE71598309E0080C627 /* FilledBandedMatrix.h */ = {isa = PBXFileReference; path = FilledBandedMatrix.h; sourceTree = "<group>"; };
 		17FB5EE8159830DA0080C627 /* MultiplicationMatrices.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultiplicationMatrices.cpp; sourceTree = "<group>"; };
 		17FB5EE9159830DA0080C627 /* MultiplicationMatrices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultiplicationMatrices.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				17EBCB76157CCC3D00C466D4 /* main.cpp */,
-				17FB5EE71598309E0080C627 /* FilledBandedMatrix_extras.h */,
+				17FB5EE71598309E0080C627 /* FilledBandedMatrix.h */,
 				17EBCB88157CCFAC00C466D4 /* Accelerate.framework */,
 				17EBCB83157CCD3600C466D4 /* FilledBandedMatrix.cpp */,
 				17444F54157DDC1F00E55C83 /* AdaptiveQR.h */,

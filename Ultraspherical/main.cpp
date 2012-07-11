@@ -8,7 +8,7 @@
 
 
 //#include "FilledBandedMatrix.h"
-#include "FilledBandedMatrix_extras.h" // stop multiple definition of RowFiller class. 
+#include "FilledBandedMatrix.h" // stop multiple definition of RowFiller class. 
 #include "MultiplicationMatrices.h"
 
 //#include "mex.h"

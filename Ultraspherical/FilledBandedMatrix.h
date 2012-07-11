@@ -12,6 +12,9 @@
 #include <iostream>
 #include <vector>
 
+
+#define NUMFILLERS 2
+
 using namespace std;
 
 
@@ -30,24 +33,26 @@ public:
     double getEntry(int k);  
     void setFill(double);    
     
-    static RowFiller leftDirichlet();
-    static RowFiller rightDirichlet();    
-    static vector<RowFiller> dirichlet(int,int);        
+//    static RowFiller leftDirichlet();
+//    static RowFiller rightDirichlet();    
+    static RowFiller* dirichlet(int,int);        
 };
 
 
 class FilledRow
 {
     vector<double> entries;
-    vector<RowFiller> fillers;
+    RowFiller *fillers;
     int index;
     
 public:
-    FilledRow(int);
-    FilledRow(int,double);   
-    FilledRow(int,vector<RowFiller>);  
-    FilledRow(int,vector<double>,vector<RowFiller>);  
-    FilledRow(int,vector<RowFiller>,int);      
+//    FilledRow(int);
+//    FilledRow(int,double);   
+    FilledRow(int,RowFiller *);  
+    FilledRow(int,vector<double>,RowFiller *);  
+    FilledRow(int,RowFiller *,int);     
+    FilledRow(const FilledRow &);
+    ~FilledRow();    
     int size();    
     double operator[] (int);
     void setEntry(int,double);  
@@ -63,8 +68,10 @@ public:
     int leftIndex();
     int rightIndex();    
     
-    static FilledRow rightDirichlet();
-    static FilledRow leftDirichlet();    
+
+    
+//    static FilledRow rightDirichlet();
+//    static FilledRow leftDirichlet();    
 };
 
 

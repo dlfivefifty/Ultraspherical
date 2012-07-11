@@ -4,7 +4,7 @@
 #define Ultraspherical_Multiplication_Matrix_h
 
 #include <iostream>
-#include "FilledBandedMatrix_extras.h" 
+#include "FilledBandedMatrix.h" 
 #include <vector>
 
 using namespace std; 
