@@ -560,6 +560,11 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     
     
     rowEntries = halvedadd;
+    
+    
+    delete halved;
+    delete halvedremove;
+    delete halvedaddwithzeros;
 }
 
 
