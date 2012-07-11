@@ -50,7 +50,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
         
         //    cout<< "col: " << col << " colsize: "<<B->columnSize(col)<<endl;        
         
-        printvec(c);
+//printvec(c);
         
         for(int row2 = row1 + 1; row2 < B->columnSize(col); row2++)
         {
@@ -81,13 +81,13 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     vector<double> r = c;
     
     
-        printvec(c);    
+//        printvec(c);    
     
     r[col] = c[col]/B->getEntry(col, col,true);
     
     vector<double> s;
-    for(int i = 0; i < (*B)[col].fillSize(); i++)
-        s.push_back((*B)[col].fillGenerate(i,col)*r[col]);
+    for(int i = 0; i < (*B)[col]->fillSize(); i++)
+        s.push_back((*B)[col]->fillGenerate(i,col)*r[col]);
     int rbnd;  
     int csize = col+1;
     
@@ -101,15 +101,15 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
         } else {      
             //scont is the contribution from higher fills
             double scont = 0;
-            for(int i = 0; i < (*B)[row].fillSize(); i++)  
-                scont += s[i]*(*B)[row].getFill(i);    
+            for(int i = 0; i < (*B)[row]->fillSize(); i++)  
+                scont += s[i]*(*B)[row]->getFill(i);    
         
             r[row] = (c[row]-B->rowDot(row,row+1,rbnd,&r) - scont)/B->getEntry(row,row,true);
 //            
-            for(int i = 0; i < (*B)[row].fillSize(); i++)            
+            for(int i = 0; i < (*B)[row]->fillSize(); i++)            
             {
 //                (*B)[rbnd];
-                s[i]+=(*B)[rbnd].fillGenerate(i,rbnd)*r[rbnd];                            
+                s[i]+=(*B)[rbnd]->fillGenerate(i,rbnd)*r[rbnd];                            
             }
         }
     }

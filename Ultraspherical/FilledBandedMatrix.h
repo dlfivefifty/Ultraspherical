@@ -81,7 +81,7 @@ public:
 
 class FilledBandedMatrix
 {
-    vector<FilledRow> rows;
+    vector<FilledRow *> rows;
     int lowerIndex;
     
     
@@ -93,21 +93,21 @@ public:
     int size();
     int columnSize();
     int columnSize(int);
-    virtual FilledRow createRow(int);
+    virtual FilledRow *createRow(int);
     void increaseSize();   
     void increaseSize(int);       
     double getEntry(int,int);
     double getEntry(int,int,bool);    
     void setEntry(int,int,double);    
     void setEntry(int,int,double,bool);        
-    FilledRow getRow(int,bool);        
-    FilledRow operator[] (int);
+    FilledRow *getRow(int,bool);        
+    FilledRow *operator[] (int);
     void print();
     
     int leftIndex(int);
     int rightIndex(int);    
     
-    void push_back(FilledRow);
+    void push_back(FilledRow *);
     
     
     void applyGivens(int,int,vector<double> *);    

@@ -173,11 +173,11 @@ int main(int argc, const char * argv[])
 
 //    
         cout<<"{"<<endl;        
-    for(long w = 10; w < 11; w += 100)
+    for(long n = 10; n < 2001; n += 100)
     {
 
     vector<double> a;         
-    a.push_back(w);// a.push_back(2*omega); a.push_back(3*omega);        
+    a.push_back(10); a.push_back(2); a.push_back(3);        
         
         DirichletD2ConvertMultiplicationMatrix drbnd(a);
         
@@ -185,17 +185,17 @@ int main(int argc, const char * argv[])
         drbnd.increaseSize();
 
 //        
-//        for(long i = 0; i < 100*n*n; i++)
-//            b.push_back(1);
-//        //    printvec(b);
+        for(long i = 0; i < 100*n; i++)
+            b.push_back(1);
+        //    printvec(b);
         
         t1 = clock();                
         
         vector<double> c = QRSolve(&drbnd,b);            
         
         t2 = clock();
-            printvec(b);
-            printvec(c);    
+//            printvec(b);
+//            printvec(c);    
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
         cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
     }

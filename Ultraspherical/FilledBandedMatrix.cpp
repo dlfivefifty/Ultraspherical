@@ -291,7 +291,7 @@ int FilledBandedMatrix::size()
 
 int FilledBandedMatrix::columnSize()
 {
-    return rows.back().rightIndex();
+    return rows.back()->rightIndex();
 }
 
 int FilledBandedMatrix::columnSize(int col)
@@ -301,16 +301,16 @@ int FilledBandedMatrix::columnSize(int col)
 
 int FilledBandedMatrix::leftIndex(int row)
 {
-    return max(0,(*this)[row].leftIndex());
+    return max(0,(*this)[row]->leftIndex());
 }
 
 int FilledBandedMatrix::rightIndex(int row)
 {
-    return (*this)[row].rightIndex();
+    return (*this)[row]->rightIndex();
 }
 
 
-FilledRow FilledBandedMatrix::getRow(int i,bool increasesize)
+FilledRow *FilledBandedMatrix::getRow(int i,bool increasesize)
 {    
     if(i >= size()) {
         if(increasesize) {
@@ -325,19 +325,19 @@ FilledRow FilledBandedMatrix::getRow(int i,bool increasesize)
     }
 }
 
-FilledRow FilledBandedMatrix::operator[] (int i)
+FilledRow * FilledBandedMatrix::operator[] (int i)
 {
     return getRow(i,false);
 }
 
 double FilledBandedMatrix::getEntry(int i,int j)
 {    
-    return (*this)[i][j];
+    return (*(*this)[i])[j];
 }
 
 double FilledBandedMatrix::getEntry(int i,int j,bool increasesize)
 {    
-    return getRow(i, increasesize)[j];
+    return (*getRow(i, increasesize))[j];
 }
 
 
@@ -352,13 +352,13 @@ void FilledBandedMatrix::increaseSize(int i)
         increaseSize();
 }
 
-void FilledBandedMatrix::push_back(FilledRow row)
+void FilledBandedMatrix::push_back(FilledRow *row)
 {
     rows.push_back(row);
 }
 
 
-FilledRow FilledBandedMatrix::createRow(int k)
+FilledRow *FilledBandedMatrix::createRow(int k)
 {
     cout << "CREATEROW NOT DEFINED!!"<<endl;
     return getRow(size()-1, 0);
@@ -367,7 +367,7 @@ FilledRow FilledBandedMatrix::createRow(int k)
 
 void FilledBandedMatrix::dropFirst(int row)
 {
-    rows[row].dropFirst();
+    rows[row]->dropFirst();
 }
 
 
@@ -383,7 +383,7 @@ void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
         rows.push_back(createRow(k));
     }
     
-    rows[i].setEntry(j,val,increasesize);    
+    rows[i]->setEntry(j,val,increasesize);    
 }
 
 
@@ -424,8 +424,8 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
     increaseSize(max(row1,row2));
     
     
-    double a = (rows[row1])[col1];
-    double b = (rows[row2])[col1];
+    double a = (*rows[row1])[col1];
+    double b = (*rows[row2])[col1];
     double norm = sqrt(a*a + b*b);
     
     a = a/norm;
@@ -460,14 +460,14 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
     }
     
     
-    for(int i = 0; i < rows[row1].fillSize(); i++)
+    for(int i = 0; i < rows[row1]->fillSize(); i++)
     {
-        en1 = rows[row1].getFill(i);
-        en2 = rows[row2].getFill(i);
+        en1 = rows[row1]->getFill(i);
+        en2 = rows[row2]->getFill(i);
         
         
-        rows[row1].setFill(i, a*en1 + b*en2);
-        rows[row2].setFill(i, -b*en1 + a*en2);  
+        rows[row1]->setFill(i, a*en1 + b*en2);
+        rows[row2]->setFill(i, -b*en1 + a*en2);  
         
     }
 }
@@ -477,14 +477,14 @@ double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> *r)
 {
     double ret = 0;
     
-    FilledRow fr = rows[row];
+    FilledRow *fr = rows[row];
     
     
     
     
     for(int j = colm; j <=colM; j++)
     {
-        ret+=fr[j]*(*r)[j];
+        ret+=(*fr)[j]*(*r)[j];
     }
     
     return ret;

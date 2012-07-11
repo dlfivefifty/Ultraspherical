@@ -463,13 +463,13 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     
     vector<double>::iterator it = a.begin();
     
-    FilledRow drrow(0,RowFiller::dirichlet(1,0));
+    FilledRow *drrow = new FilledRow(0,RowFiller::dirichlet(1,0));
     
-    drrow.increaseSize();
+    drrow->increaseSize();
     push_back(drrow);   
     
-    drrow = FilledRow(0,RowFiller::dirichlet(0,1));
-    drrow.increaseSize();    
+    drrow = new FilledRow(0,RowFiller::dirichlet(0,1));
+    drrow->increaseSize();    
     push_back(drrow);        
     
     halved->push_back(*it);
@@ -520,7 +520,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     }
     
     
-    push_back(FilledRow(0,firstrow,RowFiller::dirichlet(0,0)));    
+    push_back(new FilledRow(0,firstrow,RowFiller::dirichlet(0,0)));    
     
     
     
@@ -555,7 +555,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
         }        
         
         
-        push_back(FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
+        push_back(new FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
     }
     
     
@@ -569,7 +569,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
 
 
 
-FilledRow DirichletD2ConvertMultiplicationMatrix::createRow(int k)
+FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(int k)
 {
     
     
@@ -586,7 +586,7 @@ FilledRow DirichletD2ConvertMultiplicationMatrix::createRow(int k)
             newrow->push_back(applyConversion(rowEntries,rowEntries->size()+3-i-4, k-2));             
     }    
     
-    return FilledRow(k-2-(rowEntries->size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
+    return new FilledRow(k-2-(rowEntries->size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
 }
 
 
