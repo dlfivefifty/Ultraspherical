@@ -54,10 +54,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
         
         for(int row2 = row1 + 1; row2 < B->columnSize(col); row2++)
         {
-//    	std:cout<<"B: "<<endl;
-//            B.print();      
-            
-            cout<< "csize: " << c.size() <<endl;             
+
             
             if(row2 >= c.size()) {
                 c.push_back(0);

@@ -141,29 +141,20 @@ FilledRow::FilledRow(int ind,vector<double> *entrs,RowFiller **flr)
 {
     index = ind;
     fillers = flr;
-//    fillers = (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-//    for(int i = 0; i < NUMFILLERS; i++)
-//        fillers[i] = flr[i];   
     
     entries = entrs;
-    
-//    free(flr);     
 }
 
 FilledRow::FilledRow(const FilledRow &ref)
 {
-    fillers = ref.fillers;
-//    (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-//    for(int i = 0; i < NUMFILLERS; i++)
-//        fillers[i] = ref.fillers[i];    
-    
+    fillers = ref.fillers;    
     index = ref.index;
     entries = ref.entries;
 }
 
 FilledRow::~FilledRow()
 {
-//    free(fillers);
+
 }
 
 int FilledRow::size()
@@ -270,10 +261,9 @@ int FilledRow::rightIndex()
 
 
 
-FilledBandedMatrix::FilledBandedMatrix(const int low,FilledRow (*rgen)(int))
+FilledBandedMatrix::FilledBandedMatrix(const int low)
 {
     lowerIndex = low;
-    rowGenerator = rgen;
     
 //    increaseSize();
 }
@@ -350,10 +340,6 @@ double FilledBandedMatrix::getEntry(int i,int j,bool increasesize)
     return getRow(i, increasesize)[j];
 }
 
-FilledRow FilledBandedMatrix::createRow(int k)
-{
-    return (*rowGenerator)(k);
-}
 
 void FilledBandedMatrix::increaseSize()
 {
@@ -370,6 +356,14 @@ void FilledBandedMatrix::push_back(FilledRow row)
 {
     rows.push_back(row);
 }
+
+
+FilledRow FilledBandedMatrix::createRow(int k)
+{
+    cout << "CREATEROW NOT DEFINED!!"<<endl;
+    return getRow(size()-1, 0);
+}
+
 
 void FilledBandedMatrix::dropFirst(int row)
 {

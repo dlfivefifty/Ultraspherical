@@ -83,11 +83,10 @@ class FilledBandedMatrix
 {
     vector<FilledRow> rows;
     int lowerIndex;
-    FilledRow (*rowGenerator)(int);
     
     
 public:
-    FilledBandedMatrix(const int, FilledRow (*)(int));
+    FilledBandedMatrix(const int);
     int lower();
     void setLower(int);
     void dropFirst(int row);
