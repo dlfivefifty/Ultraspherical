@@ -21,7 +21,7 @@ void printvec(vector<double> c)
     
     for(it = c.begin(); it < c.end(); it++)
     {
-        cout << setprecision(20)<< *it << ", ";
+        cout << setprecision(16)<< *it << ", ";
     }
     
     cout << endl;
