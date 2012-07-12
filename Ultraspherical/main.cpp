@@ -14,19 +14,22 @@
 //#include "mex.h"
 #include "AdaptiveQR.h"
 #include <time.h>
-
+#include <math.h>
 
 
 void smallbandExample()
 {
+    cout << "SMALL BAND" <<endl;
+    
     clock_t t1; clock_t t2;
     
     vector<double> b;
     
-    b.push_back(1);    
+    for(long i = 0; i < 10; i++)
+        b.push_back(1);
     
     cout<<"{"<<endl;        
-    for(long n = 10; n < 11; n += 100)
+    for(long n = 0; n < 41; n ++)
     {
         
         vector<double> a;         
@@ -52,13 +55,17 @@ void smallbandExample()
         t2 = clock();
         //            printvec(b);
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
+        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;  
+        
+        for(long i = 0; i < 50000; i++)
+            b.push_back(1);                
     }
     cout<<"}"<<endl;              
 }
 
 void cosbandExample()
 {
+    cout << "COSINE BAND" <<endl;    
     clock_t t1; clock_t t2;
     
     vector<double> b;
@@ -67,7 +74,7 @@ void cosbandExample()
         b.push_back(1);
     
     cout<<"{"<<endl;        
-    for(long n = 0; n < 10; n ++)
+    for(long n = 0; n < 41; n ++)
     {
         
         vector<double> a;         
@@ -110,40 +117,39 @@ void cosbandExample()
 
 void airyExample()
 {
-//    double e = 1/10.;
-//    double left = 0.1271728034584682;
-//    double right = 0.027515172874532375;
-    
-//    double e = 1/100.;
-//    double left = 0.351913571284756;
-//    double right = 0.00024221691467447962;    
-
-//    int numex = 10;
-    double e = 1./1000000000;
-    double left = 0.05597189577301992;
-    double right = 0;
-    
-    
-    clock_t t1; clock_t t2;
-    vector<double> a;
-    a.push_back(0);
-    a.push_back(-1/e);
-    
-    vector<double> b;
-    b.push_back(left);
-    b.push_back(right);
-    
-    DirichletD2ConvertMultiplicationMatrix drbnd(a);             
-    drbnd.increaseSize();
-
-    t1 = clock();                
-    
-    vector<double> c = QRSolve(&drbnd,b);            
-    
-    t2 = clock();
-//    printvec(c);
-    float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-    cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;       
+    int numex = 14;
+    double left[] = {0.5355608832923521, 0.1271728034584682, 0.351913571284756, 
+        0.04024123848644319, -0.2607345878897477, -0.19426241417077472, 
+        0.1767533932395529, -0.12078802581383595, 0.10178242352993307, 
+        0.05597189577301992, 0.02333382924837296,-0.027905156151965354, 0.02705738360464258, 0.044775817580242405, 
+            0.01829406779298808, -0.013152978737498166, -0.02249517692130777, 
+            0.020321506196299167, -0.0021912611413430574, 
+            -0.013261784699976999, 0.005242247212492905}  ;
+    double right[] = {0.13529241631288141, 0.027515172874532375,
+        0.00024221691467447962, 1.1047532552898686E-10, 
+        1.4576297592861973E-30, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    for (int k = 0; k < numex; k++) {        
+        clock_t t1; clock_t t2;
+        vector<double> a;
+        a.push_back(0);
+        a.push_back(-pow(10, k));
+        
+        vector<double> b;
+        b.push_back(left[k]);
+        b.push_back(right[k]);
+        
+        DirichletD2ConvertMultiplicationMatrix drbnd(a);             
+        drbnd.increaseSize();
+        
+        t1 = clock();                
+        
+        vector<double> c = QRSolve(&drbnd,b);            
+        
+        t2 = clock();
+        //    printvec(c);
+        float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
+        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;       
+    }
 }
 
 
@@ -151,7 +157,7 @@ void airyExample()
 int main(int argc, const char * argv[])
 {    
 
-    airyExample();
+    cosbandExample();
 
 
     
