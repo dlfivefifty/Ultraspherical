@@ -57,46 +57,44 @@ double applyConversion(vector<double> *cin,int k)
     return applyConversion(cin,0, k);
 }
 
-double zeroFirstApplyConversion(vector<double> *row,int k)
+double zeroFirstApplyConversion(vector<double> *row)
 {
+    
+    
 ////    printvec(cin);
 //    cin.insert(cin.begin(),0);
 ////    printvec(cin);    
 //    return applyConversion(cin,0, k);
 //    
 //  TODO Fix following    
-    int ind = 0;
+//    int ind = 0; k = 0;
     
     //    printvec(row);
     
     double ret = 0;
     
+//    if(ind >= (int)row->size())
+//        return ret;
+//    
+//        if(k == 0)
+//            ret = (*row)[ind];
+//        else
+//            ret = (*row)[ind]*.5/(k+1);
+    
+    int ind=1;
+    
     if(ind >= (int)row->size())
         return ret;
     
-    if( ind >= 0)
-    {
-        if(k == 0)
-            ret = (*row)[ind];
-        else
-            ret = (*row)[ind]*.5/(k+1);
-    }
+    ret += -(*row)[ind]*(.5/(3.) + .5/(1));
     
     ind+=2;
     
     if(ind >= (int)row->size())
         return ret;
     
-    if ( ind >= 0)
-        ret += -(*row)[ind]*(.5/(k+3.) + .5/(k+1));
     
-    ind+=2;
-    
-    if(ind >= (int)row->size())
-        return ret;
-    
-    if(ind >= 0)
-        ret += (*row)[ind]*.5/(k+3);
+    ret += (*row)[ind]*.5/(3);
     
     return ret;     
 }
@@ -494,7 +492,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     
     
     halvedremove->erase(halvedremove->begin());            
-    firstrow->push_back(applyConversion(halved, 0)+zeroFirstApplyConversion(halvedremove, 0));
+    firstrow->push_back(applyConversion(halved, 0)+zeroFirstApplyConversion(halvedremove));
     
     
     for(int i = 1; i < halved->size(); i++)
@@ -503,9 +501,9 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
         
         halvedadd->insert(halvedadd->begin(),(*halved)[i]);
         if(i == 2)
-            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove, 0) + 4);        
+            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove) + 4);        
         else
-            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove, 0));                    
+            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove));                    
     }
     
     vector<double> *halvedaddwithzeros = new vector<double>(halvedadd->begin(),halvedadd->end());    

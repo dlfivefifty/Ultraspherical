@@ -173,7 +173,7 @@ int main(int argc, const char * argv[])
 
 //    
         cout<<"{"<<endl;        
-    for(long n = 10; n < 2001; n += 100)
+    for(long n = 10; n < 11; n += 100)
     {
 
     vector<double> a;         
@@ -182,10 +182,13 @@ int main(int argc, const char * argv[])
         DirichletD2ConvertMultiplicationMatrix drbnd(a);
         
         
+        drbnd.print();
+        
+        
         drbnd.increaseSize();
 
 //        
-        for(long i = 0; i < 100*n; i++)
+        for(long i = 0; i < n; i++)
             b.push_back(1);
         //    printvec(b);
         
@@ -195,7 +198,7 @@ int main(int argc, const char * argv[])
         
         t2 = clock();
 //            printvec(b);
-//            printvec(c);    
+        printvec(c);    
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
         cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;    
     }
