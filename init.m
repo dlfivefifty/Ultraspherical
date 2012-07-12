@@ -46,6 +46,7 @@ RightHandSide;
 GetRow;
 NullOperatorQ;
 RowZeroQ;
+MultiplicationMatrix;
 Begin["Private`"];
 
 
@@ -526,6 +527,25 @@ DerivativeOperator[2,0]:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOp
 
 
 LaplaceOperator:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],BandedOperator[{ShiftList[(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6},0]},{{0,0}},ShiftList[(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6},0]},{{ZeroOperator[],ZeroOperator[]}},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{ShiftList[(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6},0]},{{0,0}},Function[rw,ShiftList[(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))},1-rw]],Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)];
+
+
+SparseHankelMatrix[f_List,n_]:=PadRight[HankelMatrix[f]//SparseArray,{n,n}];SparseHankelMatrix[f_IFun,n_]:=SparseHankelMatrix[f//DCT,n];
+HankelZeroFirst[M_,m_]:=Module[{A},
+A=M;
+A[[1,;;Min[m,Length[M]]]]=0.;
+A];
+
+SparseToeplitzMatrix[g_LFun?ScalarFunQ,n_]:=SparseToeplitzMatrix[g//FFT,n];
+SparseToeplitzMatrix[f_IFun?ScalarFunQ,n_]:=SparseToeplitzMatrix[ShiftList[Reverse[f/2.//DCT//Rest],f/2.//DCT//DoubleFirst],n];
+SparseToeplitzMatrix[sl_ShiftList,n_]:=SparseArray[ToList[MapIndexed[{i_,j_}/;i==j-{##}[[2,1]]->{##}[[1]]&,ChopDrop[sl//Reverse,$MachineTolerance]]],{n,n}];
+
+SparseToeplitzMatrix[l1_List,l2_List,n_]:=Module[{k},
+SparseArray[Table[Band[{k,1}]->l1[[k]],{k,Min[n,Length[l1]]}]~Join~Table[Band[{1,k}]->l1[[k]],{k,2,Min[n,Length[l2]]}],n]
+];
+
+MultiplicationMatrix[v_List,n_]:=(HankelZeroFirst[SparseHankelMatrix[v/2.,n],v//Length]+SparseToeplitzMatrix[(v//DoubleFirst)/2,(v//DoubleFirst)/2,n]);
+
+MultiplicationMatrix[f_IFun,n_]:=MultiplicationMatrix[f//DCT,n];
 
 
 End[];
