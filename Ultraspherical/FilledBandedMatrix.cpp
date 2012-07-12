@@ -118,24 +118,8 @@ FilledRow::FilledRow(int ind,RowFiller **flr)
     index = ind;
     fillers = flr;
     entries = new vector<double>;    
-//    (RowFiller *) malloc(NUMFILLERS*sizeof(RowFiller));
-//    for(int i = 0; i < NUMFILLERS; i++)
-//        fillers[i] = flr[i];   
-    
-//    free(flr);
 }
-//
-//FilledRow::FilledRow(int ind,RowFiller *flr,int size)
-//{
-//    index = ind;
-//    fillers = (RowFiller *) malloc(sizeof(RowFiller)*NUMFILLERS);
-//    for(int i = 0; i < NUMFILLERS; i++)
-//        fillers[i] = flr[i];   
-//    
-//    entries.resize(size);
-//    
-//    free(flr);    
-//}
+
 
 FilledRow::FilledRow(int ind,vector<double> *entrs,RowFiller **flr)
 {
@@ -154,7 +138,12 @@ FilledRow::FilledRow(const FilledRow &ref)
 
 FilledRow::~FilledRow()
 {
-
+    delete entries;
+    for (int i = 0; i < NUMFILLERS; i++) {
+        delete fillers[i];
+    }
+    
+    free(fillers);
 }
 
 int FilledRow::size()
@@ -268,6 +257,13 @@ FilledBandedMatrix::FilledBandedMatrix(const int low)
 //    increaseSize();
 }
 
+
+FilledBandedMatrix::~FilledBandedMatrix()
+{
+    for (int i = 0; i < rows.size(); i++) {
+        delete rows[i];
+    }
+}
 
 
 

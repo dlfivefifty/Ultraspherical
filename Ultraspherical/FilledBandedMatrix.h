@@ -87,6 +87,7 @@ class FilledBandedMatrix
     
 public:
     FilledBandedMatrix(const int);
+    ~FilledBandedMatrix();
     int lower();
     void setLower(int);
     void dropFirst(int row);
