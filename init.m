@@ -47,12 +47,14 @@ GetRow;
 NullOperatorQ;
 RowZeroQ;
 MultiplicationMatrix;
+FillGenerator;
 Begin["Private`"];
 
 
-GetFill[BandedOperator[A_List,fill_List,rowgen_,___],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
-GetFillValue[BandedOperator[A_List,fill_List,rowgen_],{i_,_}]:=fill[[i]];
-GetFillValue[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],{i_,j_}]:=fill[[i]].fls[j];
+GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_,FillGenerator->fgen_],i_]:=If[i>Length[fill],fgen[i],fill[[i]]];
+GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
+GetFillValue[bnd:BandedOperator[_List,_List,_],{i_,_}]:=GetFill[bnd,i];
+GetFillValue[bnd:BandedOperator[_List,_List,_,Filler->fls_,___],{i_,j_}]:=GetFill[bnd,i].fls[j];
 SetFill[BandedOperator[A_List,fill_List,rowgen_,opts___],i_,val_]:=BandedOperator[A,ReplacePart[fill,i->val],rowgen,opts];
 GetRowGenerator[BandedOperator[A_List,fill_List,rowgen_,___]]:=rowgen;
 
@@ -60,8 +62,8 @@ GetRow[BandedOperator[A_List,fill_List,rowgen_,___],i_]:=If[i>Length[A],rowgen[i
 
 BandedOperator/:bnd_BandedOperator[[i_Integer,j_Integer]]:=\[Piecewise]{
  {First[bnd][[i]][[j]], i<=Length[bnd]&&LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
- {GetFillValue[bnd,{i,j}], i<=Length[bnd]&&j>RightIndex[bnd,i]},
  {GetRowGenerator[bnd][i][[j]], LeftIndex[bnd,i]<=j<=RightIndex[bnd,i]},
+ {GetFillValue[bnd,{i,j}], j>RightIndex[bnd,i]},
  {0, True}
 };
 BandedOperator/:bnd_BandedOperator[[i_List,j_Integer]]:=bnd[[#,j]]&/@i;
@@ -87,7 +89,7 @@ MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]]//Matr
 MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm];
 
 
-IncreaseLength[BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,0 Last[fill]],rowgen,opts];
+IncreaseLength[bnd:BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,GetFill[bnd,Length[A]+1]],rowgen,opts];
 
 
 (** Set Length to be at least n **)
@@ -195,6 +197,34 @@ If[OptionValue[RightHandSide]===Null,
 Bn1,
 {Bn1,ApplyToRows[G,{row1,row2},OptionValue[RightHandSide]]}
 ]
+];
+
+
+
+BandedOperator/:c_?NumberQ BandedOperator[A_List,fill_List,rowgen_,Filler->flr_,FillGenerator->flg_]:=BandedOperator[c A,c fill, c rowgen[#]&,Filler->flr,FillGenerator->(c flg[#]&)];
+
+
+BandedOperator/:( bndA:BandedOperator[A_List,fill1_List,rowgen1_?(!(#===Null)&),Filler->flr1_,FillGenerator->flg1_])+(bndB:BandedOperator[B_List,fill2_List,rowgen2_,Filler->flr2_,FillGenerator->flg2_]):=Module[{bnA,bnB,rowlength},
+bnA=IncreaseDimension[bndA,bndB];
+bnB=IncreaseDimension[bndB,bnA];
+
+
+
+BandedOperator[First[bnA]+First[bnB],bnA[[2]]+bnB[[2]], IncreaseIndexRange[ rowgen1[#],rowgen2[#]//IndexRange]+IncreaseIndexRange[rowgen2[#],rowgen1[#]//IndexRange]&,Filler->flr1,FillGenerator->(flg1[#]+flg2[#]&)]
+];
+
+BandedOperator/:( bndA:BandedOperator[A_List,fill1_List,rowgen1_?(!(#===Null)&),Filler->flr1_,FillGenerator->flg1_])+(bndB:BandedOperator[B_List,fill2_List,rowgen2_,Filler->flr2_]):=Module[{bnA,bnB,rowlength},
+bnA=IncreaseDimension[bndA,bndB];
+bnB=IncreaseDimension[bndB,bnA];
+
+
+
+BandedOperator[First[bnA]+First[bnB],bnA[[2]]+bnB[[2]], Function[row,
+Module[{lowi,highi},
+{lowi,highi}=Thread[{rowgen1[row]//IndexRange,
+rowgen2[row]//IndexRange}]//{Min[#[[1]]],Max[#[[2]]]}&;
+ShiftList[bndA[[row,lowi;;highi]]+bndB[[row,lowi;;highi]],1-lowi]
+]],Filler->flr1,FillGenerator->flg1]
 ];
 
 
@@ -496,6 +526,10 @@ ConversionOperator[2]:=ConversionOperator[2,Filler->({(-1)^(#-1),1}&)];
 
 DirichletOperator[-1]:=BandedOperator[{ShiftList[{1},0]},{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
 DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
+
+
+DirichletOperator[-1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{1,0}~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
+DirichletOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{0,1 }~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
 
 
 IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
