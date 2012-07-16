@@ -51,6 +51,22 @@ FillGenerator;
 Begin["Private`"];
 
 
+CDerivativeFiller[2]:=Function[k,{\[Piecewise]{
+ {0, EvenQ[k]},
+ {((k-1)/2)^3, True}
+},\[Piecewise]{
+ {0, EvenQ[k]},
+ {((k-1)/2), True}
+},\[Piecewise]{
+ {1/4 k (2-3 k+k^2), EvenQ[k]},
+ {0, True}
+},\[Piecewise]{
+ {(k-1), EvenQ[k]},
+ {0, True}
+}}];
+AlternatingFiller:=({(-1)^(#-1),1}&);
+
+
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_,FillGenerator->fgen_],i_]:=If[i>Length[fill],fgen[i],fill[[i]]];
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
 GetFillValue[bnd:BandedOperator[_List,_List,_],{i_,_}]:=GetFill[bnd,i];
@@ -516,16 +532,16 @@ ListRowReduce[BDx_,{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_Integer,s
 
 DerivativeOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{0,0,4},0]},{0 fls[1]},ShiftList[{0,0,2 (#+1)},1-#]&,Filler->fls];
 DerivativeOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},-1]},{0 fls[1]},ShiftList[{#},-#]&,Filler->fls];
-DerivativeOperator[1]:=DerivativeOperator[1,Filler->({(-1)^(#-1),1}&)];
-DerivativeOperator[2]:=DerivativeOperator[2,Filler->({(-1)^(#-1),1}&)];
+DerivativeOperator[1]:=DerivativeOperator[1,Filler->AlternatingFiller];
+DerivativeOperator[2]:=DerivativeOperator[2,Filler->AlternatingFiller];
 
 ConversionOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1,0,-1/2},0]},{0 fls[1]},ShiftList[{1/2,0,-1/2},1-#]&,Filler->fls];
-ConversionOperator[1]:=ConversionOperator[1,Filler->({(-1)^(#-1),1}&)];
+ConversionOperator[1]:=ConversionOperator[1,Filler->AlternatingFiller];
 ConversionOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{1,0,-2/3,0,1/6},0]},{0 fls[1]},ShiftList[{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->fls];
-ConversionOperator[2]:=ConversionOperator[2,Filler->({(-1)^(#-1),1}&)];
+ConversionOperator[2]:=ConversionOperator[2,Filler->AlternatingFiller];
 
-DirichletOperator[-1]:=BandedOperator[{ShiftList[{1},0]},{{1,0}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[-1]:=BandedOperator[{ShiftList[{1},0]},{{1,0}},Null,Filler->AlternatingFiller];
+DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->AlternatingFiller];
 
 
 DirichletOperator[-1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{1,0}~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
@@ -533,23 +549,23 @@ DirichletOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{0,1 }~Joi
 
 
 IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
-IdentityOperator[]:=IdentityOperator[Filler->({(-1)^(#-1),1}&)];
+IdentityOperator[]:=IdentityOperator[Filler->AlternatingFiller];
 
 ZeroOperator[Filler->fls_]:=BandedOperator[{ShiftList[{0,0,0},0]},{0 fls[1]},ShiftList[{0,0,0},1-#]&,Filler->fls];
-ZeroOperator[]:=ZeroOperator[Filler->({(-1)^(#-1),1}&)];
+ZeroOperator[]:=ZeroOperator[Filler->AlternatingFiller];
 
 ZeroOperator[1,\[Infinity],Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},{0 fls[1]},Null,Filler->fls];
-ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->({(-1)^(#-1),1}&)];
+ZeroOperator[1,\[Infinity]]:=ZeroOperator[1,\[Infinity],Filler->AlternatingFiller];
 
 
 
 
 
 
-DirichletOperator[-1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{IdentityOperator[],ZeroOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{ZeroOperator[],IdentityOperator[]}},Null,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[All,-1]:=BandedOperator[{ShiftList[{DirichletOperator[-1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[-1]},1-#]&,Filler->({(-1)^(#-1),1}&)];
-DirichletOperator[All,1]:=BandedOperator[{ShiftList[{DirichletOperator[1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[1]},1-#]&,Filler->({(-1)^(#-1),1}&)];
+DirichletOperator[-1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{IdentityOperator[],ZeroOperator[]}},Null,Filler->AlternatingFiller];
+DirichletOperator[1,All]:=BandedOperator[{ShiftList[{IdentityOperator[]},0]},{{ZeroOperator[],IdentityOperator[]}},Null,Filler->AlternatingFiller];
+DirichletOperator[All,-1]:=BandedOperator[{ShiftList[{DirichletOperator[-1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[-1]},1-#]&,Filler->AlternatingFiller];
+DirichletOperator[All,1]:=BandedOperator[{ShiftList[{DirichletOperator[1]},0]},{{ZeroOperator[1,\[Infinity]],ZeroOperator[1,\[Infinity]]}},ShiftList[{DirichletOperator[1]},1-#]&,Filler->AlternatingFiller];
 
 
 DerivativeOperator[0,1]:=BandedOperator[{ShiftList[{ConversionOperator[1]},-1]},{ZeroOperator[]},ShiftList[(#){ConversionOperator[1]},-#]&];
@@ -560,7 +576,7 @@ DerivativeOperator[0,2]:=BandedOperator[{ShiftList[{4 ConversionOperator[2]},-2]
 DerivativeOperator[2,0]:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],-2/3 DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/6},0]},{ZeroOperator[]},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],(-(1/(2 (#+2)))-1/(2 #))DerivativeOperator[2],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&];
 
 
-LaplaceOperator:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],BandedOperator[{ShiftList[(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6},0]},{{0,0}},ShiftList[(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/6},0]},{{ZeroOperator[],ZeroOperator[]}},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{ShiftList[(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6},0]},{{0,0}},Function[rw,ShiftList[(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))},1-rw]],Filler->({(-1)^(#-1),1}&)],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&,Filler->({(-1)^(#-1),1}&)];
+LaplaceOperator:=BandedOperator[{ShiftList[{DerivativeOperator[2],ZeroOperator[],BandedOperator[{ShiftList[(-2/3) {0,0,4,0,0}+4 {1,0,-2/3,0,1/6},0]},{{0,0}},ShiftList[(-2/3){0,0,2 (#+1),0,0}+4{1/(2 #),0,-(1/(2 (#+2)))-1/(2 #),0,1/(2(#+2))},1-#]&,Filler->AlternatingFiller],ZeroOperator[],DerivativeOperator[2]/6},0]},{{ZeroOperator[],ZeroOperator[]}},ShiftList[{DerivativeOperator[2]/(2 #),ZeroOperator[],BandedOperator[{ShiftList[(-(1/(2 (#+2)))-1/(2 #)) {0,0,4,0,0}+2(#+1){1,0,-2/3,0,1/6},0]},{{0,0}},Function[rw,ShiftList[(-(1/(2 (#+2)))-1/(2 #)){0,0,2 (rw+1),0,0}+2(#+1){1/(2rw),0,-(1/(2 (rw+2)))-1/(2 rw),0,1/(2(rw+2))},1-rw]],Filler->AlternatingFiller],ZeroOperator[],DerivativeOperator[2]/(2(#+2))},1-#]&,Filler->AlternatingFiller];
 
 
 SparseHankelMatrix[f_List,n_]:=PadRight[HankelMatrix[f]//SparseArray,{n,n}];SparseHankelMatrix[f_IFun,n_]:=SparseHankelMatrix[f//DCT,n];
@@ -580,6 +596,82 @@ SparseArray[Table[Band[{k,1}]->l1[[k]],{k,Min[n,Length[l1]]}]~Join~Table[Band[{1
 MultiplicationMatrix[v_List,n_]:=(HankelZeroFirst[SparseHankelMatrix[v/2.,n],v//Length]+SparseToeplitzMatrix[(v//DoubleFirst)/2,(v//DoubleFirst)/2,n]);
 
 MultiplicationMatrix[f_IFun,n_]:=MultiplicationMatrix[f//DCT,n];
+
+
+CDerivativeOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},{(0 fls[1])~Join~{4,0,0,0}},ShiftList[{0},1-#]&,Filler->((fls[#]~Join~CDerivativeFiller[2][#])&),FillGenerator->Function[row,(0 fls[1])~Join~\!\(\*
+TagBox[GridBox[{
+{"\[Piecewise]", GridBox[{
+{
+RowBox[{"{", 
+RowBox[{"0", ",", "0", ",", "4", ",", 
+RowBox[{
+RowBox[{"-", 
+RowBox[{"(", 
+RowBox[{"row", "-", "2"}], ")"}]}], 
+RowBox[{"(", "row", ")"}]}]}], "}"}], 
+RowBox[{"EvenQ", "[", "row", "]"}]},
+{
+RowBox[{"{", 
+RowBox[{"8", ",", 
+RowBox[{
+RowBox[{"-", "2"}], " ", 
+SuperscriptBox[
+RowBox[{"(", 
+RowBox[{"row", "-", "1"}], ")"}], "2"]}], ",", "0", ",", "0"}], "}"}], 
+RowBox[{"OddQ", "[", "row", "]"}]}
+},
+AllowedDimensions->{2, Automatic},
+Editable->True,
+GridBoxAlignment->{"Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+GridBoxItemSize->{"Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, "RowsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.84]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}},
+Selectable->True]}
+},
+GridBoxAlignment->{"Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+GridBoxItemSize->{"Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, "RowsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.35]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}}],
+"Piecewise",
+DeleteWithContents->True,
+Editable->False,
+SelectWithContents->True,
+Selectable->False]\)]];
+CDerivativeOperator[2]:=BandedOperator[{ShiftList[{0},0]},{{4,0,0,0}},ShiftList[{0},1-#]&,Filler->CDerivativeFiller[2],FillGenerator->Function[row,\!\(\*
+TagBox[GridBox[{
+{"\[Piecewise]", GridBox[{
+{
+RowBox[{"{", 
+RowBox[{"0", ",", "0", ",", "4", ",", 
+RowBox[{
+RowBox[{"-", 
+RowBox[{"(", 
+RowBox[{"row", "-", "2"}], ")"}]}], 
+RowBox[{"(", "row", ")"}]}]}], "}"}], 
+RowBox[{"EvenQ", "[", "row", "]"}]},
+{
+RowBox[{"{", 
+RowBox[{"8", ",", 
+RowBox[{
+RowBox[{"-", "2"}], " ", 
+SuperscriptBox[
+RowBox[{"(", 
+RowBox[{"row", "-", "1"}], ")"}], "2"]}], ",", "0", ",", "0"}], "}"}], 
+RowBox[{"OddQ", "[", "row", "]"}]}
+},
+AllowedDimensions->{2, Automatic},
+Editable->True,
+GridBoxAlignment->{"Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+GridBoxItemSize->{"Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, "RowsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.84]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}},
+Selectable->True]}
+},
+GridBoxAlignment->{"Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+GridBoxItemSize->{"Columns" -> {{Automatic}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, "RowsIndexed" -> {}},
+GridBoxSpacings->{"Columns" -> {Offset[0.27999999999999997`], {Offset[0.35]}, Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {Offset[0.2], {Offset[0.4]}, Offset[0.2]}, "RowsIndexed" -> {}}],
+"Piecewise",
+DeleteWithContents->True,
+Editable->False,
+SelectWithContents->True,
+Selectable->False]\)]];
 
 
 End[];
