@@ -48,6 +48,8 @@ NullOperatorQ;
 RowZeroQ;
 MultiplicationMatrix;
 FillGenerator;
+DropColumn;
+DropRow;
 Begin["Private`"];
 
 
@@ -672,6 +674,11 @@ DeleteWithContents->True,
 Editable->False,
 SelectWithContents->True,
 Selectable->False]\)]];
+
+
+DropRow[bnd:BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],row_]:=If[row>Length[A]||Length[A]==1,DropRow[bnd//IncreaseLength,row],BandedOperator[Drop[A,{row}],Drop[fill,{row}],rowgen[#+1]&,Filler->fls]];
+
+DropColumn[bnd:BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],col_]:=BandedOperator[Drop[#,col]&/@A,fill,rowgen,Filler->fls];
 
 
 End[];
