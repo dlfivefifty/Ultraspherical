@@ -50,6 +50,8 @@ MultiplicationMatrix;
 FillGenerator;
 DropColumn;
 DropRow;
+AlternatingFiller;
+BasisOperator;
 Begin["Private`"];
 
 
