@@ -57,6 +57,7 @@
 		177909D715BBF0E1008759E4 /* ultrasolve.tm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ultrasolve.tm.c; sourceTree = "<group>"; };
 		177909D915BBF0FB008759E4 /* UltrasphericalMathLink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UltrasphericalMathLink.cpp; sourceTree = "<group>"; };
 		177909DB15BBF58D008759E4 /* ultrasolve.tm */ = {isa = PBXFileReference; lastKnownFileType = text; path = ultrasolve.tm; sourceTree = "<group>"; };
+		177CE3EC15BC223E00067F87 /* UltrasphericalMatlab.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UltrasphericalMatlab.cpp; sourceTree = "<group>"; };
 		17EBCB72157CCC3D00C466D4 /* Ultraspherical */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ultraspherical; sourceTree = BUILT_PRODUCTS_DIR; };
 		17EBCB76157CCC3D00C466D4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Ultraspherical.1; sourceTree = "<group>"; };
@@ -103,11 +104,21 @@
 			path = Ultraspherical;
 			sourceTree = "<group>";
 		};
+		177CE3EA15BC21F900067F87 /* Matlab */ = {
+			isa = PBXGroup;
+			children = (
+				177CE3EC15BC223E00067F87 /* UltrasphericalMatlab.cpp */,
+			);
+			name = Matlab;
+			path = Ultraspherical;
+			sourceTree = "<group>";
+		};
 		17EBCB67157CCC3C00C466D4 = {
 			isa = PBXGroup;
 			children = (
 				17EBCB75157CCC3D00C466D4 /* Ultraspherical */,
 				177909D615BBF0A9008759E4 /* MathLink */,
+				177CE3EA15BC21F900067F87 /* Matlab */,
 				17EBCB73157CCC3D00C466D4 /* Products */,
 			);
 			sourceTree = "<group>";
