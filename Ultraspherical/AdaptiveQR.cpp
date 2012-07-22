@@ -39,7 +39,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     
 //    cout<<"colsize"<<B->columnSize(0)<<endl;
     
-    while (error > 1E-16) {
+    while (error > 1E-20) {
         
         col++;
         row1 = col;

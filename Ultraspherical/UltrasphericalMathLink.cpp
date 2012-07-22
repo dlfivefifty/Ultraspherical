@@ -21,11 +21,11 @@
 #include <vector>
 
 
-extern "C" double ultraSolve( double *, long);
+extern "C" void ultraSolve( double *, long);
 
 
 
-double ultraSolve( double *in, long n)
+void ultraSolve( double *in, long n)
 {
     vector<double> a;
     
@@ -41,10 +41,18 @@ double ultraSolve( double *in, long n)
     b.push_back(0);    
     b.push_back(0);        
     
-    vector<double> c = QRSolve(&drbnd,b);       
+    vector<double> c = QRSolve(&drbnd,b);   
     
     
-    return c[0];
+    double cret[c.size()];
+    
+    for(int i = 0; i < c.size(); i++)
+        cret[i] = c[i];
+    
+    MLPutReal64List(stdlink, cret, c.size());
+    
+    return ;
+//    return c[0];
 }
 
 

@@ -290,12 +290,12 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 
 
 # line 2 "Ultraspherical/ultrasolve.tm"
-double ultraSolve P(( double *, long));
+void ultraSolve P(( double *, long));
 
 # line 296 "Ultraspherical/ultrasolve.tm.c"
 
 
-double ultraSolve P(( double * _tp1, long _tpl1));
+void ultraSolve P(( double * _tp1, long _tpl1));
 
 #if MLPROTOTYPES
 static int _tr0( MLINK mlp)
@@ -304,16 +304,14 @@ static int _tr0(mlp) MLINK mlp;
 #endif
 {
 	int	res = 0;
-	double _tp0;
 	double * _tp1;
 	long _tpl1;
 	if ( ! MLGetRealList( mlp, &_tp1, &_tpl1) ) goto L0;
 	if ( ! MLNewPacket(mlp) ) goto L1;
 
-	_tp0 = ultraSolve(_tp1, _tpl1);
+	ultraSolve(_tp1, _tpl1);
 
-	res = MLAbort ?
-		MLPutFunction( mlp, "Abort", 0) : MLPutReal( mlp, _tp0);
+	res = 1;
 L1:	MLDisownRealList( mlp, _tp1, _tpl1);
 
 L0:	return res;
