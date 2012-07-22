@@ -11,6 +11,14 @@
  */
 
 #include "mathlink.h"
+
+#include "FilledBandedMatrix.h" // stop multiple definition of RowFiller class. 
+#include "MultiplicationMatrices.h"
+
+//#include "mex.h"
+#include "AdaptiveQR.h"
+
+
 extern double ultraSolve( double *, long);
 
 
