@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>UltrasphericalMathLink.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>177909BD15BBF007008759E4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>17EBCB71157CCC3D00C466D4</key>
 		<dict>
 			<key>primary</key>

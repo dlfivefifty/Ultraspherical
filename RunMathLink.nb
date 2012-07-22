@@ -1,0 +1,738 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     24113,        728]
+NotebookOptionsPosition[     21175,        624]
+NotebookOutlinePosition[     22170,        659]
+CellTagsIndexPosition[     22003,        652]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData["$InstallationDirectory"], "Input",
+ CellChangeTimes->{{3.551930390915943*^9, 3.5519303950601788`*^9}}],
+
+Cell[BoxData["\<\"/Applications/Mathematica.app\"\>"], "Output",
+ CellChangeTimes->{3.5519303953420963`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", "\"\<~/Projects/MathLinkTest/MathLinkTest\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.551931037528368*^9, 3.551931087322736*^9}}],
+
+Cell[BoxData["\<\"/Users/solver/Projects/MathLinkTest/MathLinkTest\"\>"], \
+"Output",
+ CellChangeTimes->{3.551931087710449*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Install", "[", "\"\<./MathLinkTest\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.551931092451158*^9, 3.551931100783188*^9}, 
+   3.551931261387898*^9, {3.551931507054139*^9, 3.551931507212287*^9}}],
+
+Cell[BoxData[
+ RowBox[{"LinkObject", "[", 
+  RowBox[{"\<\"/Users/solver/Projects/MathLinkTest/MathLinkTest/MathLinkTest\"\
+\>", ",", "20", ",", "8"}], "]"}]], "Output",
+ CellChangeTimes->{3.55193110149752*^9, 3.551931261928092*^9, 
+  3.551931507488573*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"AddTwo", "[", 
+  RowBox[{"1", ",", "3"}], "]"}]], "Input",
+ CellChangeTimes->{{3.5519315401570587`*^9, 3.551931541658854*^9}}],
+
+Cell[BoxData["4"], "Output",
+ CellChangeTimes->{3.551931542064539*^9, 3.551932266786571*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "SetDirectory", "[", 
+   "\"\</Users/solver/Library/Developer/Xcode/DerivedData/Ultraspherical-\
+hizjgypasiqwqvhbqyejgweviwjx/Build/Products/Debug\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Install", "[", "\"\<./UltrasphericalMathLink\>\"", "]"}]}], "Input",\
+
+ CellChangeTimes->{{3.5519322570506907`*^9, 3.5519322605098*^9}, {
+   3.55193273104591*^9, 3.5519327315052023`*^9}, {3.551933461125475*^9, 
+   3.5519334666931553`*^9}, 3.551934923189584*^9}],
+
+Cell[BoxData[
+ RowBox[{"LinkObject", "[", 
+  RowBox[{"\<\"/Users/solver/Library/Developer/Xcode/DerivedData/\
+Ultraspherical-hizjgypasiqwqvhbqyejgweviwjx/Build/Products/Debug/\
+UltrasphericalMathLink\"\>", ",", "10", ",", "10"}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.551932260911223*^9, 3.551932302209059*^9, 3.551932370352351*^9, 
+   3.551932402035811*^9, 3.551932734214335*^9, 3.551932824529531*^9, 
+   3.55193294475699*^9, {3.551933467034774*^9, 3.551933479438375*^9}, {
+   3.551934923693404*^9, 3.551934968723761*^9}, 3.551935251646652*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{3.551932729351491*^9}],
+
+Cell[BoxData[
+ RowBox[{"LinkObject", "[", 
+  RowBox[{"\<\"/Users/solver/Library/Developer/Xcode/DerivedData/MathLinkTest-\
+dhvnevtkdcggludraabcpbevkqrg/Build/Products/Debug/MathLinkTest\"\>", ",", "5",
+    ",", "5"}], "]"}]], "Output",
+ CellChangeTimes->{
+  3.55193226435781*^9, 3.551932303593525*^9, {3.551932354870673*^9, 
+   3.551932370878202*^9}, 3.551932403089312*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"??", "Ultra*"}]], "Input",
+ CellChangeTimes->{{3.5519322710361643`*^9, 3.551932272167262*^9}, 
+   3.551932406159877*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["\<\"UltrasphericalSolve[x, y] gives the sum of two machine \
+integers x and y.\"\>", "MSG"]], "Print", "PrintUsage",
+ CellChangeTimes->{3.551932406496996*^9},
+ CellTags->"Info3551968406-8096429"],
+
+Cell[BoxData[
+ InterpretationBox[GridBox[{
+    {GridBox[{
+       {
+        RowBox[{
+         RowBox[{"UltrasphericalSolve", "[", 
+          RowBox[{"i_Integer", ",", "j_Integer"}], "]"}], ":=", 
+         RowBox[{"ExternalCall", "[", 
+          RowBox[{
+           RowBox[{"LinkObject", "[", 
+            
+            RowBox[{"\<\"/Users/solver/Library/Developer/Xcode/DerivedData/\
+MathLinkTest-dhvnevtkdcggludraabcpbevkqrg/Build/Products/Debug/MathLinkTest\"\
+\>", ",", "5", ",", "5"}], "]"}], ",", 
+           RowBox[{"CallPacket", "[", 
+            RowBox[{"0", ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", "j"}], "}"}]}], "]"}]}], "]"}]}]}
+      },
+      BaselinePosition->{Baseline, {1, 1}},
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{"Columns" -> {{
+           Scaled[0.999]}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}}]}
+   },
+   BaselinePosition->{Baseline, {1, 1}},
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}}],
+  Definition[$CellContext`UltrasphericalSolve],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.551932406562043*^9},
+ CellTags->"Info3551968406-8096429"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"Range", "[", "2", "]"}], "//", "N"}], "//", "Total"}], "//", 
+  "Timing"}]], "Input",
+ CellChangeTimes->{{3.551932858554234*^9, 3.551932878358625*^9}, 
+   3.551934941091155*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0.00003799999999998249`", ",", "3.`"}], "}"}]], "Output",
+ CellChangeTimes->{{3.551932859960841*^9, 3.5519328786902227`*^9}, {
+  3.551934941324771*^9, 3.551934944848378*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "UltrasphericalSolve"}]], "Input",
+ CellChangeTimes->{{3.5519334823110027`*^9, 3.551933482508642*^9}}],
+
+Cell[BoxData[
+ StyleBox["\<\"UltrasphericalSolve[x] gives the sum of two machine integers x \
+and y.\"\>", "MSG"]], "Print", "PrintUsage",
+ CellChangeTimes->{3.551933483054487*^9},
+ CellTags->"Info3551969482-7861054"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Range", "[", "2", "]"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"1", ",", "2"}], "}"}]], "Output",
+ CellChangeTimes->{3.5519352632948427`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"UltrasphericalSolve", "[", 
+   RowBox[{"Range", "[", "2", "]"}], "]"}], "//", "Timing"}]], "Input",
+ CellChangeTimes->{{3.551932408655189*^9, 3.551932413165501*^9}, {
+  3.551932739019292*^9, 3.551932740788596*^9}, {3.551932827458099*^9, 
+  3.551932882326036*^9}, {3.551934948962494*^9, 3.5519349492003117`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0.0001769999999998717`", ",", "0.6389359938260389`"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.551932305197041*^9, 3.551932413370494*^9, 3.551932741184572*^9, {
+   3.5519328256378813`*^9, 3.5519328824790382`*^9}, {3.551932946098564*^9, 
+   3.5519329493708487`*^9}, {3.551933469395306*^9, 3.5519334800958853`*^9}, {
+   3.551934927185465*^9, 3.551934969869877*^9}, 3.551935252877614*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "Mult*"}]], "Input",
+ CellChangeTimes->{{3.551935271051845*^9, 3.5519352718990097`*^9}}],
+
+Cell[BoxData[
+ DynamicModuleBox[{Typeset`open$$ = True}, 
+  PaneSelectorBox[{False->
+   RowBox[{
+    OpenerBox[Dynamic[Typeset`open$$],
+     ImageSize->Small], 
+    StyleBox["System`", "InfoHeading"]}], True->GridBox[{
+     {
+      RowBox[{
+       OpenerBox[Dynamic[Typeset`open$$],
+        ImageSize->Small], 
+       StyleBox["System`", "InfoHeading"]}]},
+     {GridBox[{
+        {
+         ButtonBox["MultiedgeStyle",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultiedgeStyle", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultinormalDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultinormalDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultilaunchWarning",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultilaunchWarning", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultiplicativeOrder",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultiplicativeOrder", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultiLetterItalics",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultiLetterItalics", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["Multiplicity",
+          BaseStyle->"InformationLink",
+          ButtonData:>{"Info3551971272-5860543", {"Multiplicity", "System`"}},
+          
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultiLetterStyle",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultiLetterStyle", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariateHypergeometricDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {
+            "MultivariateHypergeometricDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultilineFunction",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultilineFunction", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariatePoissonDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {
+            "MultivariatePoissonDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["Multinomial",
+          BaseStyle->"InformationLink",
+          ButtonData:>{"Info3551971272-5860543", {"Multinomial", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariateTDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultivariateTDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultinomialDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971272-5860543", {"MultinomialDistribution", "System`"}},
+          ButtonNote->"System`"], ""}
+       },
+       DefaultBaseStyle->"InfoGrid",
+       GridBoxItemSize->{"Columns" -> {{
+            Scaled[0.475]}}}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}]}, 
+   Dynamic[Typeset`open$$],
+   ImageSize->Automatic]]], "Print", "InfoCell",
+ CellChangeTimes->{3.551935272519383*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"<<", "Ultraspherical`"}]], "Input",
+ CellChangeTimes->{{3.5519352732555*^9, 3.551935275778356*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "Mult*"}]], "Input",
+ CellChangeTimes->{{3.551935297048152*^9, 3.55193529830611*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ DynamicModuleBox[{Typeset`open$$ = True}, 
+  PaneSelectorBox[{False->
+   RowBox[{
+    OpenerBox[Dynamic[Typeset`open$$],
+     ImageSize->Small], 
+    StyleBox["System`", "InfoHeading"]}], True->GridBox[{
+     {
+      RowBox[{
+       OpenerBox[Dynamic[Typeset`open$$],
+        ImageSize->Small], 
+       StyleBox["System`", "InfoHeading"]}]},
+     {GridBox[{
+        {
+         ButtonBox["MultiedgeStyle",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultiedgeStyle", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultinormalDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultinormalDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultilaunchWarning",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultilaunchWarning", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultiplicativeOrder",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultiplicativeOrder", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultiLetterItalics",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultiLetterItalics", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["Multiplicity",
+          BaseStyle->"InformationLink",
+          ButtonData:>{"Info3551971298-5860543", {"Multiplicity", "System`"}},
+          
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultiLetterStyle",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultiLetterStyle", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariateHypergeometricDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {
+            "MultivariateHypergeometricDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultilineFunction",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultilineFunction", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariatePoissonDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {
+            "MultivariatePoissonDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["Multinomial",
+          BaseStyle->"InformationLink",
+          ButtonData:>{"Info3551971298-5860543", {"Multinomial", "System`"}},
+          ButtonNote->"System`"], 
+         ButtonBox["MultivariateTDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultivariateTDistribution", "System`"}},
+          ButtonNote->"System`"]},
+        {
+         ButtonBox["MultinomialDistribution",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {"MultinomialDistribution", "System`"}},
+          ButtonNote->"System`"], ""}
+       },
+       DefaultBaseStyle->"InfoGrid",
+       GridBoxItemSize->{"Columns" -> {{
+            Scaled[0.475]}}}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}]}, 
+   Dynamic[Typeset`open$$],
+   ImageSize->Automatic]], "\n", 
+ DynamicModuleBox[{Typeset`open$$ = True}, 
+  PaneSelectorBox[{False->
+   RowBox[{
+    OpenerBox[Dynamic[Typeset`open$$],
+     ImageSize->Small], 
+    StyleBox["Ultraspherical`", "InfoHeading"]}], True->GridBox[{
+     {
+      RowBox[{
+       OpenerBox[Dynamic[Typeset`open$$],
+        ImageSize->Small], 
+       StyleBox["Ultraspherical`", "InfoHeading"]}]},
+     {GridBox[{
+        {
+         ButtonBox["MultiplicationMatrix",
+          BaseStyle->"InformationLink",
+          
+          ButtonData:>{
+           "Info3551971298-5860543", {
+            "MultiplicationMatrix", "Ultraspherical`"}},
+          ButtonNote->"Ultraspherical`"]}
+       },
+       DefaultBaseStyle->"InfoGrid",
+       GridBoxItemSize->{"Columns" -> {{
+            Scaled[0.95]}}}]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}]}, 
+   Dynamic[Typeset`open$$],
+   ImageSize->Automatic]]}], "Print", "InfoCell",
+ CellChangeTimes->{3.551935298645569*^9}],
+
+Cell["Ultraspherical`MultiplicationMatrix", "Print", "PrintUsage",
+ CellTags->"Info3551971298-5860543"],
+
+Cell[BoxData[
+ InterpretationBox[GridBox[{
+    {GridBox[{
+       {
+        RowBox[{
+         RowBox[{"MultiplicationMatrix", "[", 
+          RowBox[{"Private`v_List", ",", "Private`n_"}], "]"}], ":=", 
+         RowBox[{
+          RowBox[{"Private`HankelZeroFirst", "[", 
+           RowBox[{
+            RowBox[{"Private`SparseHankelMatrix", "[", 
+             RowBox[{
+              FractionBox["Private`v", "2.`"], ",", "Private`n"}], "]"}], ",", 
+            RowBox[{"Length", "[", "Private`v", "]"}]}], "]"}], "+", 
+          RowBox[{"Private`SparseToeplitzMatrix", "[", 
+           RowBox[{
+            FractionBox[
+             RowBox[{"DoubleFirst", "[", "Private`v", "]"}], "2"], ",", 
+            FractionBox[
+             RowBox[{"DoubleFirst", "[", "Private`v", "]"}], "2"], ",", 
+            "Private`n"}], "]"}]}]}]},
+       {" "},
+       {
+        RowBox[{
+         RowBox[{"MultiplicationMatrix", "[", 
+          RowBox[{"Private`f_IFun", ",", "Private`n_"}], "]"}], ":=", 
+         RowBox[{"MultiplicationMatrix", "[", 
+          RowBox[{
+           RowBox[{"DCT", "[", "Private`f", "]"}], ",", "Private`n"}], "]"}]}]}
+      },
+      BaselinePosition->{Baseline, {1, 1}},
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{"Columns" -> {{
+           Scaled[0.999]}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}}]}
+   },
+   BaselinePosition->{Baseline, {1, 1}},
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}}],
+  Definition[Ultraspherical`MultiplicationMatrix],
+  Editable->False]], "Print",
+ CellTags->"Info3551971298-5860543"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"n", "=", "20"}], ";", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"LinearSolve", "[", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"DirichletOperator", "[", 
+            RowBox[{"-", "1"}], "]"}], "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", 
+            RowBox[{";;", "n"}]}], "\[RightDoubleBracket]"}], ",", 
+          RowBox[{
+           RowBox[{"DirichletOperator", "[", "1", "]"}], 
+           "\[LeftDoubleBracket]", 
+           RowBox[{"1", ",", 
+            RowBox[{";;", "n"}]}], "\[RightDoubleBracket]"}]}], "}"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"DerivativeOperator", "[", "2", "]"}], 
+          "\[LeftDoubleBracket]", 
+          RowBox[{
+           RowBox[{";;", 
+            RowBox[{"n", "-", "2"}]}], ",", 
+           RowBox[{";;", "n"}]}], "\[RightDoubleBracket]"}], "+", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"ConversionOperator", "[", "2", "]"}], 
+           "\[LeftDoubleBracket]", 
+           RowBox[{
+            RowBox[{";;", 
+             RowBox[{"n", "-", "2"}]}], ",", 
+            RowBox[{";;", "n"}]}], "\[RightDoubleBracket]"}], ".", 
+          RowBox[{"MultiplicationMatrix", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"1", ",", "2"}], "}"}], ",", "n"}], "]"}]}]}]}], " ", 
+       "]"}], ",", 
+      RowBox[{"PadRight", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0"}], "}"}], ",", "n"}], "]"}]}], "]"}], 
+    "\[LeftDoubleBracket]", "1", "\[RightDoubleBracket]"}], "-", 
+   RowBox[{"UltrasphericalSolve", "[", 
+    RowBox[{"Range", "[", "2", "]"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.551935284440632*^9, 3.551935430153665*^9}}],
+
+Cell[BoxData[
+ RowBox[{"-", "2.220446049250313`*^-16"}]], "Output",
+ CellChangeTimes->{{3.55193542924785*^9, 3.551935430517434*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"0.6389359938260387`", ",", 
+    RowBox[{"-", "0.46339089974301306`"}], ",", 
+    RowBox[{"-", "0.15197013055468056`"}], ",", 
+    RowBox[{"-", "0.03906890524387327`"}], ",", "0.01281000500604351`", ",", 
+    "0.002551726885741499`", ",", "0.00023671272783322395`", ",", 
+    RowBox[{"-", "0.00009140980001285478`"}], ",", 
+    RowBox[{"-", "0.00001287147898913656`"}], ",", 
+    RowBox[{"-", "5.427515075799639`*^-7"}], ",", "2.8998782474890287`*^-7", 
+    ",", "3.1168238454116685`*^-8", ",", "5.29614615965653`*^-10", ",", 
+    RowBox[{"-", "5.155517267622216`*^-10"}], ",", 
+    RowBox[{"-", "4.4269099896971724`*^-11"}], ",", 
+    RowBox[{"-", "6.234136663791593`*^-14"}], ",", "5.84278842189481`*^-13", 
+    ",", "4.129486338600235`*^-14", ",", 
+    RowBox[{"-", "3.975578875594677`*^-16"}], ",", 
+    RowBox[{"-", "4.581886448095213`*^-16"}]}], "}"}], " "}]], "Input",
+ CellChangeTimes->{{3.5519354220288258`*^9, 3.551935422044903*^9}}],
+
+Cell[BoxData[
+ RowBox[{"UltrasphericalSolve", "[", 
+  RowBox[{"Range", "[", "2", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.551935417537324*^9, 3.551935418295157*^9}}],
+
+Cell[BoxData[
+ RowBox[{"0.6389359938260389`", " "}]], "Input",
+ CellChangeTimes->{{3.551935419268749*^9, 3.551935419278145*^9}}]
+},
+WindowSize->{740, 756},
+WindowMargins->{{110, Automatic}, {Automatic, 0}},
+ShowSelection->True,
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (February 23, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info3551968406-8096429"->{
+  Cell[3726, 118, 220, 4, 42, "Print",
+   CellTags->"Info3551968406-8096429"],
+  Cell[3949, 124, 1324, 34, 66, "Print",
+   CellTags->"Info3551968406-8096429"]},
+ "Info3551969482-7861054"->{
+  Cell[5946, 186, 217, 4, 42, "Print",
+   CellTags->"Info3551969482-7861054"]},
+ "Info3551971298-5860543"->{
+  Cell[16016, 486, 103, 1, 39, "Print",
+   CellTags->"Info3551971298-5860543"],
+  Cell[16122, 489, 1755, 44, 132, "Print",
+   CellTags->"Info3551971298-5860543"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info3551968406-8096429", 21517, 636},
+ {"Info3551969482-7861054", 21707, 641},
+ {"Info3551971298-5860543", 21816, 644}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 116, 1, 27, "Input"],
+Cell[698, 25, 108, 1, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[843, 31, 177, 3, 27, "Input"],
+Cell[1023, 36, 127, 2, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1187, 43, 219, 3, 27, "Input"],
+Cell[1409, 48, 256, 5, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1702, 58, 150, 3, 27, "Input"],
+Cell[1855, 63, 92, 1, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1984, 69, 503, 11, 58, "Input"],
+Cell[2490, 82, 549, 9, 58, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3076, 96, 68, 1, 27, "Input"],
+Cell[3147, 99, 373, 7, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3557, 111, 144, 3, 27, "Input"],
+Cell[CellGroupData[{
+Cell[3726, 118, 220, 4, 42, "Print",
+ CellTags->"Info3551968406-8096429"],
+Cell[3949, 124, 1324, 34, 66, "Print",
+ CellTags->"Info3551968406-8096429"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5322, 164, 237, 7, 27, "Input"],
+Cell[5562, 173, 214, 4, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5813, 182, 130, 2, 27, "Input"],
+Cell[5946, 186, 217, 4, 42, "Print",
+ CellTags->"Info3551969482-7861054"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6200, 195, 58, 1, 27, "Input"],
+Cell[6261, 198, 117, 3, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6415, 206, 346, 6, 27, "Input"],
+Cell[6764, 214, 430, 8, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7231, 227, 116, 2, 27, "Input"],
+Cell[7350, 231, 3729, 105, 173, "Print"]
+}, Open  ]],
+Cell[11094, 339, 123, 2, 27, "Input"],
+Cell[CellGroupData[{
+Cell[11242, 345, 113, 2, 27, "Input"],
+Cell[CellGroupData[{
+Cell[11380, 351, 4633, 133, 234, "Print"],
+Cell[16016, 486, 103, 1, 39, "Print",
+ CellTags->"Info3551971298-5860543"],
+Cell[16122, 489, 1755, 44, 132, "Print",
+ CellTags->"Info3551971298-5860543"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17926, 539, 1797, 49, 88, "Input"],
+Cell[19726, 590, 132, 2, 30, "Output"]
+}, Open  ]],
+Cell[19873, 595, 994, 18, 118, InheritFromParent],
+Cell[20870, 615, 170, 3, 27, "Input"],
+Cell[21043, 620, 128, 2, 27, InheritFromParent]
+}
+]
+*)
+
+(* End of internal cache information *)
+

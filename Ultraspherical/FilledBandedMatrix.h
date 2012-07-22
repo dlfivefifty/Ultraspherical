@@ -9,7 +9,7 @@
 #ifndef Ultraspherical_BandedMatrix_extras_h
 #define Ultraspherical_BandedMatrix_extras_h
 
-//#include <iostream>
+#include <iostream>
 #include <vector>
 
 

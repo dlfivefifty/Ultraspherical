@@ -14,23 +14,37 @@
 
 #include "FilledBandedMatrix.h" // stop multiple definition of RowFiller class. 
 #include "MultiplicationMatrices.h"
-
-//#include "mex.h"
+//
+////#include "mex.h"
 #include "AdaptiveQR.h"
 
-
-extern double ultraSolve( double *, long);
-
+#include <vector>
 
 
-double ultraSolve( double *in, long j)
+extern "C" double ultraSolve( double *, long);
+
+
+
+double ultraSolve( double *in, long n)
 {
-    double ret = 0;
+    vector<double> a;
     
-    for(int i = 0; i < j; i++)
-        ret += in[i];
+    for(int i = 0; i < n; i++)
+        a.push_back(in[i]);
     
-	return ret;
+    DirichletD2ConvertMultiplicationMatrix drbnd(a);             
+    drbnd.increaseSize();
+    
+    vector<double> b;
+    
+    b.push_back(1);
+    b.push_back(0);    
+    b.push_back(0);        
+    
+    vector<double> c = QRSolve(&drbnd,b);       
+    
+    
+    return c[0];
 }
 
 
