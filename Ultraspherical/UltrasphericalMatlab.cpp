@@ -39,11 +39,11 @@ void mexFunction ( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 //    c = QRSolve(bnd,b);
     
     // return the coefficients of the solution. 
-    const int len = (int) 1; 
+    const int len = (int) 2; 
     plhs[0] = mxCreateDoubleMatrix(len,1,mxREAL); // real coeffs vector. 
     double * y = mxGetPr(plhs[0]); 
     
     // assign coeff vector to output. 
     for( int i = 0; i<len; ++i)
-        y[i] = 2;  
+        y[i] = nrhs;  
 }
