@@ -1,0 +1,14 @@
+To run the C++ implementation of adaptive QR for the ultraspherical spectral method, first compile the source:
+
+	cd Ultraspherical
+	c++ main.cpp MultiplicationMatrices.cpp AdaptiveQR.cpp FilledBandedMatrix.cpp -o ultraspherical
+
+
+Calling 
+
+	./ultraspherical 1 2 1.1
+
+will print out the Chebyshev coefficients of the solution to
+
+	u'' + (T_0(x) + 2*T_1(x) + 1.1*T_2(x)) u = 0,	u(-1) = 1,	u(1) = 0
+
