@@ -9,4 +9,4 @@ void ultraSolve P(( double *, long));
 :ReturnType:     Manual
 :End:
 
-:Evaluate: UltrasphericalSolve::usage = "UltrasphericalSolve[{a0,...,an}] solves the ODE u'' + (a0 T0(x) + ... + an Tn(x)) u = 0."
+:Evaluate: UltrasphericalSolve::usage = "UltrasphericalSolve[{a0,...,an}] solves the ODE u'' + (a0 T0(x) + ... + an Tn(x)) u = 0, u(-1) = 1, u(1) = 0."

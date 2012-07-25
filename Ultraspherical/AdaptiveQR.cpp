@@ -16,15 +16,15 @@
 
 void printvec(vector<double> c)
 {
-    cout <<"c: ";
-    vector<double>::iterator it;
+//    cout <<"c: ";
+
     
-    for(it = c.begin(); it < c.end(); it++)
+    for(int i = 0; i < c.size()-1; i++)
     {
-        cout << setprecision(16)<< *it << ", ";
+        cout << setprecision(16)<< c[i] << ", ";
     }
     
-    cout << endl;
+    cout << setprecision(16)<< c[c.size()-1] << endl;    
 }
 
 

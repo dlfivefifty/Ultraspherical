@@ -154,9 +154,37 @@ void airyExample()
 
 
 int main(int argc, const char * argv[])
-{    
+{ 
+    vector<double> args;
+    
+    for (int i = 1; i < argc; i++) {
+        double a;
+        sscanf(argv[i],"%lf",&a);
+        args.push_back(a);
+    }
 
-    cosbandExample();
+    
+    DirichletD2ConvertMultiplicationMatrix drbnd(args);             
+    drbnd.increaseSize();
+    
+    vector<double> b;
+    
+    b.push_back(1);
+    b.push_back(0);    
+    b.push_back(0);        
+    
+    vector<double> c = QRSolve(&drbnd,b);       
+    
+    printvec(c);
+    
+//    string args(argv[0]);
+    
+    
+
+    
+    
+    
+//    cosbandExample();
 
 
     

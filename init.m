@@ -551,6 +551,9 @@ DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->Alt
 DirichletOperator[-1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{1,0}~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
 DirichletOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{0,1 }~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
 
+BasisOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,0}},Null,Filler->AlternatingFiller];
+BasisOperator[2]:=BandedOperator[{ShiftList[{0,1},0]},{{0,0}},Null,Filler->AlternatingFiller];
+
 
 IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
 IdentityOperator[]:=IdentityOperator[Filler->AlternatingFiller];
