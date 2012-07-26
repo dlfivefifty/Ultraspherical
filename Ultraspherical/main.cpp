@@ -155,10 +155,23 @@ void airyExample()
 
 int main(int argc, const char * argv[])
 { 
-    vector<double> args;
+    if(argc < 4) {
+        cout <<endl<< "Usage: "<<endl<<endl<<"\t\tultraspherical cm cp a0 a1 ... an"<<endl<<endl<<"solves the ODE "<<endl<<endl<<"\t\tu'' + (a0 T_0(x) + ... + an T_n(x)) u = 0, u(-1) = cm, u(1) = cp"<<endl<<endl;
+        
+        return 0;
+    }
     
-    for (int i = 1; i < argc; i++) {
-        double a;
+    
+    vector<double> args;
+    vector<double> b;
+    double a;
+    sscanf(argv[1],"%lf",&a);    
+    b.push_back(a);
+    sscanf(argv[2],"%lf",&a);    
+    b.push_back(a);          
+    b.push_back(0);
+    
+    for (int i = 3; i < argc; i++) {
         sscanf(argv[i],"%lf",&a);
         args.push_back(a);
     }
@@ -166,12 +179,6 @@ int main(int argc, const char * argv[])
     
     DirichletD2ConvertMultiplicationMatrix drbnd(args);             
     drbnd.increaseSize();
-    
-    vector<double> b;
-    
-    b.push_back(1);
-    b.push_back(0);    
-    b.push_back(0);        
     
     vector<double> c = QRSolve(&drbnd,b);       
     
