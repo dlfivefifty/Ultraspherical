@@ -24,18 +24,18 @@ double alternatingFiller(int);
 class RowFiller
 {
     double fill;
-    double (*fillGenerator)(int); 
+    double (*fillGenerator)(unsigned long);
 public:    
     RowFiller();    
-    RowFiller(double, double (*)(int));
+    RowFiller(double, double (*)(unsigned long));
     double getFill();
-    double fillGenerate(int);
-    double getEntry(int k);  
+    double fillGenerate(unsigned long);
+    double getEntry(unsigned long);
     void setFill(double);    
     
 //    static RowFiller leftDirichlet();
 //    static RowFiller rightDirichlet();    
-    static RowFiller** dirichlet(int,int);        
+    static RowFiller** dirichlet(unsigned long,unsigned long);        
 };
 
 
@@ -43,30 +43,29 @@ class FilledRow
 {
     vector<double> *entries;
     RowFiller **fillers;
-    int index;
+    long index;
     
 public:
-//    FilledRow(int);
-//    FilledRow(int,double);   
-    FilledRow(int,RowFiller **);  
-    FilledRow(int,vector<double> *,RowFiller **);  
-    FilledRow(int,RowFiller **,int);     
+//    FilledRow(unsigned long);
+//    FilledRow(unsigned long,double);
+    FilledRow(long,RowFiller **);
+    FilledRow(long,vector<double> *,RowFiller **);
     FilledRow(const FilledRow &);
     ~FilledRow();    
     int size();    
-    double operator[] (int);
-    void setEntry(int,double);  
-    void setEntry(int,double,bool);      
-    void push_back(double);      
+    double operator[] (long);
+    void setEntry(long,double);
+    void setEntry(long,double,bool);
+    void push_back(double);
     void increaseSize();       
-    void increaseSize(int);       
-    void dropFirst();  
+    void increaseSize(long);
+    void dropFirst();
     double getFill(int);
-    void setFill(int,double);    
+    void setFill(int,double);
     int fillSize();
-    double fillGenerate(int,int);
-    int leftIndex();
-    int rightIndex();    
+    double fillGenerate(int,long);
+    long leftIndex();
+    long rightIndex();    
     
 
     
@@ -90,31 +89,31 @@ public:
     ~FilledBandedMatrix();
     int lower();
     void setLower(int);
-    void dropFirst(int row);
-    int size();
-    int columnSize();
-    int columnSize(int);
-    virtual FilledRow *createRow(int);
+    void dropFirst(unsigned long);
+    unsigned long size();
+    unsigned long columnSize();
+    unsigned long columnSize(unsigned long);
+    virtual FilledRow *createRow(unsigned long);
     void increaseSize();   
-    void increaseSize(int);       
-    double getEntry(int,int);
-    double getEntry(int,int,bool);    
-    void setEntry(int,int,double);    
-    void setEntry(int,int,double,bool);        
-    FilledRow *getRow(int,bool);        
-    FilledRow *operator[] (int);
+    void increaseSize(unsigned long);
+    double getEntry(unsigned long,unsigned long);
+    double getEntry(unsigned long,unsigned long,bool);
+    void setEntry(unsigned long,unsigned long,double);
+    void setEntry(unsigned long,unsigned long,double,bool);
+    FilledRow *getRow(unsigned long,bool);
+    FilledRow *operator[] (unsigned long);
     void print();
     
-    int leftIndex(int);
-    int rightIndex(int);    
+    unsigned long leftIndex(unsigned long);
+    unsigned long rightIndex(unsigned long);
     
     void push_back(FilledRow *);
     
     
-    void applyGivens(int,int,vector<double> *);    
+    void applyGivens(unsigned long,unsigned long,vector<double> *);
     
     
-    double rowDot(int,int,int,vector<double> *);
+    double rowDot(unsigned long,unsigned long,unsigned long,vector<double> *);
 };
 
 

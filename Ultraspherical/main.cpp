@@ -154,7 +154,23 @@ void airyExample()
 
 
 int main(int argc, const char * argv[])
-{ 
+{
+    if (argc > 1) {
+        switch (argv[1][0]) {
+            case 'c':
+                cosbandExample();
+                return 0;
+            case 's':
+                smallbandExample();
+                return 0;
+            case 'a':
+                airyExample();
+                return 0;
+            default:
+                break;
+        }
+    }
+    
     if(argc < 4) {
         cout <<endl<< "Usage: "<<endl<<endl<<"\t\tultraspherical cm cp a0 a1 ... an"<<endl<<endl<<"solves the ODE "<<endl<<endl<<"\t\tu'' + (a0 T_0(x) + ... + an T_n(x)) u = 0, u(-1) = cm, u(1) = cp"<<endl<<endl;
         

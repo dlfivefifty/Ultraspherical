@@ -21,12 +21,12 @@
 
 #define NUMFILLERS 2
 
-double oneFiller(int k) // for Right Dirichlet
+double oneFiller(unsigned long k) // for Right Dirichlet
 {
     return 1;
 }
 
-double alternatingFiller(int k) // for Left Dirichlet
+double alternatingFiller(unsigned long k) // for Left Dirichlet
 {
     return 1-2*(k % 2);
 }
@@ -39,7 +39,7 @@ RowFiller::RowFiller()
     fillGenerator = &oneFiller;
 }
 
-RowFiller::RowFiller(double fil, double (*filr)(int))   
+RowFiller::RowFiller(double fil, double (*filr)(unsigned long))   
 {
     fill = fil;
     fillGenerator = filr;
@@ -55,13 +55,13 @@ void RowFiller::setFill(double val)
     fill = val;
 }
 
-double RowFiller::getEntry(int k)
+double RowFiller::getEntry(unsigned long k)
 {
    return  fill*fillGenerator(k);
 }
 
 
-double RowFiller::fillGenerate(int col)
+double RowFiller::fillGenerate(unsigned long col)
 {
     return fillGenerator(col);
 }
@@ -79,7 +79,7 @@ double RowFiller::fillGenerate(int col)
 //    return flr;
 //}
 
-RowFiller** RowFiller::dirichlet(int a, int b)
+RowFiller** RowFiller::dirichlet(unsigned long a, unsigned long b)
 {
     RowFiller **fil = (RowFiller **) malloc(NUMFILLERS*sizeof(RowFiller*));
 
@@ -106,14 +106,14 @@ RowFiller** RowFiller::dirichlet(int a, int b)
 //}
 
 
-//FilledRow::FilledRow(int ind)
+//FilledRow::FilledRow(unsigned long ind)
 //{
 //    index = ind;
 //    fillers = (RowFiller *) malloc(sizeof(RowFiller)*NUMFILLERS);    
 //}
 
 
-FilledRow::FilledRow(int ind,RowFiller **flr)
+FilledRow::FilledRow(long ind,RowFiller **flr)
 {
     index = ind;
     fillers = flr;
@@ -121,7 +121,7 @@ FilledRow::FilledRow(int ind,RowFiller **flr)
 }
 
 
-FilledRow::FilledRow(int ind,vector<double> *entrs,RowFiller **flr)
+FilledRow::FilledRow(long ind,vector<double> *entrs,RowFiller **flr)
 {
     index = ind;
     fillers = flr;
@@ -148,10 +148,10 @@ FilledRow::~FilledRow()
 
 int FilledRow::size()
 {
-    return entries->size();
+    return (int) entries->size();
 }
 
-double FilledRow::operator[](int j)
+double FilledRow::operator[](long j)
 {
     //    cout<<"size(): "<<entries.size()<<endl;
     
@@ -169,11 +169,11 @@ double FilledRow::operator[](int j)
 }
 
 
-void FilledRow::setEntry(int j,double val)
+void FilledRow::setEntry(long j,double val)
 {
     setEntry(j,val,false);
 }
-void FilledRow::setEntry(int j,double val,bool increasesize)
+void FilledRow::setEntry(long j,double val,bool increasesize)
 {    
     if(SHIFTROW(j) < 0)
         throw "Filled Rows can only grow right, not left";
@@ -205,7 +205,7 @@ int FilledRow::fillSize()
     return NUMFILLERS;
 }
 
-double FilledRow::fillGenerate(int i, int col)
+double FilledRow::fillGenerate(int i, long col)
 {
     return fillers[i]->fillGenerate(col);
 }
@@ -221,9 +221,9 @@ void FilledRow::increaseSize()
 }
 
 // increases Size so that row[k] is not a fill row
-void FilledRow::increaseSize(int k)
+void FilledRow::increaseSize(long k)
 {
-    for(int i  = size(); i <= SHIFTROW(k); i++)
+    for(long i  = size(); i <= SHIFTROW(k); i++)
         increaseSize();
 }
 
@@ -238,12 +238,12 @@ void FilledRow::dropFirst()
 }
 
 
-int FilledRow::leftIndex()
+long FilledRow::leftIndex()
 {
     return index;
 }
 
-int FilledRow::rightIndex()
+long FilledRow::rightIndex()
 {
     return index + size() - 1;
 }
@@ -260,7 +260,7 @@ FilledBandedMatrix::FilledBandedMatrix(const int low)
 
 FilledBandedMatrix::~FilledBandedMatrix()
 {
-    for (int i = 0; i < rows.size(); i++) {
+    for (unsigned long i = 0; i < rows.size(); i++) {
         delete rows[i];
     }
 }
@@ -280,33 +280,38 @@ void FilledBandedMatrix::setLower(int low)
 }
 
 
-int FilledBandedMatrix::size()
+unsigned long FilledBandedMatrix::size()
 {
     return rows.size();
 }
 
-int FilledBandedMatrix::columnSize()
+unsigned long FilledBandedMatrix::columnSize()
 {
     return rows.back()->rightIndex();
 }
 
-int FilledBandedMatrix::columnSize(int col)
+unsigned long FilledBandedMatrix::columnSize(unsigned long col)
 {
     return col - lower() + 1;
 }
 
-int FilledBandedMatrix::leftIndex(int row)
+unsigned long FilledBandedMatrix::leftIndex(unsigned long row)
 {
-    return max(0,(*this)[row]->leftIndex());
+    long li = (*this)[row]->leftIndex();
+    
+    if(li > 0)
+        return li;
+    else
+        return 0;
 }
 
-int FilledBandedMatrix::rightIndex(int row)
+unsigned long FilledBandedMatrix::rightIndex(unsigned long row)
 {
     return (*this)[row]->rightIndex();
 }
 
 
-FilledRow *FilledBandedMatrix::getRow(int i,bool increasesize)
+FilledRow *FilledBandedMatrix::getRow(unsigned long i,bool increasesize)
 {    
     if(i >= size()) {
         if(increasesize) {
@@ -321,17 +326,17 @@ FilledRow *FilledBandedMatrix::getRow(int i,bool increasesize)
     }
 }
 
-FilledRow * FilledBandedMatrix::operator[] (int i)
+FilledRow * FilledBandedMatrix::operator[] (unsigned long i)
 {
     return getRow(i,false);
 }
 
-double FilledBandedMatrix::getEntry(int i,int j)
+double FilledBandedMatrix::getEntry(unsigned long i,unsigned long j)
 {    
     return (*(*this)[i])[j];
 }
 
-double FilledBandedMatrix::getEntry(int i,int j,bool increasesize)
+double FilledBandedMatrix::getEntry(unsigned long i,unsigned long j,bool increasesize)
 {    
     return (*getRow(i, increasesize))[j];
 }
@@ -342,9 +347,9 @@ void FilledBandedMatrix::increaseSize()
     rows.push_back(createRow(size()));
 }
 
-void FilledBandedMatrix::increaseSize(int i)
+void FilledBandedMatrix::increaseSize(unsigned long i)
 {
-    for(int j = size(); j <= i; j++)
+    for(unsigned long j = size(); j <= i; j++)
         increaseSize();
 }
 
@@ -354,27 +359,27 @@ void FilledBandedMatrix::push_back(FilledRow *row)
 }
 
 
-FilledRow *FilledBandedMatrix::createRow(int k)
+FilledRow *FilledBandedMatrix::createRow(unsigned long k)
 {
     cout << "CREATEROW NOT DEFINED!!"<<endl;
     return getRow(size()-1, 0);
 }
 
 
-void FilledBandedMatrix::dropFirst(int row)
+void FilledBandedMatrix::dropFirst(unsigned long row)
 {
     rows[row]->dropFirst();
 }
 
 
-void FilledBandedMatrix::setEntry(int i,int j,double val)
+void FilledBandedMatrix::setEntry(unsigned long i,unsigned long j,double val)
 {
     setEntry(i,j,false);
 }
 
-void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
+void FilledBandedMatrix::setEntry(unsigned long i,unsigned long j,double val,bool increasesize)
 {    
-    for(int k = size(); k <= i; k++)
+    for(unsigned long k = size(); k <= i; k++)
     {
         rows.push_back(createRow(k));
     }
@@ -387,15 +392,15 @@ void FilledBandedMatrix::setEntry(int i,int j,double val,bool increasesize)
 void FilledBandedMatrix::print()
 {
 
-    for(int i = 0; i < size()+3; i++)
+    for(unsigned long i = 0; i < size()+3; i++)
     {  
-        for(int j = 0; j <= rightIndex(i); j++)
+        for(unsigned long j = 0; j <= rightIndex(i); j++)
         {
             
             cout << setw(10)<<getEntry(i,j);
         }
 //        cout <<"F: ";
-        for(int j =  rightIndex(i) + 1; j <= rightIndex(i) + 4; j++)
+        for(unsigned long j =  rightIndex(i) + 1; j <= rightIndex(i) + 4; j++)
         {
             cout <<setw(10) << getEntry(i,j);
         }        
@@ -405,9 +410,9 @@ void FilledBandedMatrix::print()
 }
 
 
-void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
+void FilledBandedMatrix::applyGivens(unsigned long row1, unsigned long row2, vector<double> *c)
 {
-    int col1 = row1;    
+    unsigned long col1 = row1;    
     if(leftIndex(row2) < leftIndex(row1))
         throw "Givens should be applied left to right and top to bottom, in order";    
     if (leftIndex(row2) > col1)
@@ -444,7 +449,7 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
     
     
     
-    for(int j = col1 + 1; j <= rightIndex(row2); j++)
+    for(unsigned long j = col1 + 1; j <= rightIndex(row2); j++)
     {
         en1 = getEntry(row1, j);
         en2 = getEntry(row2, j);
@@ -469,7 +474,7 @@ void FilledBandedMatrix::applyGivens(int row1, int row2, vector<double> *c)
 }
 
 
-double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> *r)
+double FilledBandedMatrix::rowDot(unsigned long row,unsigned long colm,unsigned long colM,vector<double> *r)
 {
     double ret = 0;
     
@@ -478,7 +483,7 @@ double FilledBandedMatrix::rowDot(int row,int colm,int colM,vector<double> *r)
     
     
     
-    for(int j = colm; j <=colM; j++)
+    for(unsigned long j = colm; j <=colM; j++)
     {
         ret+=(*fr)[j]*(*r)[j];
     }

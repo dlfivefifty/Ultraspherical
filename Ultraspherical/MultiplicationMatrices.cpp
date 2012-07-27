@@ -5,7 +5,7 @@
 // TODO: Better to construct the Hankel vector in reverse so that it can be pop_backed as the ConvertMult vector is formed.
 
 
-FilledRow zeroRowGenerator(int k)
+FilledRow zeroRowGenerator(unsigned long k)
 {
     FilledRow zero(0,RowFiller::dirichlet(0, 0));
     zero.increaseSize();
@@ -14,7 +14,7 @@ FilledRow zeroRowGenerator(int k)
 
 
 
-double applyConversion(vector<double> *row,int shift,int k)
+double applyConversion(vector<double> *row,int shift,unsigned long k)
 {
     int ind = shift;
     
@@ -455,7 +455,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(D
 
 
 
-DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(-a.size()-1)
+DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(-(int)a.size()-1)
 {
     vector<double> *halved = new vector<double>;
     
@@ -508,7 +508,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     
     vector<double> *halvedaddwithzeros = new vector<double>(halvedadd->begin(),halvedadd->end());    
     
-    for(int i = halved->size(); i < halved->size() + 4; i++)
+    for(int i = (int)halved->size(); i < (int)halved->size() + 4; i++)
     {
         halvedaddwithzeros->insert(halvedaddwithzeros->begin(), 0);
         if(i == 2)
@@ -540,16 +540,16 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
         vector<double> *newrow = new vector<double>;        
         for (int j =0; j < halved->size() - i; j++) {
             if(j == 2 + i)
-                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, halved->size() +i + 3 -j,i) + 4 + 2*i);        
+                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i) + 4 + 2*i);
             else
-                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, halved->size() +i + 3 -j,i));                              
+                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i));
         }
         
-        for (int j =halved->size() - i; j < halved->size() + i + 4; j++) {            
+        for (int j =(int)halved->size() - i; j < (int)halved->size() + i + 4; j++) {
             if(j == 2 + i)
-                newrow->push_back(applyConversion(halvedaddwithzeros, halved->size() +i + 3 -j,i) + 4 + 2*i);        
+                newrow->push_back(applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i) + 4 + 2*i);
             else
-                newrow->push_back(applyConversion(halvedaddwithzeros, halved->size() +i + 3 -j,i));                
+                newrow->push_back(applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i));                
         }        
         
         
@@ -567,7 +567,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
 
 
 
-FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(int k)
+FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
 {
     
     
@@ -579,9 +579,9 @@ FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(int k)
     
     for (int i = 0; i <= rowEntries->size()+3; i++) {
         if(i + k-2-(rowEntries->size()-1)/2 == k)
-            newrow->push_back(applyConversion(rowEntries,rowEntries->size()+3-i-4, k-2) + 4 + 2*(k-2)); 
+            newrow->push_back(applyConversion(rowEntries,(int)rowEntries->size()+3-i-4, k-2) + 4 + 2*(k-2));
         else
-            newrow->push_back(applyConversion(rowEntries,rowEntries->size()+3-i-4, k-2));             
+            newrow->push_back(applyConversion(rowEntries,(int)rowEntries->size()+3-i-4, k-2));
     }    
     
     return new FilledRow(k-2-(rowEntries->size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
