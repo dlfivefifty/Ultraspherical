@@ -77,7 +77,7 @@ if(isinf(cfs))
     rhs(end-length(bcvalues)+1:end) = bcvalues; 
     
     u = A\rhs;
-    
+
     %while(max(abs(u(floor(length(u)/1.2):end)))>eps && cfs<20000)
     while(max(abs(u(end-9:end)))>eps && cfs<60000)
         %if(nargin>2&&cfs>1000),break; end;  %threshold to go to gmres.
@@ -129,11 +129,14 @@ if(isinf(cfs))
 %         end
         %rhs = (1./(1:length(rhs)))'.*rhs;
         A = realisation(N,cfs);%*diag(1./(1:cfs));
-        if(cfs<2000), A=full(A);end
-        if(cfs>4000), cfs, end
+        %if(cfs<2000), A=full(A);end
+        %if(cfs>4000), cfs, end
         %u = (A*diag(1./(1:cfs)))\rhs;
         %u=diag(1./(1:cfs))*u;
+        %defaultParms = spparms('autoamd',0);
+        %spparms('autommd',0);
         u = A\rhs;
+       % spparms('autoamd',0);
         %u = realisation(N,cfs)\rhs;
     end
 elseif(isfinite(cfs))

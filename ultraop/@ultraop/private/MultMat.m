@@ -25,7 +25,7 @@ function M = MultMat(a,bn,varargin)
     
     if(nargin==2||lam==0)
     
-        if(bn<=6000)   
+        if(bn<=1e2)   
         %compute multiplication. 
         if(length(a)>1)
             a=.5*a;
