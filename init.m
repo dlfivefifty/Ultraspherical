@@ -68,7 +68,10 @@ CDerivativeFiller[2]:=Function[k,{\[Piecewise]{
  {(k-1), EvenQ[k]},
  {0, True}
 }}];
-AlternatingFiller:=({(-1)^(#-1),1}&);
+AlternatingFiller:=({\[Piecewise]{
+ {1, EvenQ[#]},
+ {-1, OddQ[#]}
+},1}&);
 
 
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_,FillGenerator->fgen_],i_]:=If[i>Length[fill],fgen[i],fill[[i]]];
@@ -473,24 +476,24 @@ IdentityMatrix[2],
 })/Norm[{a,bB}]
 ]
 ];
-Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},col_]:=Givens[Bn[[row1]],Bn[[row2]],{srow1,srow2},col]//N;
+Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},col_]:=Givens[Bn[[row1]],Bn[[row2]],{srow1,srow2},col];
 
 Givens[Bn:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},{ssrow1_,ssrow2_},col_,scol_]:=
-Givens[Bn[[row1]][[srow1,col]],Bn[[row2]][[srow2,col]],{ssrow1,ssrow2},scol]//N;
+Givens[Bn[[row1]][[srow1,col]],Bn[[row2]][[srow2,col]],{ssrow1,ssrow2},scol];
 
 
 
 GivensReduce[BDx_,{row1_,row2_},col_,opts:OptionsPattern[RightHandSide->Null]]:=Module[{G},
-G=Givens[BDx,BDx,{row1,row2},col]//N;
+G=Givens[BDx,BDx,{row1,row2},col];
 ApplyToRows[G,BDx,{row1,row2},opts]
 ];
 GivensReduce[BDx_BandedOperator,{row1_,row2_},{srow1_,srow2_},col_,scol_,opts:OptionsPattern[RightHandSide->Null]]:=Module[{G},
-G=Givens[BDx[[row1,col]],BDx[[row2,col]],{srow1,srow2},scol]//N;
+G=Givens[BDx[[row1,col]],BDx[[row2,col]],{srow1,srow2},scol];
 ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},opts]
 ];
 
 GivensReduce[BDx:{__BandedOperator},{row1_,row2_},{srow1_,srow2_},scol_,opts:OptionsPattern[RightHandSide->Null]]:=Module[{G},
-G=Givens[BDx,{row1,row2},{srow1,srow2},scol]//N;
+G=Givens[BDx,{row1,row2},{srow1,srow2},scol];
 ApplyToRows[G,BDx,{row1,row2},{srow1,srow2},opts]
 ];
 
