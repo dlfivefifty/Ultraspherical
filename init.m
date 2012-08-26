@@ -69,9 +69,13 @@ CDerivativeFiller[2]:=Function[k,{\[Piecewise]{
  {0, True}
 }}];
 AlternatingFiller:=({\[Piecewise]{
+ {-1, EvenQ[#]},
+ {1, OddQ[#]}
+},1}&);
+NeumannFiller:=({\[Piecewise]{
  {1, EvenQ[#]},
  {-1, OddQ[#]}
-},1}&);
+},1}(#-1)^2&);
 
 
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_,FillGenerator->fgen_],i_]:=If[i>Length[fill],fgen[i],fill[[i]]];
@@ -271,6 +275,10 @@ bnB=IncreaseDimension[bndB,bnA];
 
 BandedOperator[First[bnA]+First[bnB],bnA[[2]]+bnB[[2]], IncreaseIndexRange[ rowgen1[#],rowgen2[#]//IndexRange]+IncreaseIndexRange[rowgen2[#],rowgen1[#]//IndexRange]&,opts]
 ];
+
+
+SparseRule[sl_ShiftList,rw_]:={rw,#}->sl[[#]]&/@(Range@@IndexRange[sl]);
+BandedOperator/:SparseArray[bnd_BandedOperator,{n_,m_}]:=SparseArray[MapIndexed[SparseRule[#1,#2[[1]]]&,IncreaseLength[bnd,n][[1]]]//Flatten][[;;n,;;m]]
 
 
 ApplyToRows[G_,{row1_Integer,row2_Integer},rhsin_List]:=Module[{rhs},
@@ -549,6 +557,8 @@ ConversionOperator[2]:=ConversionOperator[2,Filler->AlternatingFiller];
 
 DirichletOperator[-1]:=BandedOperator[{ShiftList[{1},0]},{{1,0}},Null,Filler->AlternatingFiller];
 DirichletOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,1}},Null,Filler->AlternatingFiller];
+NeumannOperator[-1]:=BandedOperator[{ShiftList[{0},0]},{{1,0}},Null,Filler->NeumannFiller];
+NeumannOperator[1]:=BandedOperator[{ShiftList[{0},0]},{{0,1}},Null,Filler->NeumannFiller];
 
 
 DirichletOperator[-1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{1,0}~Join~(0 fls[1])},Null,Filler->(({(-1)^(#-1),1}~Join~fls[#])&)];
