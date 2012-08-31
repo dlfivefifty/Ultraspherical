@@ -39,6 +39,7 @@ DerivativeOperator;
 ConversionOperator;
 DirichletOperator;
 IdentityOperator;
+NeumannOperator;
 ZeroOperator;
 LaplaceOperator;
 ListRowReduce;
