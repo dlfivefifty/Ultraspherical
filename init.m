@@ -113,8 +113,8 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]]];
 BandedOperator/:MatrixForm[bnd_BandedOperator]:=
 If[GetRowGenerator[bnd]===Null,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]]//MatrixForm];
+MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},\[Ellipsis]]&]//MatrixForm,
+MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},\[Ellipsis]]&//PadRight[#,{Length[#]+1,Length[#[[1]]]},\[AliasIndicator]]&]//MatrixForm];
 
 
 IncreaseLength[bnd:BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,GetFill[bnd,Length[A]+1]],rowgen,opts];
