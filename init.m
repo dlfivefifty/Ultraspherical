@@ -53,6 +53,7 @@ DropColumn;
 DropRow;
 AlternatingFiller;
 BasisOperator;
+UMultiplicationMatrix;
 Begin["Private`"];
 
 
@@ -113,8 +114,8 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]]];
 BandedOperator/:MatrixForm[bnd_BandedOperator]:=
 If[GetRowGenerator[bnd]===Null,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},\[Ellipsis]]&]//MatrixForm,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},\[Ellipsis]]&//PadRight[#,{Length[#]+1,Length[#[[1]]]},\[AliasIndicator]]&]//MatrixForm];
+MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},...]&]//MatrixForm,
+MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},...]&//PadRight[#,{Length[#]+1,Length[#[[1]]]},\[AliasIndicator]]&]//MatrixForm];
 
 
 IncreaseLength[bnd:BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,GetFill[bnd,Length[A]+1]],rowgen,opts];
@@ -617,6 +618,18 @@ SparseArray[Table[Band[{k,1}]->l1[[k]],{k,Min[n,Length[l1]]}]~Join~Table[Band[{1
 MultiplicationMatrix[v_List,n_]:=(HankelZeroFirst[SparseHankelMatrix[v/2.,n],v//Length]+SparseToeplitzMatrix[(v//DoubleFirst)/2,(v//DoubleFirst)/2,n]);
 
 MultiplicationMatrix[f_IFun,n_]:=MultiplicationMatrix[f//DCT,n];
+
+UMultiplicationMatrix[ad_List,n_]:=Module[{ac,k,bc},
+ac=ad//ToChebyshevUSeries;
+bc=Table[(ac[[k;;-1;;2]]//Total),{k,Length[ac]}];
+ToeplitzMatrix[ShiftList[bc//Rest//Reverse,bc],n]-HankelMatrix[ShiftList[{},bc//Rest],n]
+];
+UMultiplicationMatrix[if_IFun,n_]:=UMultiplicationMatrix[if//DCT,n];
+UMultiplicationMatrix[ad_List,n_]:=Module[{ac,k,bc},
+bc=DoubleFirst[ad]/2;
+ToeplitzMatrix[ShiftList[bc//Rest//Reverse,bc],n]-HankelMatrix[ShiftList[{},bc//Rest],n]
+];
+
 
 
 CDerivativeOperator[2,Filler->fls_]:=BandedOperator[{ShiftList[{0},0]},{(0 fls[1])~Join~{4,0,0,0}},ShiftList[{0},1-#]&,Filler->((fls[#]~Join~CDerivativeFiller[2][#])&),FillGenerator->Function[row,(0 fls[1])~Join~\!\(\*
