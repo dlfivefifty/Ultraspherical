@@ -80,6 +80,8 @@ NeumannFiller:=({\[Piecewise]{
 },1}(#-1)^2&);
 
 
+SetAttributes[BandedOperator,NHoldRest];
+
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_,FillGenerator->fgen_],i_]:=If[i>Length[fill],fgen[i],fill[[i]]];
 GetFill[BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],i_]:=If[i>Length[fill],0 First[fill],fill[[i]]];
 GetFillValue[bnd:BandedOperator[_List,_List,_],{i_,_}]:=GetFill[bnd,i];
@@ -114,8 +116,8 @@ BandedOperator/:Length[BandedOperator[A_List,___]]:=Length[A];
 ToArray[bnd_BandedOperator]:=bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]]];
 BandedOperator/:MatrixForm[bnd_BandedOperator]:=
 If[GetRowGenerator[bnd]===Null,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},...]&]//MatrixForm,
-MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},...]&//PadRight[#,{Length[#]+1,Length[#[[1]]]},\[AliasIndicator]]&]//MatrixForm];
+MatrixMap[MatrixForm,bnd[[;;Length[bnd],;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},"\[Ellipsis]"]&]//MatrixForm,
+MatrixMap[MatrixForm,bnd[[;;Length[bnd]+3,;;RightIndex[bnd,Length[bnd]]+3]]//PadRight[#,{Length[#],Length[#[[1]]]+1},"\[Ellipsis]"]&//PadRight[#,{Length[#]+1,Length[#[[1]]]},"\[AliasIndicator]"]&]//MatrixForm];
 
 
 IncreaseLength[bnd:BandedOperator[A_List,fill_List,rowgen_,opts___]]:=BandedOperator[Join[A,{rowgen[Length[A]+1]}],Append[fill,GetFill[bnd,Length[A]+1]],rowgen,opts];
@@ -413,9 +415,11 @@ Bn2=Bd2;
 Do[
 {B1,B2}={Bn1[[row1,i]],Bn2[[row2,i]]};
 
+If[!NullOperatorQ[G,B1,B2,{srow1,srow2}],
 {B1,B2}=ApplyToRows[G,B1,B2,{srow1,srow2}];
 Bn1=ReplaceEntry[Bn1,{row1,i},B1,IncreaseSize->True];
 Bn2=ReplaceEntry[Bn2,{row2,i},B2,IncreaseSize->True];
+];
 
 ,{i,Min[LeftIndex[Bn1,row1],LeftIndex[Bn2,row2]],Max[RightIndex[Bn1,row1],RightIndex[Bn2,row2]]}];
 
@@ -568,6 +572,7 @@ DirichletOperator[1,Filler->fls_]:=BandedOperator[{ShiftList[{1},0]},{{0,1 }~Joi
 
 BasisOperator[1]:=BandedOperator[{ShiftList[{1},0]},{{0,0}},Null,Filler->AlternatingFiller];
 BasisOperator[2]:=BandedOperator[{ShiftList[{0,1},0]},{{0,0}},Null,Filler->AlternatingFiller];
+BasisOperator[k_]:=BandedOperator[{ShiftList[ZeroVector[k-1]~Join~{1},0]},{{0,0}},Null,Filler->AlternatingFiller];
 
 
 IdentityOperator[Filler->fls_]:=BandedOperator[{ShiftList[{1,0,0},0]},{0 fls[1]},ShiftList[{1,0,0},1-#]&,Filler->fls];
