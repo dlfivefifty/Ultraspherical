@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    172018,       4552]
-NotebookOptionsPosition[    168927,       4442]
-NotebookOutlinePosition[    169283,       4458]
-CellTagsIndexPosition[    169240,       4455]
+NotebookDataLength[    174908,       4624]
+NotebookOptionsPosition[    171815,       4514]
+NotebookOutlinePosition[    172171,       4530]
+CellTagsIndexPosition[    172128,       4527]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -4381,49 +4381,121 @@ Cell[CellGroupData[{
 Cell["Keller", "Section",
  CellChangeTimes->{{3.5635006540048103`*^9, 3.563500654715928*^9}}],
 
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
-  RowBox[{"KellerMatrix", "[", 
-   RowBox[{"\[Epsilon]_", ",", "m_"}], "]"}], ":=", 
-  RowBox[{"Module", "[", 
+  RowBox[{
    RowBox[{
-    RowBox[{"{", "n", "}"}], ",", "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{"n", "=", 
-      RowBox[{"Floor", "[", 
-       RowBox[{
-        RowBox[{"1", "/", "\[Epsilon]"}], "//", "Abs"}], "]"}]}], ";", 
-     "\[IndentingNewLine]", 
-     RowBox[{"A", "=", 
-      RowBox[{
-       RowBox[{"\[Epsilon]", " ", 
-        RowBox[{"SparseArray", "[", 
-         RowBox[{
-          RowBox[{"DerivativeOperator", "[", "1", "]"}], ",", 
-          RowBox[{"{", 
-           RowBox[{"m", ",", "m"}], "}"}]}], "]"}]}], "+", 
-       RowBox[{"SparseArray", "[", 
-        RowBox[{
-         RowBox[{"ConversionOperator", "[", "1", "]"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"m", ",", "m"}], "}"}]}], "]"}]}]}], ";", 
-     "\[IndentingNewLine]", 
+    RowBox[{"KellerMatrix", "[", 
+     RowBox[{"\[Epsilon]_", ",", "m_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
      RowBox[{
-      RowBox[{"A", "\[LeftDoubleBracket]", 
-       RowBox[{";;", 
-        RowBox[{"n", "-", "1"}]}], "\[RightDoubleBracket]"}], "~", "Join", 
-      "~", 
+      RowBox[{"{", "n", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"n", "=", 
+        RowBox[{"Floor", "[", 
+         RowBox[{
+          RowBox[{"1", "/", "\[Epsilon]"}], "//", "Abs"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"A", "=", 
+        RowBox[{
+         RowBox[{"\[Epsilon]", " ", 
+          RowBox[{"SparseArray", "[", 
+           RowBox[{
+            RowBox[{"DerivativeOperator", "[", "1", "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"m", ",", "m"}], "}"}]}], "]"}]}], "+", 
+         RowBox[{"SparseArray", "[", 
+          RowBox[{
+           RowBox[{"ConversionOperator", "[", "1", "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"m", ",", "m"}], "}"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"n", ">", "m"}], ",", "\[IndentingNewLine]", "A", ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"A", "\[LeftDoubleBracket]", 
+           RowBox[{";;", 
+            RowBox[{"n", "-", "1"}]}], "\[RightDoubleBracket]"}], "~", "Join",
+           "~", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"BasisVector", "[", "m", "]"}], "[", "n", "]"}], "}"}], 
+          "~", "Join", "~", 
+          RowBox[{"A", "\[LeftDoubleBracket]", 
+           RowBox[{"n", ";;", 
+            RowBox[{"-", "2"}]}], "\[RightDoubleBracket]"}]}]}], 
+        "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"KellerSolve", "[", 
+     RowBox[{"\[Epsilon]_", ",", "f_List"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
       RowBox[{"{", 
-       RowBox[{
-        RowBox[{"BasisVector", "[", "m", "]"}], "[", "n", "]"}], "}"}], "~", 
-      "Join", "~", 
-      RowBox[{"A", "\[LeftDoubleBracket]", 
-       RowBox[{"n", ";;", 
-        RowBox[{"-", "2"}]}], "\[RightDoubleBracket]"}]}]}]}], 
-   "\[IndentingNewLine]", "]"}]}]], "Input",
+       RowBox[{"n", ",", "m"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"m", "=", 
+        RowBox[{
+         RowBox[{"2", " ", "f"}], "//", "Length"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"n", "=", 
+        RowBox[{"Floor", "[", 
+         RowBox[{
+          RowBox[{"1", "/", "\[Epsilon]"}], "//", "Abs"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"n", ">", "m"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"LinearSolve", "[", 
+          RowBox[{
+           RowBox[{"KellerMatrix", "[", 
+            RowBox[{"\[Epsilon]", ",", "m"}], "]"}], ",", 
+           RowBox[{"PadRight", "[", 
+            RowBox[{
+             RowBox[{"f", "//", "ToChebyshevUSeries"}], ",", "m"}], "]"}]}], 
+          "]"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"LinearSolve", "[", 
+          RowBox[{
+           RowBox[{"KellerMatrix", "[", 
+            RowBox[{"\[Epsilon]", ",", "m"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"PadRight", "[", 
+             RowBox[{
+              RowBox[{"f", "//", "ToChebyshevUSeries"}], ",", 
+              RowBox[{"m", "-", "1"}]}], "]"}], "//", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{";;", 
+                RowBox[{"n", "-", "1"}]}], "\[RightDoubleBracket]"}], "~", 
+              "Join", "~", 
+              RowBox[{"{", "0", "}"}], "~", "Join", "~", 
+              RowBox[{"#", "\[LeftDoubleBracket]", 
+               RowBox[{"n", ";;"}], "\[RightDoubleBracket]"}]}], "&"}]}]}], 
+          "]"}]}], "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"KellerSolve", "[", 
+    RowBox[{"\[Epsilon]_", ",", "f_IFun"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n", ",", "m"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"KellerSolve", "[", 
+        RowBox[{"\[Epsilon]", ",", 
+         RowBox[{"f", "//", "DCT"}]}], "]"}], "//", "InverseDCT"}], "//", 
+      "Fun"}]}], "\[IndentingNewLine]", "]"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.563500662371709*^9, 3.5635007462079153`*^9}, {
   3.563500827768839*^9, 3.5635008302721243`*^9}, {3.563501022505035*^9, 
-  3.5635010296717443`*^9}}]
+  3.5635010296717443`*^9}, {3.5643493250658503`*^9, 3.5643494894575768`*^9}, {
+  3.5643495516927223`*^9, 3.564349606042338*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4547,11 +4619,11 @@ Cell[164748, 4319, 2114, 56, 103, "Input",
 }, Closed]],
 Cell[CellGroupData[{
 Cell[166899, 4380, 93, 1, 37, "Section"],
-Cell[166995, 4383, 1543, 42, 88, "Input"]
+Cell[166995, 4383, 4431, 114, 328, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[168575, 4430, 91, 1, 67, "Section"],
-Cell[168669, 4433, 242, 6, 43, "Input",
+Cell[171463, 4502, 91, 1, 67, "Section"],
+Cell[171557, 4505, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
