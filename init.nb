@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    175534,       4636]
-NotebookOptionsPosition[    172396,       4525]
-NotebookOutlinePosition[    172754,       4541]
-CellTagsIndexPosition[    172711,       4538]
+NotebookDataLength[    175610,       4638]
+NotebookOptionsPosition[    172472,       4527]
+NotebookOutlinePosition[    172830,       4543]
+CellTagsIndexPosition[    172787,       4540]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -4400,7 +4400,8 @@ Cell[BoxData[{
      RowBox[{"\[Epsilon]_", ",", "m_"}], "]"}], ":=", 
     RowBox[{"Module", "[", 
      RowBox[{
-      RowBox[{"{", "n", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"A", ",", "n"}], "}"}], ",", "\[IndentingNewLine]", 
       RowBox[{
        RowBox[{"n", "=", 
         RowBox[{"Floor", "[", 
@@ -4506,7 +4507,8 @@ Cell[BoxData[{
  CellChangeTimes->{{3.563500662371709*^9, 3.5635007462079153`*^9}, {
   3.563500827768839*^9, 3.5635008302721243`*^9}, {3.563501022505035*^9, 
   3.5635010296717443`*^9}, {3.5643493250658503`*^9, 3.5643494894575768`*^9}, {
-  3.5643495516927223`*^9, 3.564349606042338*^9}}]
+  3.5643495516927223`*^9, 3.564349606042338*^9}, {3.56709711753122*^9, 
+  3.567097117740528*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4631,11 +4633,11 @@ Cell[165329, 4330, 2114, 56, 103, "Input",
 }, Closed]],
 Cell[CellGroupData[{
 Cell[167480, 4391, 93, 1, 37, "Section"],
-Cell[167576, 4394, 4431, 114, 328, "Input"]
+Cell[167576, 4394, 4507, 116, 328, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[172044, 4513, 91, 1, 67, "Section"],
-Cell[172138, 4516, 242, 6, 43, "Input",
+Cell[172120, 4515, 91, 1, 67, "Section"],
+Cell[172214, 4518, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
