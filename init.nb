@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    177518,       4697]
-NotebookOptionsPosition[    174261,       4582]
-NotebookOutlinePosition[    174619,       4598]
-CellTagsIndexPosition[    174576,       4595]
+NotebookDataLength[    177572,       4699]
+NotebookOptionsPosition[    174288,       4583]
+NotebookOutlinePosition[    174646,       4599]
+CellTagsIndexPosition[    174603,       4596]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -4561,6 +4561,7 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"f", "//", "DCT"}], "//", "ToChebyshevUSeries"}]}], 
   ";"}]}], "Input",
+ InitializationCell->True,
  CellChangeTimes->{{3.5680302570040293`*^9, 3.568030294027053*^9}, {
   3.56803032601716*^9, 3.5680303477688923`*^9}, {3.568030654746426*^9, 
   3.568030685712617*^9}}]
@@ -4692,11 +4693,12 @@ Cell[167592, 4394, 4553, 116, 328, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[172182, 4515, 93, 1, 67, "Section"],
-Cell[172278, 4518, 1594, 47, 103, "Input"]
+Cell[172278, 4518, 1621, 48, 103, "Input",
+ InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[173909, 4570, 91, 1, 67, "Section"],
-Cell[174003, 4573, 242, 6, 43, "Input",
+Cell[173936, 4571, 91, 1, 67, "Section"],
+Cell[174030, 4574, 242, 6, 43, "Input",
  InitializationCell->True]
 }, Open  ]]
 }
