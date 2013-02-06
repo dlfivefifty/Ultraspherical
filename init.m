@@ -717,5 +717,36 @@ DropRow[bnd:BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],row_]:=If[row>
 DropColumn[bnd:BandedOperator[A_List,fill_List,rowgen_,Filler->fls_],col_]:=BandedOperator[Drop[#,col]&/@A,fill,rowgen,Filler->fls];
 
 
+KellerMatrix[\[Epsilon]_,m_]:=Module[{A,n},
+n=Floor[1/\[Epsilon]//Abs];
+A=\[Epsilon] SparseArray[DerivativeOperator[1],{m,m}]+SparseArray[ConversionOperator[1],{m,m}];
+If[n>m,
+A,
+A[[;;n-1]]~Join~{BasisVector[m][n]}~Join~A[[n;;-2]]
+]
+];
+
+KellerSolve[\[Epsilon]_,f_List]:=Module[{n,m},
+m=2 f//Length;
+n=Floor[1/\[Epsilon]//Abs];
+If[n>m,
+LinearSolve[KellerMatrix[\[Epsilon],m],PadRight[f//ToChebyshevUSeries,m]],
+LinearSolve[KellerMatrix[\[Epsilon],m],PadRight[f//ToChebyshevUSeries,m-1]//#[[;;n-1]]~Join~{0}~Join~#[[n;;]]&]
+]
+];
+
+KellerSolve[\[Epsilon]_,f_IFun]:=Module[{n,m},
+KellerSolve[\[Epsilon],f//DCT]//InverseDCT//Fun
+];
+
+
+DerivativeMatrix[k_Integer,n_Integer]:=SparseArray[DerivativeOperator[k],{n,n}];
+ConversionMatrix[k_Integer,n_Integer]:=SparseArray[ConversionOperator[k],{n,n}];
+
+ToCSeries[k_,u_]:=ConversionMatrix[k,Length[u]].u;
+CSeries[k_,f_]:=ConversionMatrix[k,Length[f]].DCT[f];
+USeries[f_]:=f//DCT//ToChebyshevUSeries;
+
+
 End[];
 EndPackage[];
