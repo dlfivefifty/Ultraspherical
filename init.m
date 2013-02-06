@@ -56,6 +56,7 @@ BasisOperator;
 UMultiplicationMatrix;
 SparseHankelMatrix;
 SparseToeplitzMatrix;
+ConversionMatrix;
 Begin["Private`"];
 
 
