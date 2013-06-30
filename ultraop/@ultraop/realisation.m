@@ -152,7 +152,7 @@ end
 if ~isempty(N.lbc)
     if isa(N.lbc,'double')
         A(rbcrow,:) = (-1).^(0:cfs-1); 
-        bcvalues = [bcvalues N.lbc];
+        bcvalues = [N.lbc bcvalues];
     elseif isa(N.lbc,'function_handle')
         [Wa Wb r] = recoverCoeffsBC(N);
         rows = BCrows(Wa,Wb,cfs);
