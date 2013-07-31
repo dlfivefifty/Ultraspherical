@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[    177948,       4705]
-NotebookOptionsPosition[    174605,       4587]
-NotebookOutlinePosition[    174995,       4604]
-CellTagsIndexPosition[    174952,       4601]
+NotebookDataLength[    179306,       4744]
+NotebookOptionsPosition[    175963,       4626]
+NotebookOutlinePosition[    176353,       4643]
+CellTagsIndexPosition[    176310,       4640]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -4532,12 +4532,49 @@ Cell[BoxData[{
       RowBox[{"n", ",", "n"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{"ConversionMatrix", "[", 
+    RowBox[{"k_Integer", ",", "n_Integer"}], "]"}], ":=", 
+   RowBox[{"SparseArray", "[", 
+    RowBox[{
+     RowBox[{"ConversionOperator", "[", "k", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "n"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
    RowBox[{
-    RowBox[{"ConversionMatrix", "[", 
-     RowBox[{"k_Integer", ",", "n_Integer"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"ConversionMatrix", "[", 
+      RowBox[{
+       RowBox[{"Rule", "[", 
+        RowBox[{"\[Lambda]_Integer", ",", "j_Integer"}], "]"}], ",", 
+       "n_Integer"}], "]"}], "/;", 
+     RowBox[{"j", "\[Equal]", 
+      RowBox[{"\[Lambda]", "+", "1"}]}]}], ":=", 
     RowBox[{"SparseArray", "[", 
      RowBox[{
-      RowBox[{"ConversionOperator", "[", "k", "]"}], ",", 
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"i", ",", "i"}], "}"}], "\[Rule]", 
+           FractionBox["\[Lambda]", 
+            RowBox[{"i", "-", "1", "+", "\[Lambda]"}]]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "n"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"i", ",", 
+             RowBox[{"i", "+", "2"}]}], "}"}], "\[Rule]", 
+           RowBox[{"-", 
+            FractionBox["\[Lambda]", 
+             RowBox[{"i", "+", "1", "+", "\[Lambda]"}]]}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"n", "-", "2"}]}], "}"}]}], "]"}]}], "]"}], ",", 
       RowBox[{"{", 
        RowBox[{"n", ",", "n"}], "}"}]}], "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
@@ -4568,7 +4605,9 @@ Cell[BoxData[{
  InitializationCell->True,
  CellChangeTimes->{{3.5680302570040293`*^9, 3.568030294027053*^9}, {
   3.56803032601716*^9, 3.5680303477688923`*^9}, {3.568030654746426*^9, 
-  3.568030685712617*^9}, {3.569018709525931*^9, 3.569018710820122*^9}}]
+  3.568030685712617*^9}, {3.569018709525931*^9, 3.569018710820122*^9}, {
+  3.584233397286935*^9, 3.584233461780167*^9}, {3.5842335005205183`*^9, 
+  3.584233533747772*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -4699,12 +4738,12 @@ Cell[167836, 4397, 4580, 117, 369, "Input",
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[172453, 4519, 93, 1, 80, "Section"],
-Cell[172549, 4522, 1667, 48, 114, "Input",
+Cell[172549, 4522, 3025, 87, 169, "Input",
  InitializationCell->True]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[174253, 4575, 91, 1, 80, "Section"],
-Cell[174347, 4578, 242, 6, 46, "Input",
+Cell[175611, 4614, 91, 1, 80, "Section"],
+Cell[175705, 4617, 242, 6, 46, "Input",
  InitializationCell->True]
 }, Open  ]]
 }

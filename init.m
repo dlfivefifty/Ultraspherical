@@ -746,6 +746,7 @@ KellerSolve[\[Epsilon],f//DCT]//InverseDCT//Fun
 
 DerivativeMatrix[k_Integer,n_Integer]:=SparseArray[DerivativeOperator[k],{n,n}];
 ConversionMatrix[k_Integer,n_Integer]:=SparseArray[ConversionOperator[k],{n,n}];
+ConversionMatrix[Rule[\[Lambda]_Integer,j_Integer],n_Integer]/;j==\[Lambda]+1:=SparseArray[Join[Table[{i,i}->\[Lambda]/(i-1+\[Lambda]),{i,n}],Table[{i,i+2}->-(\[Lambda]/(i+1+\[Lambda])),{i,n-2}]],{n,n}];
 
 ToCSeries[k_,u_]:=ConversionMatrix[k,Length[u]].u;
 CSeries[k_,f_]:=ConversionMatrix[k,Length[f]].DCT[f];
