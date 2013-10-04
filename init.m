@@ -744,10 +744,15 @@ KellerSolve[\[Epsilon],f//DCT]//InverseDCT//Fun
 ];
 
 
-DerivativeMatrix[k_Integer,n_Integer]:=SparseArray[DerivativeOperator[k],{n,n}];
-DerivativeMatrix[Rule[1,2],n_Integer]:=2 Module[{i,j},SparseArray[{i_,j_}/;j==i+1->1,{n,n}]];
-ConversionMatrix[k_Integer,n_Integer]:=SparseArray[ConversionOperator[k],{n,n}];
-ConversionMatrix[Rule[\[Lambda]_Integer,j_Integer],n_Integer]/;j==\[Lambda]+1:=SparseArray[Join[Table[{i,i}->\[Lambda]/(i-1+\[Lambda]),{i,n}],Table[{i,i+2}->-(\[Lambda]/(i+1+\[Lambda])),{i,n-2}]],{n,n}];
+DerivativeMatrix[0->1,n_Integer]:=SparseArray[DerivativeOperator[1],{n,n}];
+DerivativeMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]/;\[Mu]==\[Lambda]+1:=2 \[Lambda] Module[{i,j},SparseArray[{i_,j_}/;j==i+1->1,{n,n}]];
+DerivativeMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]:=DerivativeMatrix[\[Lambda]+1->\[Mu],n].DerivativeMatrix[\[Lambda]->\[Lambda]+1,n];
+DerivativeMatrix[\[Lambda]_Integer,n_Integer]:=DerivativeMatrix[0->\[Lambda],n];
+ConversionMatrix[0->1,n_Integer]:=SparseArray[ConversionOperator[1],{n,n}];
+ConversionMatrix[\[Lambda]_Integer->j_Integer,n_Integer]/;j==\[Lambda]+1:=SparseArray[Join[Table[{i,i}->\[Lambda]/(i-1+\[Lambda]),{i,n}],Table[{i,i+2}->-(\[Lambda]/(i+1+\[Lambda])),{i,n-2}]],{n,n}];
+ConversionMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]:=ConversionMatrix[\[Lambda]+1->\[Mu],n].ConversionMatrix[\[Lambda]->\[Lambda]+1,n];
+ConversionMatrix[\[Lambda]_Integer,n_Integer]:=ConversionMatrix[0->\[Lambda],n];
+
 
 ToCSeries[k_,u_]:=ConversionMatrix[k,Length[u]].u;
 CSeries[k_,f_]:=ConversionMatrix[k,Length[f]].DCT[f];
