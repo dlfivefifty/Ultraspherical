@@ -21,6 +21,8 @@ using namespace std;
 double oneFiller(int);
 double alternatingFiller(int);
 
+
+
 class RowFiller
 {
     double fill;
@@ -37,6 +39,7 @@ public:
 //    static RowFiller rightDirichlet();    
     static RowFiller** dirichlet(unsigned long,unsigned long);        
 };
+
 
 
 class FilledRow

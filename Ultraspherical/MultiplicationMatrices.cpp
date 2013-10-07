@@ -449,7 +449,7 @@ double zeroFirstApplyConversion(vector<double> *row)
 
 DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other) : FilledBandedMatrix(other)
 {
-    rowEntries = other.rowEntries;
+    rowAdder = other.rowAdder;
     setLower(other.lower());
 }
 
@@ -557,7 +557,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     }
     
     
-    rowEntries = halvedadd;
+    rowAdder = new PlusRowAdder(new DirichletD2ConvertMultiplicationRowAdder(halvedadd));
     
     
     delete halved;
@@ -565,9 +565,45 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     delete halvedaddwithzeros;
 }
 
+RowAdder::RowAdder()
+{
+    
+}
 
+FilledRow *RowAdder::createRow(unsigned long k)
+{
+    cout << "CREATEROW NOT DEFINED!!"<<endl;
+    return NULL;
+}
+
+
+PlusRowAdder::PlusRowAdder(RowAdder *rowAdder)
+{
+    summands = new vector<RowAdder *>;
+    summands->push_back(rowAdder);
+}
+
+FilledRow *PlusRowAdder::createRow(unsigned long k)
+{
+
+    for(RowAdder *i : *summands)
+         return i->createRow(k);
+    
+    return NULL;
+}
+
+
+DirichletD2ConvertMultiplicationRowAdder::DirichletD2ConvertMultiplicationRowAdder(vector<double> *a)
+{
+    rowEntries = a;
+}
 
 FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
+{
+    return rowAdder->createRow(k);
+}
+
+FilledRow *DirichletD2ConvertMultiplicationRowAdder::createRow(unsigned long k)
 {
     
     

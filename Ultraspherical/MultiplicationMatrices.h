@@ -49,9 +49,38 @@ using namespace std;
 //    virtual FilledRow createRow(int);
 //};
 
-class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
+class RowAdder
+{
+public:
+    RowAdder();
+    virtual FilledRow *createRow(unsigned long);
+};
+
+
+
+class DirichletD2ConvertMultiplicationRowAdder : public RowAdder
 {
     vector<double> *rowEntries;
+    
+public:
+    DirichletD2ConvertMultiplicationRowAdder(vector<double> *a);
+    virtual FilledRow *createRow(unsigned long);
+};
+
+
+class PlusRowAdder
+{
+    vector<RowAdder *> *summands;
+public:
+    PlusRowAdder(RowAdder *rowAdd);
+    virtual FilledRow *createRow(unsigned long);
+    
+};
+
+class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
+{
+    PlusRowAdder *rowAdder;
+    
 public:
     DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);
     DirichletD2ConvertMultiplicationMatrix(vector<double> a);
