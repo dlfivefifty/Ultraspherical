@@ -268,13 +268,14 @@ void FilledRow::print()
 FilledRow *FilledRow::operator+(FilledRow *row)
 {
     long li = min(this->leftIndex(),row->leftIndex());
-    long ri = min(this->rightIndex(),row->rightIndex());
+    long ri = max
+    (this->rightIndex(),row->rightIndex());
     
     FilledRow *ret = new FilledRow(li,fillers);
     
     
     for (long i = li; i <= ri; ++i) {
-        ret->setEntry(i, (*this)[i] + (*row)[i]);
+        ret->setEntry(i, (*this)[i] + (*row)[i],true);
     }
     
     //Assuming 0 fill in

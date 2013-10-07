@@ -155,11 +155,6 @@ void airyExample()
 
 int main(int argc, const char * argv[])
 {
-//    RowAdder *add = new DerivativeRowAdder();
-//    
-//    for(int i = 0; i < 5; ++i)
-//        add->createRow(i)->print();
-    
     
     if (argc > 1) {
         switch (argv[1][0]) {
@@ -204,6 +199,7 @@ int main(int argc, const char * argv[])
     
     drbnd.increaseSize();
     
+    drbnd.print();
     
     
     vector<double> c = QRSolve(&drbnd,b);       

@@ -74,6 +74,7 @@ class PlusRowAdder : public RowAdder
 public:
     PlusRowAdder(RowAdder *rowAdd);
     virtual FilledRow *createRow(unsigned long);
+    void push_back(RowAdder *rowAdd);
     
 };
 
@@ -85,7 +86,7 @@ class DerivativeRowAdder : public RowAdder
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
 {
-    PlusRowAdder *rowAdder;
+    PlusRowAdder *adder;
     
 public:
     DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);

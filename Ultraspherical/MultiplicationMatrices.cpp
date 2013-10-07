@@ -449,7 +449,7 @@ double zeroFirstApplyConversion(vector<double> *row)
 
 DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other) : FilledBandedMatrix(other)
 {
-    rowAdder = other.rowAdder;
+    adder = other.adder;
     setLower(other.lower());
 }
 
@@ -557,8 +557,8 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     }
     
     
-    rowAdder = new PlusRowAdder(new DirichletD2ConvertMultiplicationRowAdder(halvedadd));
-    
+    adder = new PlusRowAdder(new DirichletD2ConvertMultiplicationRowAdder(halvedadd));
+    adder->push_back(new DerivativeRowAdder());
     
     delete halved;
     delete halvedremove;
@@ -577,22 +577,36 @@ FilledRow *RowAdder::createRow(unsigned long k)
 }
 
 
-PlusRowAdder::PlusRowAdder(RowAdder *rowAdder)
+PlusRowAdder::PlusRowAdder(RowAdder *adder)
 {
     summands = new vector<RowAdder *>;
-    summands->push_back(rowAdder);
+    summands->push_back(adder);
+}
+
+void PlusRowAdder::push_back(RowAdder *add)
+{
+    summands->push_back(add);
 }
 
 FilledRow *PlusRowAdder::createRow(unsigned long k)
 {
     FilledRow *ret = NULL;
+//    cout << "createRow " << k <<": \n";
     for(RowAdder *i : *summands) {
+        FilledRow *row = i->createRow(k);
+        
+//        row->print();
+        
         if (ret == NULL) {
-            ret = i->createRow(k);
+            ret = row;
         } else {
-            ret = *ret + i->createRow(k);
+            ret = (*ret) + row;
         }
     }
+    
+//    ret->print();
+    
+//    cout << "end createRow" <<endl;
     
     return ret;
 }
@@ -605,7 +619,7 @@ DirichletD2ConvertMultiplicationRowAdder::DirichletD2ConvertMultiplicationRowAdd
 
 FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
 {
-    return rowAdder->createRow(k);
+    return adder->createRow(k);
 }
 
 
@@ -615,9 +629,9 @@ FilledRow *DerivativeRowAdder::createRow(unsigned long k)
     
     vector<double> *newrow = new vector<double>;
     
-    newrow->push_back(4 + 2*k);
+    newrow->push_back(4 + 2*(k-2));
     
-    return new FilledRow(k+2,newrow,RowFiller::dirichlet(0, 0));
+    return new FilledRow(k,newrow,RowFiller::dirichlet(0, 0));
 }
 
 
@@ -632,11 +646,8 @@ FilledRow *DirichletD2ConvertMultiplicationRowAdder::createRow(unsigned long k)
 //    }
     
     for (int i = 0; i <= rowEntries->size()+3; i++) {
-        if(i + k-2-(rowEntries->size()-1)/2 == k)
-            newrow->push_back(applyConversion(rowEntries,(int)rowEntries->size()+3-i-4, k-2) + 4 + 2*(k-2));
-        else
             newrow->push_back(applyConversion(rowEntries,(int)rowEntries->size()+3-i-4, k-2));
-    }    
+    }
     
     return new FilledRow(k-2-(rowEntries->size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
 }
