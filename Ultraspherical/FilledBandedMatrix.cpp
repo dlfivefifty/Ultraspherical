@@ -253,16 +253,34 @@ long FilledRow::rightIndex()
 void FilledRow::print()
 {
     
-    for(unsigned long i = 0; i < size()+3; i++)
+    for(unsigned long i = 0; i < rightIndex()+3; i++)
     {
         cout << setw(10)<<(*this)[i];
         
 
         
-        cout << endl;
+        cout << " ";
     }
+    cout << endl;
 }
 
+
+FilledRow *FilledRow::operator+(FilledRow *row)
+{
+    long li = min(this->leftIndex(),row->leftIndex());
+    long ri = min(this->rightIndex(),row->rightIndex());
+    
+    FilledRow *ret = new FilledRow(li,fillers);
+    
+    
+    for (long i = li; i <= ri; ++i) {
+        ret->setEntry(i, (*this)[i] + (*row)[i]);
+    }
+    
+    //Assuming 0 fill in
+    
+    return ret;
+}
 
 
 FilledBandedMatrix::FilledBandedMatrix(const int low)

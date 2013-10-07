@@ -585,11 +585,16 @@ PlusRowAdder::PlusRowAdder(RowAdder *rowAdder)
 
 FilledRow *PlusRowAdder::createRow(unsigned long k)
 {
-
-    for(RowAdder *i : *summands)
-         return i->createRow(k);
+    FilledRow *ret = NULL;
+    for(RowAdder *i : *summands) {
+        if (ret == NULL) {
+            ret = i->createRow(k);
+        } else {
+            ret = *ret + i->createRow(k);
+        }
+    }
     
-    return NULL;
+    return ret;
 }
 
 
@@ -602,6 +607,19 @@ FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
 {
     return rowAdder->createRow(k);
 }
+
+
+FilledRow *DerivativeRowAdder::createRow(unsigned long k)
+{
+    
+    
+    vector<double> *newrow = new vector<double>;
+    
+    newrow->push_back(4 + 2*k);
+    
+    return new FilledRow(k+2,newrow,RowFiller::dirichlet(0, 0));
+}
+
 
 FilledRow *DirichletD2ConvertMultiplicationRowAdder::createRow(unsigned long k)
 {

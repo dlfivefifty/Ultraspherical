@@ -155,6 +155,12 @@ void airyExample()
 
 int main(int argc, const char * argv[])
 {
+//    RowAdder *add = new DerivativeRowAdder();
+//    
+//    for(int i = 0; i < 5; ++i)
+//        add->createRow(i)->print();
+    
+    
     if (argc > 1) {
         switch (argv[1][0]) {
             case 'c':
@@ -208,6 +214,9 @@ int main(int argc, const char * argv[])
     
     
 
+    
+
+    
     
     
     

@@ -68,13 +68,19 @@ public:
 };
 
 
-class PlusRowAdder
+class PlusRowAdder : public RowAdder
 {
     vector<RowAdder *> *summands;
 public:
     PlusRowAdder(RowAdder *rowAdd);
     virtual FilledRow *createRow(unsigned long);
     
+};
+
+//only second currently
+class DerivativeRowAdder : public RowAdder
+{
+    virtual FilledRow *createRow(unsigned long);
 };
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix

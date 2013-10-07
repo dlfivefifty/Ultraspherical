@@ -57,6 +57,7 @@ public:
     ~FilledRow();    
     int size();    
     double operator[] (long);
+    FilledRow* operator+(FilledRow *);
     void setEntry(long,double);
     void setEntry(long,double,bool);
     void push_back(double);
