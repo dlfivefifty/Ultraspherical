@@ -612,6 +612,41 @@ FilledRow *PlusRowAdder::createRow(unsigned long k)
 }
 
 
+TimesRowAdder::TimesRowAdder(RowAdder *adder)
+{
+    summands = new vector<RowAdder *>;
+    summands->push_back(adder);
+}
+
+void TimesRowAdder::push_back(RowAdder *add)
+{
+    summands->push_back(add);
+}
+
+FilledRow *TimesRowAdder::createRow(unsigned long k)
+{
+    FilledRow *ret = NULL;
+    //    cout << "createRow " << k <<": \n";
+    for(RowAdder *i : *summands) {
+        FilledRow *row = i->createRow(k);
+        
+        //        row->print();
+        
+        if (ret == NULL) {
+            ret = row;
+        } else {
+            ret = (*ret) + row;
+        }
+    }
+    
+    //    ret->print();
+    
+    //    cout << "end createRow" <<endl;
+    
+    return ret;
+}
+
+
 DirichletD2ConvertMultiplicationRowAdder::DirichletD2ConvertMultiplicationRowAdder(vector<double> *a)
 {
     rowEntries = a;

@@ -78,6 +78,16 @@ public:
     
 };
 
+
+class TimesRowAdder : public RowAdder
+{
+    vector<RowAdder *> *summands;
+public:
+    TimesRowAdder(RowAdder *rowAdd);
+    virtual FilledRow *createRow(unsigned long);
+    void push_back(RowAdder *rowAdd);
+};
+
 //only second currently
 class DerivativeRowAdder : public RowAdder
 {
