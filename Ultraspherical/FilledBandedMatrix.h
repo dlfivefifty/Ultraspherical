@@ -66,7 +66,7 @@ public:
     double fillGenerate(int,long);
     long leftIndex();
     long rightIndex();    
-    
+    void print();
 
     
 //    static FilledRow rightDirichlet();

@@ -88,7 +88,7 @@ vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
     vector<double> s;
     for(int i = 0; i < (*B)[col]->fillSize(); i++)
         s.push_back((*B)[col]->fillGenerate(i,col)*r[col]);
-    int rbnd;  
+    unsigned long rbnd;
     int csize = col+1;
     
     for(int row = csize - 1; row >= 0; row--)

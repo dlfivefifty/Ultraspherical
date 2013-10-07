@@ -28,7 +28,8 @@ double oneFiller(unsigned long k) // for Right Dirichlet
 
 double alternatingFiller(unsigned long k) // for Left Dirichlet
 {
-    return 1-2*(k % 2);
+    unsigned long km = (k % 2);
+    return   (double)1-2*km;
 }
 
 
@@ -246,6 +247,20 @@ long FilledRow::leftIndex()
 long FilledRow::rightIndex()
 {
     return index + size() - 1;
+}
+
+
+void FilledRow::print()
+{
+    
+    for(unsigned long i = 0; i < size()+3; i++)
+    {
+        cout << setw(10)<<(*this)[i];
+        
+
+        
+        cout << endl;
+    }
 }
 
 

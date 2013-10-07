@@ -1,5 +1,5 @@
 /*
- * This file automatically produced by /Applications/Mathematica.app/SystemFiles/Links/MathLink/DeveloperKit/CompilerAdditions/mprep from:
+ * This file automatically produced by /Applications/Mathematica.app/SystemFiles/Links/MathLink/DeveloperKit/MacOSX-x86-64/CompilerAdditions/mprep from:
  *	Ultraspherical/ultrasolve.tm
  * mprep Revision 16 Copyright (c) Wolfram Research, Inc. 1990-2009
  */
@@ -329,7 +329,8 @@ static struct func {
 
 static const char* evalstrs[] = {
 	"UltrasphericalSolve::usage = \"UltrasphericalSolve[{a0,...,an}] s",
-	"olves the ODE u'' + (a0 T0(x) + ... + an Tn(x)) u = 0.\"",
+	"olves the ODE u'' + (a0 T0(x) + ... + an Tn(x)) u = 0, u(-1) = 1",
+	", u(1) = 0.\"",
 	(const char*)0,
 	(const char*)0
 };

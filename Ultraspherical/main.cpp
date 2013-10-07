@@ -191,10 +191,14 @@ int main(int argc, const char * argv[])
         sscanf(argv[i],"%lf",&a);
         args.push_back(a);
     }
+    
 
     
-    DirichletD2ConvertMultiplicationMatrix drbnd(args);             
+    DirichletD2ConvertMultiplicationMatrix drbnd(args);
+    
     drbnd.increaseSize();
+    
+    
     
     vector<double> c = QRSolve(&drbnd,b);       
     
