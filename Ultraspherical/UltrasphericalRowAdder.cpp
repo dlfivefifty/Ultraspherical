@@ -196,7 +196,7 @@ double HankelRowAdder::getEntry(long row, long col)
     if (ind >= length)
         return 0;
     else
-        return .5*a[ind];
+        return a[ind];
 }
 
 
@@ -220,7 +220,7 @@ long HankelRowAdder::rightIndex(unsigned long row)
 
 RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ain)
 {
-    if (lambda == 0) {
+    if (lambda <= 1) {
         unsigned long length = 2*ain->size() - 1;
         
         
@@ -242,6 +242,9 @@ RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ai
 RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
 {
     if (lambda == 0) {
+        if (ain->size() <= 1)
+            return NULL;
+        
         unsigned long length = ain->size() - 1;
         
         
@@ -250,13 +253,33 @@ RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
         int k=0;
         for (double i : *ain) {
             if (k > 0) {
-                a[k-1] = i;
+                a[k-1] = .5*i;
             }
 
             k++;
         }
         
         return new ShiftRowAdder(new HankelRowAdder(a, length),-1);
+    } else if (lambda == 1) {
+        if (ain->size() <= 2)
+            return NULL;
+        
+        unsigned long length = ain->size() - 2;
+        
+        
+        double *a = (double *)malloc(length*sizeof(double));
+        
+        int k=0;
+        for (double i : *ain) {
+            if (k > 1) {
+                a[k-2] = -.5*i;
+            }
+            
+            k++;
+        }
+        
+        return new ShiftRowAdder(new HankelRowAdder(a, length),-1);
+        
     }
     
     throw "MultiplicationHankelRowAdder not defined";
@@ -265,8 +288,16 @@ RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
 
 RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 {
-    PlusRowAdder *pl = new PlusRowAdder(MultiplicationToeplitzRowAdder(lambda,args));
-    pl->push_back(MultiplicationHankelRowAdder(lambda,args));
+    RowAdder *toep = MultiplicationToeplitzRowAdder(lambda,args);
+    RowAdder *han = MultiplicationHankelRowAdder(lambda,args);
+    
+    if (han == NULL) {
+        return toep;
+    }
+    
+    
+    PlusRowAdder *pl = new PlusRowAdder(toep);
+    pl->push_back(han);
     
     return pl;
 }
