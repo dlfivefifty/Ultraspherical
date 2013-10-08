@@ -449,7 +449,7 @@ double zeroFirstApplyConversion(vector<double> *row)
 
 DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other) : FilledBandedMatrix(other)
 {
-    adder = other.adder;
+    setAdder(other.getAdder());
     setLower(other.lower());
 }
 
@@ -558,7 +558,7 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
     
     PlusRowAdder *pl = new PlusRowAdder(new ConversionRowAdder());
     pl->push_back(new DerivativeRowAdder());
-    adder = new ShiftRowAdder(pl,-2);
+    setAdder(new ShiftRowAdder(pl,-2));
 
     
     delete halved;
@@ -571,16 +571,5 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
 
 
 
-FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
-{
-    
-    
-    vector<double> *newrow = new vector<double>;
-    
-    for (long j = adder->leftIndex(k); j <= adder->rightIndex(k); ++j)
-        newrow->push_back(adder->getEntry(k,j));
-    
-    return new FilledRow(adder->leftIndex(k),newrow,RowFiller::dirichlet(0, 0));
-}
 
 

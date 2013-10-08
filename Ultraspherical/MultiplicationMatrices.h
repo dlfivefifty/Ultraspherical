@@ -54,12 +54,10 @@ using namespace std;
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
 {
-    ShiftRowAdder *adder;
     
 public:
     DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);
     DirichletD2ConvertMultiplicationMatrix(vector<double> a);
-    virtual FilledRow *createRow(unsigned long);
 };
 
 

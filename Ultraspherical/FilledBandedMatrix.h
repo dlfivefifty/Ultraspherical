@@ -12,6 +12,8 @@
 #include <iostream>
 #include <vector>
 
+#include "RowAdder.h"
+
 
 #define NUMFILLERS 2
 
@@ -86,6 +88,7 @@ class FilledBandedMatrix
 {
     vector<FilledRow *> rows;
     int lowerIndex;
+    RowAdder *adder;
     
     
 public:
@@ -97,7 +100,7 @@ public:
     unsigned long size();
     unsigned long columnSize();
     unsigned long columnSize(unsigned long);
-    virtual FilledRow *createRow(unsigned long);
+    FilledRow *createRow(unsigned long);
     void increaseSize();   
     void increaseSize(unsigned long);
     double getEntry(unsigned long,unsigned long);
@@ -113,6 +116,8 @@ public:
     
     void push_back(FilledRow *);
     
+    void setAdder(RowAdder *);
+    RowAdder *getAdder();
     
     void applyGivens(unsigned long,unsigned long,vector<double> *);
     

@@ -393,11 +393,29 @@ void FilledBandedMatrix::push_back(FilledRow *row)
 }
 
 
+void FilledBandedMatrix::setAdder(RowAdder *a)
+{
+    adder = a;
+}
+
+RowAdder * FilledBandedMatrix::getAdder()
+{
+    return adder;
+}
+
+
 FilledRow *FilledBandedMatrix::createRow(unsigned long k)
 {
-    cout << "CREATEROW NOT DEFINED!!"<<endl;
-    return getRow(size()-1, 0);
+    
+    
+    vector<double> *newrow = new vector<double>;
+    
+    for (long j = adder->leftIndex(k); j <= adder->rightIndex(k); ++j)
+        newrow->push_back(adder->getEntry(k,j));
+    
+    return new FilledRow(adder->leftIndex(k),newrow,RowFiller::dirichlet(0, 0));
 }
+
 
 
 void FilledBandedMatrix::dropFirst(unsigned long row)
