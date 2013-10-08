@@ -53,7 +53,10 @@ class RowAdder
 {
 public:
     RowAdder();
-    virtual FilledRow *createRow(unsigned long);
+    FilledRow *createRow(unsigned long);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
 };
 
 
@@ -64,7 +67,9 @@ class DirichletD2ConvertMultiplicationRowAdder : public RowAdder
     
 public:
     DirichletD2ConvertMultiplicationRowAdder(vector<double> *a);
-    virtual FilledRow *createRow(unsigned long);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
 };
 
 
@@ -73,7 +78,9 @@ class PlusRowAdder : public RowAdder
     vector<RowAdder *> *summands;
 public:
     PlusRowAdder(RowAdder *rowAdd);
-    virtual FilledRow *createRow(unsigned long);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
     void push_back(RowAdder *rowAdd);
     
 };
@@ -84,14 +91,18 @@ class TimesRowAdder : public RowAdder
     vector<RowAdder *> *summands;
 public:
     TimesRowAdder(RowAdder *rowAdd);
-    virtual FilledRow *createRow(unsigned long);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
     void push_back(RowAdder *rowAdd);
 };
 
 //only second currently
 class DerivativeRowAdder : public RowAdder
 {
-    virtual FilledRow *createRow(unsigned long);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
 };
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix

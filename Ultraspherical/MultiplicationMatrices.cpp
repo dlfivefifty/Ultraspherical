@@ -570,11 +570,37 @@ RowAdder::RowAdder()
     
 }
 
-FilledRow *RowAdder::createRow(unsigned long k)
+double RowAdder::getEntry(long k, long j)
 {
-    cout << "CREATEROW NOT DEFINED!!"<<endl;
+    cout << "getEntry NOT DEFINED!!"<<endl;
     return NULL;
 }
+
+long RowAdder::leftIndex(unsigned long k)
+{
+    cout << "leftIndex NOT DEFINED!!"<<endl;
+    return NULL;
+}
+long  RowAdder::rightIndex(unsigned long k)
+{
+    cout << "leftIndex NOT DEFINED!!"<<endl;
+    return NULL;
+}
+
+
+
+FilledRow *RowAdder::createRow(unsigned long k)
+{
+    
+    
+    vector<double> *newrow = new vector<double>;
+    
+    for (long j = leftIndex(k); j <= rightIndex(k); ++j)
+        newrow->push_back(getEntry(k,j));
+    
+    return new FilledRow(leftIndex(k),newrow,RowFiller::dirichlet(0, 0));
+}
+
 
 
 PlusRowAdder::PlusRowAdder(RowAdder *adder)
@@ -588,25 +614,48 @@ void PlusRowAdder::push_back(RowAdder *add)
     summands->push_back(add);
 }
 
-FilledRow *PlusRowAdder::createRow(unsigned long k)
+double PlusRowAdder::getEntry(long k, long j)
 {
-    FilledRow *ret = NULL;
+    double ret = 0;
 //    cout << "createRow " << k <<": \n";
     for(RowAdder *i : *summands) {
-        FilledRow *row = i->createRow(k);
-        
-//        row->print();
-        
-        if (ret == NULL) {
-            ret = row;
-        } else {
-            ret = (*ret) + row;
-        }
+        ret += i->getEntry(k, j);
     }
     
 //    ret->print();
     
 //    cout << "end createRow" <<endl;
+    
+    return ret;
+}
+
+long PlusRowAdder::leftIndex(unsigned long row)
+{
+    //TODO: change -1
+    long ret = -1000;
+    
+    for(RowAdder *i : *summands) {
+        long li = i->leftIndex(row);
+        
+        if (ret == -1000)
+            ret = li;
+        else
+            ret = min(ret, li);
+    }
+    
+    return ret;
+}
+
+long PlusRowAdder::rightIndex(unsigned long row)
+{
+    //TODO: change -1
+    long ret = -1000;
+    
+    for(RowAdder *i : *summands) {
+        long li = i->rightIndex(row);
+        
+        ret = max(ret, li);
+    }
     
     return ret;
 }
@@ -623,20 +672,44 @@ void TimesRowAdder::push_back(RowAdder *add)
     summands->push_back(add);
 }
 
-FilledRow *TimesRowAdder::createRow(unsigned long k)
+
+
+long TimesRowAdder::leftIndex(unsigned long row)
 {
-    FilledRow *ret = NULL;
+    //TODO: change -1
+    long ret = -1000;
+    
+    for(RowAdder *i : *summands) {
+        long li = i->leftIndex(row);
+        
+        if (ret == -1000)
+            ret = li;
+        else
+            ret = min(ret, li);
+    }
+    
+    return ret;
+}
+
+long TimesRowAdder::rightIndex(unsigned long row)
+{
+    //TODO: change -1
+    long ret = -1000;
+    
+    for(RowAdder *i : *summands) {
+        long li = i->rightIndex(row);
+        
+        ret = max(ret, li);
+    }
+    
+    return ret;
+}
+double TimesRowAdder::getEntry(long k, long j)
+{
+    double ret = 0;
     //    cout << "createRow " << k <<": \n";
     for(RowAdder *i : *summands) {
-        FilledRow *row = i->createRow(k);
-        
-        //        row->print();
-        
-        if (ret == NULL) {
-            ret = row;
-        } else {
-            ret = (*ret) + row;
-        }
+        ret += i->getEntry(k, j);
     }
     
     //    ret->print();
@@ -645,6 +718,9 @@ FilledRow *TimesRowAdder::createRow(unsigned long k)
     
     return ret;
 }
+
+
+
 
 
 DirichletD2ConvertMultiplicationRowAdder::DirichletD2ConvertMultiplicationRowAdder(vector<double> *a)
@@ -658,33 +734,57 @@ FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
 }
 
 
-FilledRow *DerivativeRowAdder::createRow(unsigned long k)
+
+
+double DerivativeRowAdder::getEntry(long row, long col)
 {
-    
-    
-    vector<double> *newrow = new vector<double>;
-    
-    newrow->push_back(4 + 2*(k-2));
-    
-    return new FilledRow(k,newrow,RowFiller::dirichlet(0, 0));
+    if(row < 2)
+        return 0;
+    else if (row == col)
+        return (4 + 2*(row-2));
+    else return 0;
 }
 
 
-FilledRow *DirichletD2ConvertMultiplicationRowAdder::createRow(unsigned long k)
+long DerivativeRowAdder::leftIndex(unsigned long row)
 {
-    
-    
-    vector<double> *newrow = new vector<double>;
-    
-//    for (int i = rowEntries.size()+3; i >= 0; i--) {
-//        newrow.push_back(applyConversion(rowEntries,i-4, k-2)); 
-//    }
-    
-    for (int i = 0; i <= rowEntries->size()+3; i++) {
-            newrow->push_back(applyConversion(rowEntries,(int)rowEntries->size()+3-i-4, k-2));
-    }
-    
-    return new FilledRow(k-2-(rowEntries->size()-1)/2,newrow,RowFiller::dirichlet(0, 0));
+    return row;
 }
 
+long DerivativeRowAdder::rightIndex(unsigned long row)
+{
+    return row;
+}
+
+
+
+
+double DirichletD2ConvertMultiplicationRowAdder::getEntry(long row, long col)
+{
+    double c = (double) col;
+    
+    if(row < 2)
+        return 0;
+    else if (row == 2 &&  col ==0)
+        return 1;
+    else if (row == col + 2)
+        return 1/(2.*(c+1));
+    else if (row == col)
+        return -1/(2*(c+1))-1/(2*(c-1));
+    else if (row == col - 2)
+        return 1/(2*(c-1));
+    else
+        return 0;
+}
+
+
+long DirichletD2ConvertMultiplicationRowAdder::leftIndex(unsigned long row)
+{
+    return row-2;
+}
+
+long DirichletD2ConvertMultiplicationRowAdder::rightIndex(unsigned long row)
+{
+    return row + 2;
+}
 
