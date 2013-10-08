@@ -306,15 +306,18 @@ RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 
 
 
-FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
+FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a, vector<double> *b)
 {
     PlusRowAdder *pl =
     new   PlusRowAdder(new DerivativeRowAdder(0,2));
-    pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new DerivativeRowAdder(0,1)));
-    pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,a)));
+    if (a != NULL)
+        pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new DerivativeRowAdder(0,1)));
+    
+    if (b!= NULL)
+        pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,b)));
     
     
-    FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)a->size(),new ShiftRowAdder(pl,-2));
+    FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)b->size(),new ShiftRowAdder(pl,-2));
     
     FilledRow *drrow = new FilledRow(0,RowFiller::dirichlet(1,0));
     

@@ -25,23 +25,27 @@ extern "C" void ultraSolve( double *, long);
 
 
 
-void ultraSolve( double *in, long n)
+void ultraSolve( double *ain, long n, double *bin, long m)
 {
-    vector<double> a;
+    vector<double> a, b;
     
     for(int i = 0; i < n; i++)
-        a.push_back(in[i]);
+        a.push_back(ain[i]);
     
-    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a);
+    for (int i = 0; i < m; ++i) {
+        b.push_back(bin[i]);
+    }
+    
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a,&b);
     drbnd->increaseSize();
     
-    vector<double> b;
+    vector<double> f;
     
-    b.push_back(1);
-    b.push_back(0);    
-    b.push_back(0);        
+    f.push_back(1);
+    f.push_back(0);
+    f.push_back(0);
     
-    vector<double> c = QRSolve(drbnd,b);   
+    vector<double> c = QRSolve(drbnd,f);   
     
     
     double cret[c.size()];

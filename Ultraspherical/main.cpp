@@ -34,7 +34,7 @@ void smallbandExample()
         vector<double> a;         
         a.push_back(10); a.push_back(2); a.push_back(3);        
         
-        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a);
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL,&a);
         
         
         //        drbnd.print();
@@ -92,7 +92,7 @@ void cosbandExample()
         a.push_back(-5.261244076090109e-10);
         a.push_back(0.);a.push_back(9.999074386172517e-13);  
         
-        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a);
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL, &a);
         drbnd->increaseSize();
         
         //        
@@ -141,7 +141,7 @@ void airyExample()
         b.push_back(left[k]);
         b.push_back(right[k]);
         
-        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a);
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL,&a);
         drbnd->increaseSize();
         
         t1 = clock();                
@@ -201,7 +201,7 @@ int main(int argc, const char * argv[])
     
 
     
-    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&args);
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL, &args);
     drbnd->increaseSize();
     
     

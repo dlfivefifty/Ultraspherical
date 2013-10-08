@@ -1,11 +1,11 @@
 
-void ultraSolve P(( double *, long));
+void ultraSolve P(( double *, long, double *, long));
 
 :Begin:
 :Function:       ultraSolve
-:Pattern:        UltrasphericalSolve[i_List]
-:Arguments:      { i }
-:ArgumentTypes:  { RealList }
+:Pattern:        UltrasphericalSolve[i_List,j_List]
+:Arguments:      { i, j }
+:ArgumentTypes:  { RealList, RealList }
 :ReturnType:     Manual
 :End:
 
