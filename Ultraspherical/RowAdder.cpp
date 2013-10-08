@@ -26,18 +26,18 @@ RowAdder::RowAdder()
 double RowAdder::getEntry(long k, long j)
 {
     cout << "getEntry NOT DEFINED!!"<<endl;
-    return NULL;
+    return -1;
 }
 
 long RowAdder::leftIndex(unsigned long k)
 {
     cout << "leftIndex NOT DEFINED!!"<<endl;
-    return NULL;
+    return -1;
 }
 long  RowAdder::rightIndex(unsigned long k)
 {
     cout << "leftIndex NOT DEFINED!!"<<endl;
-    return NULL;
+    return -1;
 }
 
 

@@ -32,8 +32,8 @@ void ultraSolve( double *in, long n)
     for(int i = 0; i < n; i++)
         a.push_back(in[i]);
     
-    DirichletD2ConvertMultiplicationMatrix drbnd(a);             
-    drbnd.increaseSize();
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a);
+    drbnd->increaseSize();
     
     vector<double> b;
     
@@ -41,7 +41,7 @@ void ultraSolve( double *in, long n)
     b.push_back(0);    
     b.push_back(0);        
     
-    vector<double> c = QRSolve(&drbnd,b);   
+    vector<double> c = QRSolve(drbnd,b);   
     
     
     double cret[c.size()];
