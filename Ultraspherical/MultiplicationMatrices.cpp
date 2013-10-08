@@ -447,123 +447,24 @@ double zeroFirstApplyConversion(vector<double> *row)
 
 
 
-DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other) : FilledBandedMatrix(other)
+
+
+FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> a) 
 {
-    setAdder(other.getAdder());
-    setLower(other.lower());
-}
-
-
-
-DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(vector<double> a) : FilledBandedMatrix(-(int)a.size()-1)
-{
-    vector<double> *halved = new vector<double>;
-    
-    vector<double>::iterator it = a.begin();
+    PlusRowAdder *pl = new PlusRowAdder(new ConversionRowAdder());
+    pl->push_back(new DerivativeRowAdder());
+    FilledBandedMatrix *ret = new FilledBandedMatrix(-2,new ShiftRowAdder(pl,-2));
     
     FilledRow *drrow = new FilledRow(0,RowFiller::dirichlet(1,0));
     
     drrow->increaseSize();
-    push_back(drrow);   
+    ret->push_back(drrow);
     
     drrow = new FilledRow(0,RowFiller::dirichlet(0,1));
-    drrow->increaseSize();    
-    push_back(drrow);        
+    drrow->increaseSize();
+    ret->push_back(drrow);
     
-    halved->push_back(*it);
-    for (++it; it < a.end(); it++)
-    {
-        halved->push_back(.5*(*it));
-    }
-    
-    
-    vector<double> *halvedadd = new vector<double>(halved->begin(),halved->end());    
-    
-    vector<double> *firstrow = new vector<double>;
-    
-    
-    vector<double> *halvedremove = new vector<double>(halved->begin(),halved->end());
-    
-    //    while(halvedremove.size() >0)
-    //    {
-    //        halvedremove.erase(halvedremove.begin());    
-    //        firstrow.push_back(zeroFirstApplyConversion(halvedremove, 0));
-    //    }
-    
-    
-    halvedremove->erase(halvedremove->begin());            
-    firstrow->push_back(applyConversion(halved, 0)+zeroFirstApplyConversion(halvedremove));
-    
-    
-    for(int i = 1; i < halved->size(); i++)
-    {   
-        halvedremove->erase(halvedremove->begin()); 
-        
-        halvedadd->insert(halvedadd->begin(),(*halved)[i]);
-        if(i == 2)
-            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove) + 4);        
-        else
-            firstrow->push_back(applyConversion(halvedadd, 0)+zeroFirstApplyConversion(halvedremove));                    
-    }
-    
-    vector<double> *halvedaddwithzeros = new vector<double>(halvedadd->begin(),halvedadd->end());    
-    
-    for(int i = (int)halved->size(); i < (int)halved->size() + 4; i++)
-    {
-        halvedaddwithzeros->insert(halvedaddwithzeros->begin(), 0);
-        if(i == 2)
-            firstrow->push_back(applyConversion(halvedaddwithzeros, 0)+4);                
-        else
-            firstrow->push_back(applyConversion(halvedaddwithzeros, 0));                
-    }
-    
-    
-    push_back(new FilledRow(0,firstrow,RowFiller::dirichlet(0,0)));    
-    
-    
-    
-    
-    
-    //    for (int strt = 1; strt < a.size(); strt++) {
-    //        vector<double> newrow;
-    //        
-    //        for(int i = a.size() + strt + 3; i >=0; i--)
-    //        {
-    //            newrow.push_back(applyConversion(halvedaddwithzeros,i, strt));
-    //        }
-    //        
-    //        push_back(FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
-    //    }//i + 3 + a.size(), i + 2 + a.size(),   a.size() - i
-    
-    for(int i = 1; i < halved->size(); i++)
-    {
-        vector<double> *newrow = new vector<double>;        
-        for (int j =0; j < halved->size() - i; j++) {
-            if(j == 2 + i)
-                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i) + 4 + 2*i);
-            else
-                newrow->push_back(applyConversion(halved, j + i,i) + applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i));
-        }
-        
-        for (int j =(int)halved->size() - i; j < (int)halved->size() + i + 4; j++) {
-            if(j == 2 + i)
-                newrow->push_back(applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i) + 4 + 2*i);
-            else
-                newrow->push_back(applyConversion(halvedaddwithzeros, (int)halved->size() +i + 3 -j,i));                
-        }        
-        
-        
-        push_back(new FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
-    }
-    
-    PlusRowAdder *pl = new PlusRowAdder(new ConversionRowAdder());
-    pl->push_back(new DerivativeRowAdder());
-    setAdder(new ShiftRowAdder(pl,-2));
-
-    
-    delete halved;
-    delete halvedremove;
-    delete halvedaddwithzeros;
+    return ret;
 }
 
 

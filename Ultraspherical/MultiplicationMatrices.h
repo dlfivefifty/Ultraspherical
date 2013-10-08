@@ -51,15 +51,7 @@ using namespace std;
 //};
 
 
-
-class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
-{
-    
-public:
-    DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);
-    DirichletD2ConvertMultiplicationMatrix(vector<double> a);
-};
-
+FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> a);
 
 
 

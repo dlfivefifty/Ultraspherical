@@ -284,9 +284,10 @@ FilledRow *FilledRow::operator+(FilledRow *row)
 }
 
 
-FilledBandedMatrix::FilledBandedMatrix(const int low)
+FilledBandedMatrix::FilledBandedMatrix(const int low, RowAdder *a)
 {
     lowerIndex = low;
+    adder = a;
     
 //    increaseSize();
 }

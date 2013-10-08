@@ -34,13 +34,13 @@ void smallbandExample()
         vector<double> a;         
         a.push_back(10); a.push_back(2); a.push_back(3);        
         
-        DirichletD2ConvertMultiplicationMatrix drbnd(a);
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(a);
         
         
         //        drbnd.print();
         
         
-        drbnd.increaseSize();
+        drbnd->increaseSize();
         
         //        
         for(long i = 0; i < n; i++)
@@ -49,7 +49,7 @@ void smallbandExample()
         
         t1 = clock();                
         
-        vector<double> c = QRSolve(&drbnd,b);            
+        vector<double> c = QRSolve(drbnd,b);
         
         t2 = clock();
         //            printvec(b);
@@ -57,9 +57,11 @@ void smallbandExample()
         cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;  
         
         for(long i = 0; i < 50000; i++)
-            b.push_back(1);                
+            b.push_back(1);
+        
+        delete drbnd;
     }
-    cout<<"}"<<endl;              
+    cout<<"}"<<endl;
 }
 
 void cosbandExample()
@@ -90,8 +92,8 @@ void cosbandExample()
         a.push_back(-5.261244076090109e-10);
         a.push_back(0.);a.push_back(9.999074386172517e-13);  
         
-        DirichletD2ConvertMultiplicationMatrix drbnd(a);             
-        drbnd.increaseSize();
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(a);
+        drbnd->increaseSize();
         
         //        
 
@@ -99,7 +101,7 @@ void cosbandExample()
         
         t1 = clock();                
         
-        vector<double> c = QRSolve(&drbnd,b);            
+        vector<double> c = QRSolve(drbnd,b);
         
         t2 = clock();
         //            printvec(b);
@@ -108,9 +110,11 @@ void cosbandExample()
         
         
         for(long i = 0; i < 50000; i++)
-            b.push_back(1);        
+            b.push_back(1);
+        
+        delete drbnd;
     }
-    cout<<"}"<<endl;              
+    cout<<"}"<<endl;
 }
 
 
@@ -137,17 +141,19 @@ void airyExample()
         b.push_back(left[k]);
         b.push_back(right[k]);
         
-        DirichletD2ConvertMultiplicationMatrix drbnd(a);             
-        drbnd.increaseSize();
+        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(a);
+        drbnd->increaseSize();
         
         t1 = clock();                
         
-        vector<double> c = QRSolve(&drbnd,b);            
+        vector<double> c = QRSolve(drbnd,b);
         
         t2 = clock();
         //    printvec(c);
         float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;       
+        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;
+        
+        delete drbnd;
     }
 }
 
@@ -195,14 +201,13 @@ int main(int argc, const char * argv[])
     
 
     
-    DirichletD2ConvertMultiplicationMatrix drbnd(args);
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(b);
+    drbnd->increaseSize();
     
-    drbnd.increaseSize();
-    
-    drbnd.print();
+    drbnd->print();
     
     
-    vector<double> c = QRSolve(&drbnd,b);       
+    vector<double> c = QRSolve(drbnd,b);
     
     printvec(c);
     
@@ -213,7 +218,7 @@ int main(int argc, const char * argv[])
     
 
     
-    
+    delete drbnd;
     
     
 //    cosbandExample();
