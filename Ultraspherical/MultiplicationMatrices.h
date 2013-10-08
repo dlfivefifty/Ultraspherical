@@ -61,12 +61,11 @@ public:
 
 
 
-class DirichletD2ConvertMultiplicationRowAdder : public RowAdder
+class ConversionRowAdder : public RowAdder
 {
-    vector<double> *rowEntries;
+//TODO: Implement other conversion operators
     
 public:
-    DirichletD2ConvertMultiplicationRowAdder(vector<double> *a);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
@@ -97,9 +96,23 @@ public:
     void push_back(RowAdder *rowAdd);
 };
 
-//only second currently
+
 class DerivativeRowAdder : public RowAdder
 {
+    //TODO: Implement other derivative operators
+public:
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+class ShiftRowAdder : public RowAdder
+{
+    RowAdder *adder;
+    long shift;
+public:
+    ShiftRowAdder(RowAdder *, long);
+    
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
@@ -107,7 +120,7 @@ class DerivativeRowAdder : public RowAdder
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
 {
-    PlusRowAdder *adder;
+    ShiftRowAdder *adder;
     
 public:
     DirichletD2ConvertMultiplicationMatrix(DirichletD2ConvertMultiplicationMatrix& other);

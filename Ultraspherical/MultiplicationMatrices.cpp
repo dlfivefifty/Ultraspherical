@@ -556,9 +556,10 @@ DirichletD2ConvertMultiplicationMatrix::DirichletD2ConvertMultiplicationMatrix(v
         push_back(new FilledRow(0,newrow,RowFiller::dirichlet(0,0)));    
     }
     
-    
-    adder = new PlusRowAdder(new DirichletD2ConvertMultiplicationRowAdder(halvedadd));
-    adder->push_back(new DerivativeRowAdder());
+    PlusRowAdder *pl = new PlusRowAdder(new ConversionRowAdder());
+    pl->push_back(new DerivativeRowAdder());
+    adder = new ShiftRowAdder(pl,0);
+
     
     delete halved;
     delete halvedremove;
@@ -723,10 +724,6 @@ double TimesRowAdder::getEntry(long k, long j)
 
 
 
-DirichletD2ConvertMultiplicationRowAdder::DirichletD2ConvertMultiplicationRowAdder(vector<double> *a)
-{
-    rowEntries = a;
-}
 
 FilledRow *DirichletD2ConvertMultiplicationMatrix::createRow(unsigned long k)
 {
@@ -759,7 +756,7 @@ long DerivativeRowAdder::rightIndex(unsigned long row)
 
 
 
-double DirichletD2ConvertMultiplicationRowAdder::getEntry(long row, long col)
+double ConversionRowAdder::getEntry(long row, long col)
 {
     double c = (double) col;
     
@@ -778,13 +775,36 @@ double DirichletD2ConvertMultiplicationRowAdder::getEntry(long row, long col)
 }
 
 
-long DirichletD2ConvertMultiplicationRowAdder::leftIndex(unsigned long row)
+long ConversionRowAdder::leftIndex(unsigned long row)
 {
     return row-2;
 }
 
-long DirichletD2ConvertMultiplicationRowAdder::rightIndex(unsigned long row)
+long ConversionRowAdder::rightIndex(unsigned long row)
 {
     return row + 2;
+}
+
+
+ShiftRowAdder::ShiftRowAdder(RowAdder *a, long s)
+{
+    adder = a;
+    shift = s;
+}
+
+double ShiftRowAdder::getEntry(long row, long col)
+{
+    return adder->getEntry(row + shift, col);
+}
+
+
+long ShiftRowAdder::leftIndex(unsigned long row)
+{
+    return adder->leftIndex(row + shift);
+}
+
+long ShiftRowAdder::rightIndex(unsigned long row)
+{
+    return adder->rightIndex(row + shift);
 }
 
