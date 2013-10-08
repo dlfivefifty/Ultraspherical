@@ -42,7 +42,7 @@ long  RowAdder::rightIndex(unsigned long k)
 void RowAdder::print()
 {
     for (int i = 0; i < 6; ++i) {
-        for(int j = 0; j < 6; ++j)
+        for(int j = 0; j < 12; ++j)
             cout<< setw(10) << getEntry(i,j) << " ";
      
         cout <<endl;
@@ -108,60 +108,31 @@ long PlusRowAdder::rightIndex(unsigned long row)
 }
 
 
-TimesRowAdder::TimesRowAdder(RowAdder *adder)
+TimesRowAdder::TimesRowAdder(RowAdder *aa, RowAdder *bb)
 {
-    summands = new vector<RowAdder *>;
-    summands->push_back(adder);
+    a = aa;
+    b = bb;
 }
 
-void TimesRowAdder::push_back(RowAdder *add)
-{
-    summands->push_back(add);
-}
 
 
 
 long TimesRowAdder::leftIndex(unsigned long row)
 {
-    //TODO: change -1
-    long ret = -1000;
     
-    for(RowAdder *i : *summands) {
-        long li = i->leftIndex(row);
-        
-        if (ret == -1000)
-            ret = li;
-        else
-            ret = min(ret, li);
-    }
-    
-    return ret;
+    return b->leftIndex(a->leftIndex(row));
 }
 
 long TimesRowAdder::rightIndex(unsigned long row)
 {
-    //TODO: change -1
-    long ret = -1000;
-    
-    for(RowAdder *i : *summands) {
-        long li = i->rightIndex(row);
-        
-        ret = max(ret, li);
-    }
-    
-    return ret;
+    return b->rightIndex(a->rightIndex(row));
 }
 double TimesRowAdder::getEntry(long k, long j)
 {
     double ret = 0;
-    //    cout << "createRow " << k <<": \n";
-    for(RowAdder *i : *summands) {
-        ret += i->getEntry(k, j);
-    }
-    
-    //    ret->print();
-    
-    //    cout << "end createRow" <<endl;
+
+    for (long r = a->leftIndex(k); r <= a->rightIndex(k); ++r)
+        ret += a->getEntry(k,r)*b->getEntry(r,j);
     
     return ret;
 }

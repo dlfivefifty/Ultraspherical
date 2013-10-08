@@ -207,7 +207,8 @@ int main(int argc, const char * argv[])
     drbnd->print();
     
     RowAdder *pl = MultiplicationRowAdder(&args);
-    pl->print();
+    
+    TimesRowAdder(new ConversionRowAdder(),pl).print();
     
     delete pl;
     

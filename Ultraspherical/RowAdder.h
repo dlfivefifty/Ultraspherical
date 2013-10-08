@@ -56,13 +56,13 @@ public:
 
 class TimesRowAdder : public RowAdder
 {
-    vector<RowAdder *> *summands;
+    RowAdder *a;
+    RowAdder *b;
 public:
-    TimesRowAdder(RowAdder *rowAdd);
+    TimesRowAdder(RowAdder *aa, RowAdder *bb);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
-    void push_back(RowAdder *rowAdd);
 };
 
 
@@ -89,6 +89,7 @@ public:
 
 class ToeplitzRowAdder : public RowAdder
 {
+    //TODO: Not really Toeplitz
     vector<double> *a;
     
 public:
