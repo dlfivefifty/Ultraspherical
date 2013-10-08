@@ -6,12 +6,30 @@
 
 
 
+DerivativeRowAdder::DerivativeRowAdder(unsigned int l, unsigned int m)
+{
+    from = l;
+    to = m;
+}
+
+long factorial(long x, long result = 1) {
+    if (x == 1) return result; else return factorial(x - 1, x * result);
+}
+
 double DerivativeRowAdder::getEntry(long row, long col)
 {
-    if (row == col-2)
-        return (4 + 2*(row));
-    else
-        return 0;
+    if (from == 0) {
+        if (row == col - to)
+            return pow(2,to-1)*factorial(to-1)*(to + row);
+        else
+            return 0;
+
+    } else {
+        if (row == col + from - to)
+            return (4 + 2*(row));
+        else
+            return 0;
+    }
 }
 
 
@@ -152,7 +170,7 @@ RowAdder *MultiplicationRowAdder(vector<double> *args)
 FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
 {
     PlusRowAdder *pl =
-    new   PlusRowAdder(new DerivativeRowAdder());
+    new   PlusRowAdder(new DerivativeRowAdder(0,2));
     pl->push_back(new TimesRowAdder(new ConversionRowAdder(),MultiplicationRowAdder(a)));
     
     
