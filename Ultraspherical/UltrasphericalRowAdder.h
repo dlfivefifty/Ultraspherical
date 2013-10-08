@@ -63,7 +63,7 @@ public:
 };
 
 
-RowAdder *MultiplicationRowAdder(vector<double> *);
+RowAdder *MultiplicationRowAdder(unsigned int, vector<double> *);
 
 
 FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a);

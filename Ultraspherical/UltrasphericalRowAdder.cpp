@@ -189,21 +189,26 @@ long HankelRowAdder::rightIndex(unsigned long row)
 }
 
 
-RowAdder *MultiplicationRowAdder(vector<double> *args)
+RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 {
-    vector<double> *ha = new vector<double>;
-    
-    vector<double>::iterator it = args->begin();
-    
-    
-    for (    ++it; it < args->end(); ++it) {
-        ha->push_back(*it);
+    if (lambda ==0) {
+        vector<double> *ha = new vector<double>;
+        
+        vector<double>::iterator it = args->begin();
+        
+        
+        for (    ++it; it < args->end(); ++it) {
+            ha->push_back(*it);
+        }
+        
+        PlusRowAdder *pl = new PlusRowAdder(new ToeplitzRowAdder(args));
+        pl->push_back(new ShiftRowAdder(new HankelRowAdder(ha),-1));
+        
+        return pl;
+    } else {
+        //TODO: Implement
+        throw "Higher order multiplication not implemented";
     }
-    
-    PlusRowAdder *pl = new PlusRowAdder(new ToeplitzRowAdder(args));
-    pl->push_back(new ShiftRowAdder(new HankelRowAdder(ha),-1));
-    
-    return pl;
 }
 
 
@@ -214,7 +219,7 @@ FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
 {
     PlusRowAdder *pl =
     new   PlusRowAdder(new DerivativeRowAdder(0,2));
-    pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(a)));
+    pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,a)));
     
     
     FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)a->size(),new ShiftRowAdder(pl,-2));
