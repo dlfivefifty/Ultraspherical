@@ -44,22 +44,65 @@ long DerivativeRowAdder::rightIndex(unsigned long row)
 }
 
 
-
+ConversionRowAdder::ConversionRowAdder(unsigned int l, unsigned int m)
+{
+    from = l;
+    to = m;
+}
 
 double ConversionRowAdder::getEntry(long row, long col)
 {
     double c = (double) col;
     
-    if (  col == 0 && row ==0)
+    if (from == to && row == col) {
         return 1;
-    else if (row == col)
-        return 1/(2.*(c+1));
-    else if (row +2 == col)
-        return -1/(2*(c+1))-1/(2*(c-1));
-    else if (row + 4 == col)
-        return 1/(2*(c-1));
-    else
-        return 0;
+    } else if (from == 0) {
+        switch (to) {
+            case 1:
+                if (row == 0 && col == 0)
+                    return 1;
+                else if (row == col)
+                    return .5;
+                else if (row +2 == col)
+                    return -.5;
+                
+                break;
+                
+                
+            case 2:
+                
+                if (  col == 0 && row ==0)
+                    return 1;
+                else if (row == col)
+                    return 1/(2.*(c+1));
+                else if (row +2 == col)
+                    return -1/(2*(c+1))-1/(2*(c-1));
+                else if (row + 4 == col)
+                    return 1/(2*(c-1));
+                
+                
+                break;
+                
+            default:
+                break;
+        }
+    } else if (from == 1) {
+        switch (to) {
+            case 2:
+                if (row == col)
+                    return 1/((double) (col+1));
+                else if (row +2 == col)
+                    return -1/((double) (col+1));
+                    
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+
+    return 0;
 }
 
 
@@ -70,7 +113,7 @@ long ConversionRowAdder::leftIndex(unsigned long row)
 
 long ConversionRowAdder::rightIndex(unsigned long row)
 {
-    return row + 4;
+    return row + (to - from)*2;
 }
 
 
@@ -171,7 +214,7 @@ FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
 {
     PlusRowAdder *pl =
     new   PlusRowAdder(new DerivativeRowAdder(0,2));
-    pl->push_back(new TimesRowAdder(new ConversionRowAdder(),MultiplicationRowAdder(a)));
+    pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(a)));
     
     
     FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)a->size(),new ShiftRowAdder(pl,-2));

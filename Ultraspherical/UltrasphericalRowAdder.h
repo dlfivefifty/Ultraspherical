@@ -13,9 +13,12 @@ using namespace std;
 
 class ConversionRowAdder : public RowAdder
 {
+    unsigned int from,to;
     //TODO: Implement other conversion operators
     
 public:
+    ConversionRowAdder(unsigned int l, unsigned int m);
+    
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
