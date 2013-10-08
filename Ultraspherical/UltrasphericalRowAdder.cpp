@@ -13,7 +13,7 @@ DerivativeRowAdder::DerivativeRowAdder(unsigned int l, unsigned int m)
 }
 
 long factorial(long x, long result = 1) {
-    if (x == 1) return result; else return factorial(x - 1, x * result);
+    if (x == 1 || x ==0) return 1; else return factorial(x - 1, x * result);
 }
 
 double DerivativeRowAdder::getEntry(long row, long col)
@@ -310,6 +310,7 @@ FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
 {
     PlusRowAdder *pl =
     new   PlusRowAdder(new DerivativeRowAdder(0,2));
+    pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new DerivativeRowAdder(0,1)));
     pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,a)));
     
     
