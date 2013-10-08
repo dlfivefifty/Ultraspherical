@@ -11,6 +11,27 @@
 using namespace std; 
 
 
+class ConversionRowAdder : public RowAdder
+{
+    //TODO: Implement other conversion operators
+    
+public:
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+
+class DerivativeRowAdder : public RowAdder
+{
+    //TODO: Implement other derivative operators
+public:
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+
 
 class ToeplitzRowAdder : public RowAdder
 {

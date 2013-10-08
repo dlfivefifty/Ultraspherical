@@ -9,7 +9,7 @@
 
 
 #include "FilledBandedMatrix.h" 
-#include "MultiplicationMatrices.h"
+#include "UltrasphericalRowAdder.h"
 
 #include "AdaptiveQR.h"
 #include <time.h>

@@ -7,7 +7,7 @@
 //
 
 #include "FilledBandedMatrix.h"
-#include "MultiplicationMatrices.h"
+#include "UltrasphericalRowAdder.h"
 
 #include <math.h>
 #include <stdio.h>

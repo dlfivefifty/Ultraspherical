@@ -141,57 +141,6 @@ double TimesRowAdder::getEntry(long k, long j)
 
 
 
-
-double DerivativeRowAdder::getEntry(long row, long col)
-{
-    if (row == col-2)
-        return (4 + 2*(row));
-    else
-        return 0;
-}
-
-
-long DerivativeRowAdder::leftIndex(unsigned long row)
-{
-    return row+2;
-}
-
-long DerivativeRowAdder::rightIndex(unsigned long row)
-{
-    return row+2;
-}
-
-
-
-
-double ConversionRowAdder::getEntry(long row, long col)
-{
-    double c = (double) col;
-    
-    if (  col == 0 && row ==0)
-        return 1;
-    else if (row == col)
-        return 1/(2.*(c+1));
-    else if (row +2 == col)
-        return -1/(2*(c+1))-1/(2*(c-1));
-    else if (row + 4 == col)
-        return 1/(2*(c-1));
-    else
-        return 0;
-}
-
-
-long ConversionRowAdder::leftIndex(unsigned long row)
-{
-    return row;
-}
-
-long ConversionRowAdder::rightIndex(unsigned long row)
-{
-    return row + 4;
-}
-
-
 ShiftRowAdder::ShiftRowAdder(RowAdder *a, long s)
 {
     adder = a;
