@@ -8,11 +8,14 @@
 
 
 
-FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> a) 
+FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a)
 {
-    PlusRowAdder *pl = new PlusRowAdder(new ConversionRowAdder());
-    pl->push_back(new DerivativeRowAdder());
-    FilledBandedMatrix *ret = new FilledBandedMatrix(-2,new ShiftRowAdder(pl,-2));
+    PlusRowAdder *pl =
+    new   PlusRowAdder(new DerivativeRowAdder());
+    pl->push_back(new TimesRowAdder(new ConversionRowAdder(),MultiplicationRowAdder(a)));
+    
+    
+    FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)a->size(),new ShiftRowAdder(pl,-2));
     
     FilledRow *drrow = new FilledRow(0,RowFiller::dirichlet(1,0));
     

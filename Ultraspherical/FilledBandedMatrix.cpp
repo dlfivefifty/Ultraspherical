@@ -411,10 +411,12 @@ FilledRow *FilledBandedMatrix::createRow(unsigned long k)
     
     vector<double> *newrow = new vector<double>;
     
-    for (long j = adder->leftIndex(k); j <= adder->rightIndex(k); ++j)
+    long li = max((long)0,adder->leftIndex(k));
+    
+    for (long j = li; j <= adder->rightIndex(k); ++j)
         newrow->push_back(adder->getEntry(k,j));
     
-    return new FilledRow(adder->leftIndex(k),newrow,RowFiller::dirichlet(0, 0));
+    return new FilledRow(li,newrow,RowFiller::dirichlet(0, 0));
 }
 
 

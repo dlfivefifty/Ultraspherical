@@ -51,7 +51,7 @@ using namespace std;
 //};
 
 
-FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> a);
+FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a);
 
 
 

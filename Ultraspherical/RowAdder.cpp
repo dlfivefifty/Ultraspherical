@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <iomanip>
+#include <math.h>
+
 
 
 RowAdder::RowAdder()
@@ -234,7 +236,10 @@ double ToeplitzRowAdder::getEntry(long row, long col)
 
 long ToeplitzRowAdder::leftIndex(unsigned long row)
 {
-    return row+1-a->size();
+    if (row + 1 < a->size())
+        return 0;
+    else
+        return row+1-a->size();
 }
 
 long ToeplitzRowAdder::rightIndex(unsigned long row)
@@ -265,7 +270,7 @@ double HankelRowAdder::getEntry(long row, long col)
 
 long HankelRowAdder::leftIndex(unsigned long row)
 {
-    if (row <= a->size())
+    if (row < a->size())
         return 0;
     else
         return row;
