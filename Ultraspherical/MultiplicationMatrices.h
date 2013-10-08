@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "FilledBandedMatrix.h" 
+#include "RowAdder.h"
 #include <vector>
 
 using namespace std; 
@@ -49,74 +50,7 @@ using namespace std;
 //    virtual FilledRow createRow(int);
 //};
 
-class RowAdder
-{
-public:
-    RowAdder();
-    FilledRow *createRow(unsigned long);
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-};
 
-
-
-class ConversionRowAdder : public RowAdder
-{
-//TODO: Implement other conversion operators
-    
-public:
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-};
-
-
-class PlusRowAdder : public RowAdder
-{
-    vector<RowAdder *> *summands;
-public:
-    PlusRowAdder(RowAdder *rowAdd);
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-    void push_back(RowAdder *rowAdd);
-    
-};
-
-
-class TimesRowAdder : public RowAdder
-{
-    vector<RowAdder *> *summands;
-public:
-    TimesRowAdder(RowAdder *rowAdd);
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-    void push_back(RowAdder *rowAdd);
-};
-
-
-class DerivativeRowAdder : public RowAdder
-{
-    //TODO: Implement other derivative operators
-public:
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-};
-
-class ShiftRowAdder : public RowAdder
-{
-    RowAdder *adder;
-    long shift;
-public:
-    ShiftRowAdder(RowAdder *, long);
-    
-    virtual double getEntry(long,long);
-    virtual long leftIndex(unsigned long);
-    virtual long rightIndex(unsigned long);
-};
 
 class DirichletD2ConvertMultiplicationMatrix : public FilledBandedMatrix
 {
