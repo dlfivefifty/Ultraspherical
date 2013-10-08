@@ -56,10 +56,12 @@ public:
 
 class HankelRowAdder : public RowAdder
 {
-    vector<double> *a;
+    double *a;
+    unsigned long length;
     
 public:
     HankelRowAdder(vector<double> *a);
+    HankelRowAdder(double *, unsigned long);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);

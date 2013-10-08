@@ -147,10 +147,8 @@ double ToeplitzRowAdder::getEntry(long row, long col)
     
     if (ind >= length)
         return 0;
-    else if (ind == 0)
-        return a[ind];
     else
-        return .5*a[ind];
+        return a[ind];
 }
 
 
@@ -171,7 +169,21 @@ long ToeplitzRowAdder::rightIndex(unsigned long row)
 HankelRowAdder::HankelRowAdder(vector<double> *ain)
 {
     //Assume symmetric
+    length = ain->size();
+    
+    a = (double *)malloc(length*sizeof(double));
+    
+    int k=0;
+    for (double i : *ain) {
+        a[k] = i;
+        k++;
+    }
+}
+
+HankelRowAdder::HankelRowAdder(double *ain, unsigned long l)
+{
     a = ain;
+    length = l;
 }
 
 double HankelRowAdder::getEntry(long row, long col)
@@ -181,16 +193,16 @@ double HankelRowAdder::getEntry(long row, long col)
     
     long ind = row + col;
     
-    if (ind >= a->size())
+    if (ind >= length)
         return 0;
     else
-        return .5*(*a)[ind];
+        return .5*a[ind];
 }
 
 
 long HankelRowAdder::leftIndex(unsigned long row)
 {
-    if (row < a->size())
+    if (row < length)
         return 0;
     else
         return row;
@@ -198,8 +210,8 @@ long HankelRowAdder::leftIndex(unsigned long row)
 
 long HankelRowAdder::rightIndex(unsigned long row)
 {
-    if (row <= a->size())
-        return a->size() - 1;
+    if (row <= length)
+        return length - 1;
     else
         return row;
     
@@ -217,8 +229,7 @@ RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ai
         
         int k=0;
         for (double i : *ain) {
-            a[index + k] = i;
-            a[index - k] = i;
+            a[index - k] = a[index + k] = (k==0?1:.5)*i;
             k++;
         }
         
@@ -228,29 +239,36 @@ RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ai
     throw "MultiplicationToeplitzRowAdder not defined";
 }
 
+RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
+{
+    if (lambda == 0) {
+        unsigned long length = ain->size() - 1;
+        
+        
+        double *a = (double *)malloc(length*sizeof(double));
+        
+        int k=0;
+        for (double i : *ain) {
+            if (k > 0) {
+                a[k-1] = i;
+            }
+
+            k++;
+        }
+        
+        return new ShiftRowAdder(new HankelRowAdder(a, length),-1);
+    }
+    
+    throw "MultiplicationHankelRowAdder not defined";
+}
+
 
 RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 {
-    if (lambda ==0) {
-        vector<double> *ha = new vector<double>;
-        
-        vector<double>::iterator it = args->begin();
-        
-        
-        for (    ++it; it < args->end(); ++it) {
-            ha->push_back(*it);
-        }
-        
-        
-        
-        PlusRowAdder *pl = new PlusRowAdder(MultiplicationToeplitzRowAdder(lambda,args));
-        pl->push_back(new ShiftRowAdder(new HankelRowAdder(ha),-1));
-        
-        return pl;
-    } else {
-        //TODO: Implement
-        throw "Higher order multiplication not implemented";
-    }
+    PlusRowAdder *pl = new PlusRowAdder(MultiplicationToeplitzRowAdder(lambda,args));
+    pl->push_back(MultiplicationHankelRowAdder(lambda,args));
+    
+    return pl;
 }
 
 
