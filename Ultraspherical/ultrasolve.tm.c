@@ -290,12 +290,12 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 
 
 # line 2 "Ultraspherical/ultrasolve.tm"
-void ultraSolve P(( double *, long, double *, long));
+void ultraSolve P(( double *, long, double *, long, double *, long, double *, long));
 
 # line 296 "Ultraspherical/ultrasolve.tm.c"
 
 
-void ultraSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2));
+void ultraSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2, double * _tp3, long _tpl3, double * _tp4, long _tpl4));
 
 #if MLPROTOTYPES
 static int _tr0( MLINK mlp)
@@ -308,13 +308,21 @@ static int _tr0(mlp) MLINK mlp;
 	long _tpl1;
 	double * _tp2;
 	long _tpl2;
+	double * _tp3;
+	long _tpl3;
+	double * _tp4;
+	long _tpl4;
 	if ( ! MLGetRealList( mlp, &_tp1, &_tpl1) ) goto L0;
 	if ( ! MLGetRealList( mlp, &_tp2, &_tpl2) ) goto L1;
-	if ( ! MLNewPacket(mlp) ) goto L2;
+	if ( ! MLGetRealList( mlp, &_tp3, &_tpl3) ) goto L2;
+	if ( ! MLGetRealList( mlp, &_tp4, &_tpl4) ) goto L3;
+	if ( ! MLNewPacket(mlp) ) goto L4;
 
-	ultraSolve(_tp1, _tpl1, _tp2, _tpl2);
+	ultraSolve(_tp1, _tpl1, _tp2, _tpl2, _tp3, _tpl3, _tp4, _tpl4);
 
 	res = 1;
+L4:	MLDisownRealList( mlp, _tp4, _tpl4);
+L3:	MLDisownRealList( mlp, _tp3, _tpl3);
 L2:	MLDisownRealList( mlp, _tp2, _tpl2);
 L1:	MLDisownRealList( mlp, _tp1, _tpl1);
 
@@ -328,13 +336,14 @@ static struct func {
 	int   (*f_func)P((MLINK));
 	const char  *f_name;
 	} _tramps[1] = {
-		{ 2, 0, _tr0, "ultraSolve" }
+		{ 4, 0, _tr0, "ultraSolve" }
 		};
 
 static const char* evalstrs[] = {
-	"UltrasphericalSolve::usage = \"UltrasphericalSolve[{a0,...,an}] s",
-	"olves the ODE u'' + (a0 T0(x) + ... + an Tn(x)) u = 0, u(-1) = 1",
-	", u(1) = 0.\"",
+	"UltrasphericalSolve::usage = \"UltrasphericalSolve[{a0,...,an},{b",
+	"0,...,bn},{bc0,bc1},{f0,...,fn}] solves the ODE u'' + (a0 T0(x) ",
+	"+ ... + an T_n(x)) u' + (b0 T0(x) + ... + bn T_n(x)) u = f0 T0(x",
+	") + ... + fn T_n(x), u(-1) = bc0, u(1) = bc1.\"",
 	(const char*)0,
 	(const char*)0
 };
@@ -355,7 +364,7 @@ int MLInstall(mlp) MLINK mlp;
 {
 	int _res;
 	_res = MLConnect(mlp);
-	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List,j_List]", (char *)"{ i, j }", 0);
+	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List,j_List,bc_List,fn_List]", (char *)"{ i, j, bc, fn }", 0);
 	if (_res) _res = _doevalstr( mlp, 0);
 	if (_res) _res = MLPutSymbol( mlp, "End");
 	if (_res) _res = MLFlush( mlp);

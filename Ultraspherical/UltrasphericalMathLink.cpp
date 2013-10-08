@@ -21,13 +21,66 @@
 #include <vector>
 
 
-extern "C" void ultraSolve( double *, long, double *, long);
+extern "C" void ultraSolve( double *, long, double *, long, double *, long, double *, long);
 
 
+void toUSeries(double *fin, long fn)
+{
+    switch (fn) {
+        case 0:
+        case 1:
+            break;
+            
+        case 2:
+            fin[1] = .5*fin[1];
+            break;
+            
+        default:
+            fin[0] = fin[0] - .5*fin[2];
+            
+            for (int i = 1; i < fn-2; ++i) {
+                fin[i] = .5*fin[i] - .5*fin[i+2];
+            }
+            
+            fin[fn-2] = .5*fin[fn-2];
+            fin[fn-1] = .5*fin[fn-1];
+            break;
+    }
 
-void ultraSolve( double *ain, long n, double *bin, long m)
+}
+
+void toC2Series(double *fin, long fn)
+{
+    toUSeries(fin, fn);
+    
+    switch (fn) {
+        case 0:
+        case 1:
+            break;
+            
+        case 2:
+            fin[1] = .5*fin[1];
+            break;
+            
+        default:
+            for (int i = 0; i < fn-2; ++i) {
+                fin[i] = 1/((double) i+1)*fin[i] -  1/((double) i+3)*fin[i+2];
+            }
+            
+            fin[fn-2] = 1/((double) fn-1)*fin[fn-2];
+            fin[fn-1] = 1/((double) fn)*fin[fn-1];
+            break;
+    }
+    
+}
+
+
+void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, double *fin, long fn)
 {
     vector<double> a, b;
+    
+    if (k != 2)
+        return;
     
     for(int i = 0; i < n; i++)
         a.push_back(ain[i]);
@@ -41,9 +94,17 @@ void ultraSolve( double *ain, long n, double *bin, long m)
     
     vector<double> f;
     
-    f.push_back(1);
-    f.push_back(0);
-    f.push_back(0);
+    f.push_back(bc[0]);
+    f.push_back(bc[1]);
+
+    toC2Series(fin,fn);
+    
+    
+    
+    for (long i = 0; i < fn; ++i) {
+        f.push_back(fin[i]);
+    }
+
     
     vector<double> c = QRSolve(drbnd,f);   
     
