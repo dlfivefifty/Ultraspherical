@@ -204,11 +204,6 @@ int main(int argc, const char * argv[])
     FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&args);
     drbnd->increaseSize();
     
-//    drbnd->print();
-    
-//        cout << drbnd->getRow(5, false)->leftIndex() << " ";
-    
-    cout << endl;
     
     
     
