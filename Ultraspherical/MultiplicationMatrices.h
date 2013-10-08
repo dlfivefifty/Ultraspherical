@@ -10,45 +10,33 @@
 
 using namespace std; 
 
-//class ToeplitzMatrix : public FilledBandedMatrix
-//{
-//    vector<double> *rowEntries;
-//public:
-//    ToeplitzMatrix(vector<double> a);
-//    virtual FilledRow createRow(int);
-//};
-//
-//class MultiplicationMatrix : public FilledBandedMatrix
-//{
-//    vector<double> *rowEntries;
-//public:
-//    MultiplicationMatrix(vector<double> a);
-//    virtual FilledRow createRow(int);
-//};
-//
-//class ConvertToeplitzMatrix : public FilledBandedMatrix
-//{
-//    vector<double> *rowEntries;
-//public:
-//    ConvertToeplitzMatrix(vector<double> a);
-//    virtual FilledRow createRow(int);
-//};
-//
-//
-//class ConvertHankelMatrix : public FilledBandedMatrix
-//{
-//public:
-//    ConvertHankelMatrix(vector<double> a);
-//    virtual FilledRow createRow(int);
-//};
-//
-//class ConvertMultiplicationMatrix : public FilledBandedMatrix
-//{
-//    vector<double> *rowEntries;
-//public:
-//    ConvertMultiplicationMatrix(vector<double> a);
-//    virtual FilledRow createRow(int);
-//};
+
+
+class ToeplitzRowAdder : public RowAdder
+{
+    //TODO: Not really Toeplitz
+    vector<double> *a;
+    
+public:
+    ToeplitzRowAdder(vector<double> *a);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+class HankelRowAdder : public RowAdder
+{
+    vector<double> *a;
+    
+public:
+    HankelRowAdder(vector<double> *a);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+
+RowAdder *MultiplicationRowAdder(vector<double> *);
 
 
 FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a);
