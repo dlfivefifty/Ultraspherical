@@ -24,6 +24,8 @@ public:
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
+    
+    void print();
 };
 
 
@@ -84,5 +86,30 @@ public:
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
+
+class ToeplitzRowAdder : public RowAdder
+{
+    vector<double> *a;
+    
+public:
+    ToeplitzRowAdder(vector<double> *a);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+class HankelRowAdder : public RowAdder
+{
+    vector<double> *a;
+    
+public:
+    HankelRowAdder(vector<double> *a);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+RowAdder *MultiplicationRowAdder(vector<double> *);
+
 
 #endif

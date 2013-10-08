@@ -10,6 +10,12 @@
 
 #include "RowAdder.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+
+
 RowAdder::RowAdder()
 {
     
@@ -33,6 +39,15 @@ long  RowAdder::rightIndex(unsigned long k)
 }
 
 
+void RowAdder::print()
+{
+    for (int i = 0; i < 6; ++i) {
+        for(int j = 0; j < 6; ++j)
+            cout<< setw(10) << getEntry(i,j) << " ";
+     
+        cout <<endl;
+    }
+}
 
 
 PlusRowAdder::PlusRowAdder(RowAdder *adder)
@@ -225,3 +240,91 @@ long ShiftRowAdder::rightIndex(unsigned long row)
 {
     return adder->rightIndex(row + shift);
 }
+
+
+ToeplitzRowAdder::ToeplitzRowAdder(vector<double> *ain)
+{
+    //Assume symmetric
+    a = ain;
+}
+
+double ToeplitzRowAdder::getEntry(long row, long col)
+{
+    long ind = abs(row - col);
+    
+    if (ind >= a->size())
+        return 0;
+    else if (ind == 0)
+        return (*a)[ind];
+    else
+        return .5*(*a)[ind];
+}
+
+
+long ToeplitzRowAdder::leftIndex(unsigned long row)
+{
+    return row+1-a->size();
+}
+
+long ToeplitzRowAdder::rightIndex(unsigned long row)
+{
+    return row-1+a->size();
+}
+
+
+HankelRowAdder::HankelRowAdder(vector<double> *ain)
+{
+    //Assume symmetric
+    a = ain;
+}
+
+double HankelRowAdder::getEntry(long row, long col)
+{
+    if (row < 0)
+        return 0;
+    
+    long ind = row + col;
+    
+    if (ind >= a->size())
+        return 0;
+    else
+        return .5*(*a)[ind];
+}
+
+
+long HankelRowAdder::leftIndex(unsigned long row)
+{
+    if (row <= a->size())
+        return 0;
+    else
+        return row;
+}
+
+long HankelRowAdder::rightIndex(unsigned long row)
+{
+    if (row <= a->size())
+        return a->size() - 1;
+    else
+        return row;
+
+}
+
+
+RowAdder *MultiplicationRowAdder(vector<double> *args)
+{
+    vector<double> *ha = new vector<double>;
+    
+    vector<double>::iterator it = args->begin();
+    
+    
+    for (    ++it; it < args->end(); ++it) {
+        ha->push_back(*it);
+    }
+    
+    PlusRowAdder *pl = new PlusRowAdder(new ToeplitzRowAdder(args));
+    pl->push_back(new ShiftRowAdder(new HankelRowAdder(ha),-1));
+    
+    return pl;
+}
+
+

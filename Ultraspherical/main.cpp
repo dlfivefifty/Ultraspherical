@@ -206,6 +206,10 @@ int main(int argc, const char * argv[])
     
     drbnd->print();
     
+    RowAdder *pl = MultiplicationRowAdder(&args);
+    pl->print();
+    
+    delete pl;
     
     vector<double> c = QRSolve(drbnd,b);
     
