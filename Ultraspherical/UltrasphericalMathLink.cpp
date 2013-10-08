@@ -13,7 +13,7 @@
 #include "mathlink.h"
 
 #include "FilledBandedMatrix.h" // stop multiple definition of RowFiller class. 
-#include "MultiplicationMatrices.h"
+#include "UltrasphericalRowAdder.h"
 //
 ////#include "mex.h"
 #include "AdaptiveQR.h"
@@ -21,7 +21,7 @@
 #include <vector>
 
 
-extern "C" void ultraSolve( double *, long);
+extern "C" void ultraSolve( double *, long, double *, long);
 
 
 

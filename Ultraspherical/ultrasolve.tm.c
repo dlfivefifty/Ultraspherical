@@ -290,12 +290,12 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 
 
 # line 2 "Ultraspherical/ultrasolve.tm"
-void ultraSolve P(( double *, long));
+void ultraSolve P(( double *, long, double *, long));
 
 # line 296 "Ultraspherical/ultrasolve.tm.c"
 
 
-void ultraSolve P(( double * _tp1, long _tpl1));
+void ultraSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2));
 
 #if MLPROTOTYPES
 static int _tr0( MLINK mlp)
@@ -306,12 +306,16 @@ static int _tr0(mlp) MLINK mlp;
 	int	res = 0;
 	double * _tp1;
 	long _tpl1;
+	double * _tp2;
+	long _tpl2;
 	if ( ! MLGetRealList( mlp, &_tp1, &_tpl1) ) goto L0;
-	if ( ! MLNewPacket(mlp) ) goto L1;
+	if ( ! MLGetRealList( mlp, &_tp2, &_tpl2) ) goto L1;
+	if ( ! MLNewPacket(mlp) ) goto L2;
 
-	ultraSolve(_tp1, _tpl1);
+	ultraSolve(_tp1, _tpl1, _tp2, _tpl2);
 
 	res = 1;
+L2:	MLDisownRealList( mlp, _tp2, _tpl2);
 L1:	MLDisownRealList( mlp, _tp1, _tpl1);
 
 L0:	return res;
@@ -324,7 +328,7 @@ static struct func {
 	int   (*f_func)P((MLINK));
 	const char  *f_name;
 	} _tramps[1] = {
-		{ 1, 0, _tr0, "ultraSolve" }
+		{ 2, 0, _tr0, "ultraSolve" }
 		};
 
 static const char* evalstrs[] = {
@@ -351,7 +355,7 @@ int MLInstall(mlp) MLINK mlp;
 {
 	int _res;
 	_res = MLConnect(mlp);
-	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List]", (char *)"{ i }", 0);
+	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List,j_List]", (char *)"{ i, j }", 0);
 	if (_res) _res = _doevalstr( mlp, 0);
 	if (_res) _res = MLPutSymbol( mlp, "End");
 	if (_res) _res = MLFlush( mlp);

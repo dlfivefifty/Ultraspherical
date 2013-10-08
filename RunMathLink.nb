@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      8617,        226]
-NotebookOptionsPosition[      7860,        195]
-NotebookOutlinePosition[      8237,        212]
-CellTagsIndexPosition[      8194,        209]
+NotebookDataLength[     13877,        363]
+NotebookOptionsPosition[     12513,        311]
+NotebookOutlinePosition[     13122,        336]
+CellTagsIndexPosition[     13037,        331]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -24,12 +24,13 @@ Cell[TextData[{
   FontSlant->"Italic"],
  "\n\nFirst compile the source using \n\ncd Ultraspherical\nmcc ultrasolve.tm \
 UltrasphericalMathLink.cpp AdaptiveQR.cpp FilledBandedMatrix.cpp \
-MultiplicationMatrices.cpp RowAdder.cpp -o UltrasphericalMathLink\n\n\nWe can \
+UltrasphericalRowAdder.cpp RowAdder.cpp -o UltrasphericalMathLink\n\n\nWe can \
 now install the compiled file:"
 }], "Text",
  CellChangeTimes->{{3.5901060237703457`*^9, 3.590106025662459*^9}, {
   3.59010625648219*^9, 3.5901062775321074`*^9}, {3.590106315663307*^9, 
-  3.590106355251938*^9}, {3.5902061992112293`*^9, 3.59020620265703*^9}}],
+  3.590106355251938*^9}, {3.5902061992112293`*^9, 3.59020620265703*^9}, {
+  3.590221397500806*^9, 3.590221401832095*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -47,6 +48,121 @@ This installs UltrasphericalSolve[{a0,...,an}], which solves the ODE u\
 u(-1) = 1, u(1) = 0.\
 \>", "Text",
  CellChangeTimes->{{3.590106362239006*^9, 3.590106390811984*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"??", "UltrasphericalSolve"}]], "Input",
+ CellChangeTimes->{{3.59022143626326*^9, 3.5902214388631487`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["\<\"UltrasphericalSolve[{a0,...,an}] solves the ODE u'' + (a0 \
+T0(x) + ... + an Tn(x)) u = 0, u(-1) = 1, u(1) = 0.\"\>", "MSG"]], "Print", \
+"PrintUsage",
+ CellChangeTimes->{3.590221439430098*^9},
+ CellTags->"Info3590261039-6179092"],
+
+Cell[BoxData[
+ InterpretationBox[GridBox[{
+    {GridBox[{
+       {
+        RowBox[{
+         RowBox[{"UltrasphericalSolve", "[", "i_List", "]"}], ":=", 
+         RowBox[{"ExternalCall", "[", 
+          RowBox[{
+           RowBox[{"LinkObject", "[", 
+            
+            RowBox[{"\<\"/Users/solver/Projects/Ultraspherical//\
+Ultraspherical/UltrasphericalMathLink\"\>", ",", "23382", ",", "6"}], "]"}], 
+           ",", 
+           RowBox[{"CallPacket", "[", 
+            RowBox[{"0", ",", 
+             RowBox[{"{", "i", "}"}]}], "]"}]}], "]"}]}]},
+       {" "},
+       {
+        RowBox[{
+         RowBox[{"UltrasphericalSolve", "[", 
+          RowBox[{"i_List", ",", "j_List"}], "]"}], ":=", 
+         RowBox[{"ExternalCall", "[", 
+          RowBox[{
+           RowBox[{"LinkObject", "[", 
+            
+            RowBox[{"\<\"/Users/solver/Projects/Ultraspherical//\
+Ultraspherical/UltrasphericalMathLink\"\>", ",", "29241", ",", "7"}], "]"}], 
+           ",", 
+           RowBox[{"CallPacket", "[", 
+            RowBox[{"0", ",", 
+             RowBox[{"{", 
+              RowBox[{"i", ",", "j"}], "}"}]}], "]"}]}], "]"}]}]}
+      },
+      BaselinePosition->{Baseline, {1, 1}},
+      GridBoxAlignment->{
+       "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+        "RowsIndexed" -> {}},
+      GridBoxItemSize->{"Columns" -> {{
+           Scaled[0.999]}}, "ColumnsIndexed" -> {}, "Rows" -> {{1.}}, 
+        "RowsIndexed" -> {}}]}
+   },
+   BaselinePosition->{Baseline, {1, 1}},
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}}],
+  Definition[$CellContext`UltrasphericalSolve],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.590221439485673*^9},
+ CellTags->"Info3590261039-6179092"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UltrasphericalSolve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.590221443657592*^9, 3.590221452082155*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0.4690677145109066`", ",", 
+   RowBox[{"-", "0.5120815458166542`"}], ",", "0.022810886566049324`", ",", 
+   "0.006202814074498598`", ",", "0.009692238756204988`", ",", 
+   "0.006861549602323292`", ",", 
+   RowBox[{"-", "0.0011525893812405492`"}], ",", 
+   RowBox[{"-", "0.001083608003998867`"}], ",", 
+   RowBox[{"-", "0.0005007532869198649`"}], ",", "0.0000759817230581789`", 
+   ",", "0.00008884641450707624`", ",", "0.00002996922960895692`", ",", 
+   RowBox[{"-", "5.12869266120596`*^-6"}], ",", 
+   RowBox[{"-", "5.51804888027529`*^-6"}], ",", 
+   RowBox[{"-", "1.4752267525726467`*^-6"}], ",", "3.0780537658296763`*^-7", 
+   ",", "2.7777673443474077`*^-7", ",", "6.044746311164879`*^-8", ",", 
+   RowBox[{"-", "1.574709176556414`*^-8"}], ",", 
+   RowBox[{"-", "1.1748975719049219`*^-8"}], ",", 
+   RowBox[{"-", "2.090277585148545`*^-9"}], ",", "6.873504232297827`*^-10", 
+   ",", "4.2765612660113236`*^-10", ",", "6.158182326457806`*^-11", ",", 
+   RowBox[{"-", "2.5925384585049288`*^-11"}], ",", 
+   RowBox[{"-", "1.3632853589331498`*^-11"}], ",", 
+   RowBox[{"-", "1.549728856916012`*^-12"}], ",", "8.570538544441554`*^-13", 
+   ",", "3.857706929514513`*^-13", ",", "3.302313589419707`*^-14", ",", 
+   RowBox[{"-", "2.5155181600210253`*^-14"}], ",", 
+   RowBox[{"-", "9.794085823719291`*^-15"}], ",", 
+   RowBox[{"-", "5.762421762718035`*^-16"}], ",", "6.628163617236839`*^-16", 
+   ",", "2.2503014789698577`*^-16", ",", "7.340084801898365`*^-18", ",", 
+   RowBox[{"-", "1.5826242680734256`*^-17"}], ",", 
+   RowBox[{"-", "4.712134376123079`*^-18"}], ",", 
+   RowBox[{"-", "2.9529584033945605`*^-20"}], ",", "3.451665956204374`*^-19", 
+   ",", "9.045276205747795`*^-20", ",", 
+   RowBox[{"-", "1.9016823460508375`*^-21"}], ",", 
+   RowBox[{"-", "5.832900866516977`*^-19"}], ",", 
+   RowBox[{"-", "1.346766405838833`*^-19"}], ",", "1.1644758541767817`*^-21", 
+   ",", "3.2415040688068685`*^-23"}], "}"}]], "Output",
+ CellChangeTimes->{{3.590221432231658*^9, 3.590221452539077*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -204,29 +320,50 @@ StyleDefinitions->"Default.nb"
 
 (* Internal cache information *)
 (*CellTagsOutline
-CellTagsIndex->{}
+CellTagsIndex->{
+ "Info3590261039-6179092"->{
+  Cell[1990, 59, 259, 5, 40, "Print",
+   CellTags->"Info3590261039-6179092"],
+  Cell[2252, 66, 1792, 48, 120, "Print",
+   CellTags->"Info3590261039-6179092"]}
+ }
 *)
 (*CellTagsIndex
-CellTagsIndex->{}
+CellTagsIndex->{
+ {"Info3590261039-6179092", 12854, 323}
+ }
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[557, 20, 605, 11, 201, "Text"],
-Cell[1165, 33, 335, 8, 28, "Input"],
-Cell[1503, 43, 258, 5, 49, "Text"],
+Cell[557, 20, 654, 12, 201, "Text"],
+Cell[1214, 34, 335, 8, 28, "Input"],
+Cell[1552, 44, 258, 5, 49, "Text"],
 Cell[CellGroupData[{
-Cell[1786, 52, 757, 14, 28, "Input"],
-Cell[2546, 68, 2864, 50, 207, "Output"]
+Cell[1835, 53, 130, 2, 28, "Input"],
+Cell[CellGroupData[{
+Cell[1990, 59, 259, 5, 40, "Print",
+ CellTags->"Info3590261039-6179092"],
+Cell[2252, 66, 1792, 48, 120, "Print",
+ CellTags->"Info3590261039-6179092"]
+}, Open  ]]
 }, Open  ]],
-Cell[5425, 121, 175, 2, 30, "Text"],
-Cell[5603, 125, 127, 2, 28, "Input"],
 Cell[CellGroupData[{
-Cell[5755, 131, 1471, 40, 131, "Input"],
-Cell[7229, 173, 230, 6, 28, "Output"]
+Cell[4093, 120, 279, 7, 28, "Input"],
+Cell[4375, 129, 2027, 34, 222, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[7496, 184, 196, 4, 28, "Input"],
-Cell[7695, 190, 149, 2, 66, "Output"]
+Cell[6439, 168, 757, 14, 28, "Input"],
+Cell[7199, 184, 2864, 50, 207, "Output"]
+}, Open  ]],
+Cell[10078, 237, 175, 2, 30, "Text"],
+Cell[10256, 241, 127, 2, 28, "Input"],
+Cell[CellGroupData[{
+Cell[10408, 247, 1471, 40, 131, "Input"],
+Cell[11882, 289, 230, 6, 28, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12149, 300, 196, 4, 28, "Input"],
+Cell[12348, 306, 149, 2, 32, "Output"]
 }, Open  ]]
 }
 ]
