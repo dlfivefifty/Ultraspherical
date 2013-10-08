@@ -117,37 +117,54 @@ long ConversionRowAdder::rightIndex(unsigned long row)
 }
 
 
-
-ToeplitzRowAdder::ToeplitzRowAdder(vector<double> *ain)
+ToeplitzRowAdder::ToeplitzRowAdder(double *ain, unsigned long l, long ind)
 {
     //Assume symmetric
+    length =l;
     a = ain;
+    index = ind;
+}
+
+ToeplitzRowAdder::ToeplitzRowAdder(vector<double> *ain, long ind)
+{
+    //Assume symmetric
+    length = ain->size();
+    
+    a = (double *)malloc(length*sizeof(double));
+    index = ind;
+    
+    int k=0;
+    for (double i : *ain) {
+        a[k] = i;
+        k++;
+    }
+
 }
 
 double ToeplitzRowAdder::getEntry(long row, long col)
 {
-    long ind = abs(row - col);
+    long ind = row - col + index;
     
-    if (ind >= a->size())
+    if (ind >= length)
         return 0;
     else if (ind == 0)
-        return (*a)[ind];
+        return a[ind];
     else
-        return .5*(*a)[ind];
+        return .5*a[ind];
 }
 
 
 long ToeplitzRowAdder::leftIndex(unsigned long row)
 {
-    if (row + 1 < a->size())
+    if (row < index)
         return 0;
     else
-        return row+1-a->size();
+        return row-index;
 }
 
 long ToeplitzRowAdder::rightIndex(unsigned long row)
 {
-    return row-1+a->size();
+    return row+length+index;
 }
 
 
@@ -189,6 +206,29 @@ long HankelRowAdder::rightIndex(unsigned long row)
 }
 
 
+RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ain)
+{
+    if (lambda == 0) {
+        unsigned long length = 2*ain->size() - 1;
+        
+        
+        double *a = (double *)malloc(length*sizeof(double));
+        long index = ain->size() - 1;
+        
+        int k=0;
+        for (double i : *ain) {
+            a[index + k] = i;
+            a[index - k] = i;
+            k++;
+        }
+        
+        return new ToeplitzRowAdder(a, length, index);
+    }
+    
+    throw "MultiplicationToeplitzRowAdder not defined";
+}
+
+
 RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 {
     if (lambda ==0) {
@@ -201,7 +241,9 @@ RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
             ha->push_back(*it);
         }
         
-        PlusRowAdder *pl = new PlusRowAdder(new ToeplitzRowAdder(args));
+        
+        
+        PlusRowAdder *pl = new PlusRowAdder(MultiplicationToeplitzRowAdder(lambda,args));
         pl->push_back(new ShiftRowAdder(new HankelRowAdder(ha),-1));
         
         return pl;

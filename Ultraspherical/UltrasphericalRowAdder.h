@@ -42,10 +42,13 @@ public:
 class ToeplitzRowAdder : public RowAdder
 {
     //TODO: Not really Toeplitz
-    vector<double> *a;
+    double *a;
+    unsigned long length;
+    long index;
     
 public:
-    ToeplitzRowAdder(vector<double> *a);
+    ToeplitzRowAdder(vector<double> *, long);
+    ToeplitzRowAdder(double *, unsigned long, long);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
