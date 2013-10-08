@@ -201,8 +201,11 @@ int main(int argc, const char * argv[])
     
 
     
-    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL, &args);
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&args, &args);
+
+    
     drbnd->increaseSize();
+    drbnd->print();
     
     
     

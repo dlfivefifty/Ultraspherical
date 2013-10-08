@@ -278,7 +278,7 @@ RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
             k++;
         }
         
-        return new ShiftRowAdder(new HankelRowAdder(a, length),-1);
+        return new HankelRowAdder(a, length);
         
     }
     
@@ -311,7 +311,7 @@ FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a, ve
     PlusRowAdder *pl =
     new   PlusRowAdder(new DerivativeRowAdder(0,2));
     if (a != NULL)
-        pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new DerivativeRowAdder(0,1)));
+        pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new TimesRowAdder(MultiplicationRowAdder(1,a),new DerivativeRowAdder(0,1))));
     
     if (b!= NULL)
         pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,b)));
