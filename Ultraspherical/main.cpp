@@ -16,52 +16,154 @@
 #include <math.h>
 
 
+//void smallbandExample()
+//{
+//    cout << "SMALL BAND" <<endl;
+//    
+//    clock_t t1; clock_t t2;
+//    
+//    vector<double> b;
+//    
+//    for(long i = 0; i < 10; i++)
+//        b.push_back(1);
+//    
+//    cout<<"{"<<endl;        
+//    for(long n = 0; n < 41; n ++)
+//    {
+//        
+//        vector<double> a;         
+//        a.push_back(10); a.push_back(2); a.push_back(3);        
+//        
+//        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL,&a);
+//        
+//        
+//        //        drbnd.print();
+//        
+//        
+//        drbnd->increaseSize();
+//        
+//        //        
+//        for(long i = 0; i < n; i++)
+//            b.push_back(1);
+//        //    printvec(b);
+//        
+//        t1 = clock();                
+//        
+//        vector<double> c = QRSolve(drbnd,b);
+//        
+//        t2 = clock();
+//        //            printvec(b);
+//        float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
+//        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;  
+//        
+//        for(long i = 0; i < 50000; i++)
+//            b.push_back(1);
+//        
+//        delete drbnd;
+//    }
+//    cout<<"}"<<endl;
+//}
+
+
+void toUSeries(double *fin, long fn)
+{
+    switch (fn) {
+        case 0:
+        case 1:
+            break;
+            
+        case 2:
+            fin[1] = .5*fin[1];
+            break;
+            
+        default:
+            fin[0] = fin[0] - .5*fin[2];
+            
+            for (int i = 1; i < fn-2; ++i) {
+                fin[i] = .5*fin[i] - .5*fin[i+2];
+            }
+            
+            fin[fn-2] = .5*fin[fn-2];
+            fin[fn-1] = .5*fin[fn-1];
+            break;
+    }
+    
+}
+
+void toC2Series(double *fin, long fn)
+{
+    toUSeries(fin, fn);
+    
+    switch (fn) {
+        case 0:
+        case 1:
+            break;
+            
+        case 2:
+            fin[1] = .5*fin[1];
+            break;
+            
+        default:
+            for (int i = 0; i < fn-2; ++i) {
+                fin[i] = 1/((double) i+1)*fin[i] -  1/((double) i+3)*fin[i+2];
+            }
+            
+            fin[fn-2] = 1/((double) fn-1)*fin[fn-2];
+            fin[fn-1] = 1/((double) fn)*fin[fn-1];
+            break;
+    }
+    
+}
+
+
 void smallbandExample()
 {
     cout << "SMALL BAND" <<endl;
     
     clock_t t1; clock_t t2;
     
+    long n = 40;
+    double bin[n];
+    
+    for (int i = 0; i < n; ++i)
+        bin[i] = 1.;
+    
+    toC2Series(bin, n);
+    
+    
     vector<double> b;
     
-    for(long i = 0; i < 10; i++)
-        b.push_back(1);
+    b.push_back(1);
+    b.push_back(1);
     
-    cout<<"{"<<endl;        
-    for(long n = 0; n < 41; n ++)
-    {
-        
-        vector<double> a;         
-        a.push_back(10); a.push_back(2); a.push_back(3);        
-        
-        FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL,&a);
-        
-        
-        //        drbnd.print();
-        
-        
-        drbnd->increaseSize();
-        
-        //        
-        for(long i = 0; i < n; i++)
-            b.push_back(1);
-        //    printvec(b);
-        
-        t1 = clock();                
-        
-        vector<double> c = QRSolve(drbnd,b);
-        
-        t2 = clock();
-        //            printvec(b);
-        float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
-        cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;  
-        
-        for(long i = 0; i < 50000; i++)
-            b.push_back(1);
-        
-        delete drbnd;
-    }
-    cout<<"}"<<endl;
+    for(long i = 0; i < n; i++)
+        b.push_back(bin[i]);
+    
+    printvec(b);
+    
+    vector<double> a;
+    a.push_back(10); a.push_back(2); a.push_back(3);
+    
+    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(NULL,&a);
+    
+    
+    //        drbnd.print();
+    
+    
+    drbnd->increaseSize();
+    
+    t1 = clock();
+    
+    vector<double> c = QRSolve(drbnd,b);
+    
+    t2 = clock();
+    //            printvec(b);
+    float tottime = ((float)(t2-t1)/CLOCKS_PER_SEC);
+    cout<<"{"<<c.size()<<", "<<tottime<<"},"<<endl;
+    
+    printvec(c);
+    
+    delete drbnd;
 }
 
 void cosbandExample()
@@ -205,7 +307,7 @@ int main(int argc, const char * argv[])
 
     
     drbnd->increaseSize();
-    drbnd->print();
+//    drbnd->print();
     
     
     

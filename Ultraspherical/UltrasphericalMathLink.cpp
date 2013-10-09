@@ -111,12 +111,14 @@ void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, d
     
     double cret[c.size()];
     
-    for(int i = 0; i < c.size(); i++)
+    for(long i = 0; i < c.size(); i++)
         cret[i] = c[i];
     
     
     
     MLPutReal64List(stdlink, cret, (int)c.size());
+    
+    delete drbnd;
     
     return ;
 //    return c[0];
