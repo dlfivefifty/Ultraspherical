@@ -10,7 +10,7 @@
 
 #include "FilledBandedMatrix.h" 
 #include "UltrasphericalRowAdder.h"
-
+#include "OlversAlgorithm.h"
 #include "AdaptiveQR.h"
 #include <time.h>
 #include <math.h>
@@ -329,6 +329,10 @@ int main(int argc, const char * argv[])
 //    cosbandExample();
 
 
+    
+    IdentityOperator()->print();
+    
+    RSRowAdder().print();
     
     return 0;
 }
