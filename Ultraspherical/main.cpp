@@ -330,7 +330,7 @@ int main(int argc, const char * argv[])
 
 
     
-    IdentityOperator()->print();
+    ConstantOperator(1)->print();
     
     RSRowAdder().print();
     

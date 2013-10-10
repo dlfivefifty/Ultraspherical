@@ -12,7 +12,7 @@
 #include <iostream>
 #include "UltrasphericalRowAdder.h"
 
-RowAdder *IdentityOperator();
+RowAdder *ConstantOperator(double);
 
 class RSRowAdder : public RowAdder
 {
@@ -24,5 +24,8 @@ public:
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
+
+RowAdder *RSListRowAdder(double *, double *, unsigned long n);
+
 
 #endif /* defined(__Ultraspherical__OlversAlgorithm__) */

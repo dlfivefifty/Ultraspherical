@@ -11,11 +11,11 @@
 
 
 
-RowAdder *IdentityOperator()
+RowAdder *ConstantOperator(double c)
 {
     double *one = (double *)malloc(sizeof(double));
     
-    *one = 1;
+    *one = c;
     
     return new ToeplitzRowAdder(one, 1,0);
 }
@@ -59,7 +59,19 @@ long RSRowAdder::rightIndex(unsigned long row)
 }
 
 
-
+RowAdder *RSListRowAdder(double *a, double *s, unsigned long n)
+{
+    if(n < 1)
+        return NULL;
+        
+    
+    PlusRowAdder *pl = new PlusRowAdder(new DoubleTimesRowAdder(a[0], new RSRowAdder()));
+    pl->push_back(ConstantOperator(s[0]));
+    
+    
+    
+    return pl;
+}
 
 
 

@@ -54,6 +54,16 @@ public:
     virtual long rightIndex(unsigned long);
 };
 
+class DoubleTimesRowAdder : public RowAdder
+{
+    double a;
+    RowAdder *b;
+public:
+    DoubleTimesRowAdder(double a, RowAdder *bb);
+    virtual double getEntry(long,long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
 
 
 class ShiftRowAdder : public RowAdder

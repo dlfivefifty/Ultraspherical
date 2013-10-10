@@ -140,6 +140,30 @@ double TimesRowAdder::getEntry(long k, long j)
 }
 
 
+DoubleTimesRowAdder::DoubleTimesRowAdder(double aa, RowAdder *bb)
+{
+    a = aa;
+    b = bb;
+}
+
+
+
+
+long DoubleTimesRowAdder::leftIndex(unsigned long row)
+{
+    return b->leftIndex(row);
+}
+
+long DoubleTimesRowAdder::rightIndex(unsigned long row)
+{
+    return b->rightIndex(row);
+}
+double DoubleTimesRowAdder::getEntry(long k, long j)
+{
+    return a*b->getEntry(k, j);
+}
+
+
 
 ShiftRowAdder::ShiftRowAdder(RowAdder *a, long s)
 {
