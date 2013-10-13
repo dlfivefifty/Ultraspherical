@@ -283,22 +283,28 @@ FilledRow *FilledRow::operator+(FilledRow *row)
     return ret;
 }
 
-
-FilledBandedOperator::FilledBandedOperator(const int low, Operator *a)
+SavedOperator::SavedOperator(Operator *a)
 {
-    lowerIndex = low;
     adder = a;
-    
-//    increaseSize();
 }
 
-
-FilledBandedOperator::~FilledBandedOperator()
+SavedOperator::~SavedOperator()
 {
     for (unsigned long i = 0; i < rows.size(); i++) {
         delete rows[i];
     }
 }
+
+
+
+FilledBandedOperator::FilledBandedOperator(const int low, Operator *a) : SavedOperator(a)
+{
+    lowerIndex = low;
+    
+//    increaseSize();
+}
+
+
 
 
 
@@ -315,7 +321,7 @@ void FilledBandedOperator::setLower(int low)
 }
 
 
-unsigned long FilledBandedOperator::size()
+unsigned long SavedOperator::size()
 {
     return rows.size();
 }
@@ -330,7 +336,7 @@ unsigned long FilledBandedOperator::columnSize(unsigned long col)
     return col - lower() + 1;
 }
 
-long FilledBandedOperator::leftIndex(unsigned long row)
+long SavedOperator::leftIndex(unsigned long row)
 {
     long li = (*this)[row]->leftIndex();
     
@@ -340,13 +346,13 @@ long FilledBandedOperator::leftIndex(unsigned long row)
         return 0;
 }
 
-long FilledBandedOperator::rightIndex(unsigned long row)
+long SavedOperator::rightIndex(unsigned long row)
 {
     return (*this)[row]->rightIndex();
 }
 
 
-FilledRow *FilledBandedOperator::getRow(unsigned long i,bool increasesize)
+FilledRow *SavedOperator::getRow(unsigned long i,bool increasesize)
 {    
     if(i >= size()) {
         if(increasesize) {
@@ -361,28 +367,28 @@ FilledRow *FilledBandedOperator::getRow(unsigned long i,bool increasesize)
     }
 }
 
-FilledRow * FilledBandedOperator::operator[] (unsigned long i)
+FilledRow * SavedOperator::operator[] (unsigned long i)
 {
     return getRow(i,false);
 }
 
-double FilledBandedOperator::getEntry(unsigned long i,unsigned long j)
+double SavedOperator::getEntry(unsigned long i,unsigned long j)
 {    
     return (*(*this)[i])[j];
 }
 
-double FilledBandedOperator::getEntry(unsigned long i,unsigned long j,bool increasesize)
+double SavedOperator::getEntry(unsigned long i,unsigned long j,bool increasesize)
 {    
     return (*getRow(i, increasesize))[j];
 }
 
 
-void FilledBandedOperator::increaseSize()
+void SavedOperator::increaseSize()
 {
     rows.push_back(createRow(size()));
 }
 
-void FilledBandedOperator::increaseSize(unsigned long i)
+void SavedOperator::increaseSize(unsigned long i)
 {
     for(unsigned long j = size(); j <= i; j++)
         increaseSize();
@@ -405,7 +411,7 @@ Operator * FilledBandedOperator::getAdder()
 }
 
 
-FilledRow *FilledBandedOperator::createRow(unsigned long k)
+FilledRow *SavedOperator::createRow(unsigned long k)
 {
     
     
@@ -444,7 +450,7 @@ void FilledBandedOperator::setEntry(unsigned long i,unsigned long j,double val,b
 
 
 
-void FilledBandedOperator::print()
+void SavedOperator::print()
 {
 
     for(unsigned long i = 0; i < size()+3; i++)

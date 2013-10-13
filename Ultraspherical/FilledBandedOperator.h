@@ -81,38 +81,47 @@ public:
 
 
 
-
-
-
-class FilledBandedOperator : public Operator
+class SavedOperator : public Operator
 {
-    vector<FilledRow *> rows;
-    int lowerIndex;
+public:
     Operator *adder;
+    vector<FilledRow *> rows;
+    
+    SavedOperator(Operator *);
+    ~SavedOperator();
+    
+    FilledRow *createRow(unsigned long);
+    unsigned long size();    
+    void increaseSize();
+    void increaseSize(unsigned long);
+    double getEntry(unsigned long,unsigned long);
+    double getEntry(unsigned long,unsigned long,bool);
+    
+    FilledRow *getRow(unsigned long,bool);
+    FilledRow *operator[] (unsigned long);
+    
+    long leftIndex(unsigned long);
+    long rightIndex(unsigned long);
+    void print();    
+};
+
+
+
+
+class FilledBandedOperator : public SavedOperator
+{
+    int lowerIndex;
     
     
 public:
     FilledBandedOperator(const int, Operator *add);
-    ~FilledBandedOperator();
     int lower();
     void setLower(int);
     void dropFirst(unsigned long);
-    unsigned long size();
     unsigned long columnSize();
     unsigned long columnSize(unsigned long);
-    FilledRow *createRow(unsigned long);
-    void increaseSize();   
-    void increaseSize(unsigned long);
-    double getEntry(unsigned long,unsigned long);
-    double getEntry(unsigned long,unsigned long,bool);
     void setEntry(unsigned long,unsigned long,double);
     void setEntry(unsigned long,unsigned long,double,bool);
-    FilledRow *getRow(unsigned long,bool);
-    FilledRow *operator[] (unsigned long);
-    void print();
-    
-    long leftIndex(unsigned long);
-    long rightIndex(unsigned long);
     
     void push_back(FilledRow *);
     
