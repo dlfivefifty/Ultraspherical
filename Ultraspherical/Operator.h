@@ -26,7 +26,9 @@ public:
     virtual long rightIndex(unsigned long);
     
     virtual Operator *operator+(Operator *);
+    virtual Operator *operator*(Operator *);
     virtual Operator *operator*(double);
+    virtual vector<double> *operator*(vector<double> *);
     
     void print();
 };

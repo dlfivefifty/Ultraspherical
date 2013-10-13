@@ -259,20 +259,120 @@ void airyExample()
     }
 }
 
+vector<double> *vectorTimes(vector<double> *a, double c)
+{
+    vector<double> *ret = new vector<double>;
+    for (double en : *a)
+    {
+        ret->push_back(c*en);
+    }
+    
+    return ret;
+}
+
+vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
+{
+    vector<double> *ret = new vector<double>;
+    
+    unsigned long n = a->size(),m = b->size();
+    
+    for (unsigned long i = 0; i < max(n,m); ++i) {
+        double en = 0;
+        if(i < n)
+            en += (*a)[i];
+        
+        if (i < m)
+            en += (*a)[i];
+        
+        ret->push_back(en);
+    }
+    
+    return ret;
+}
+
+
+
 void olversAlgorithm()
 {
 //    ConstantOperator(1)->print();
 
-    Operator *op = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
-    op = *op + (*ConstantOperator(1))*(0);
+#define OpLength 10
+    Operator *A[OpLength];
+    Operator *B[OpLength];
     
-    op->print();
+    Operator *S = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
+    Operator *I = new SavedOperator(ConstantOperator(1));
     
-    for (int i =0; i < 5; ++i) {
-        cout << op->leftIndex(i) <<", " << op->rightIndex(i) << endl;
+    for (unsigned long i = 0; i < OpLength; ++i) {
+        A[i] = (*S) + (*I)*S->getEntry(i,i);
+        
+//        A[i]->print();
     }
     
-    delete op;
+#define beta(k) S->getEntry(k,k+1)
+#define gamma(k) S->getEntry(k,k-1)
+    
+    B[0] = A[0];
+    B[1] = *((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1));
+//    cout << "1: " << endl; // << beta(0) << " " << gamma(2) << endl;
+//    B[1]->print();
+//    cout << endl;
+    
+    for (unsigned long i = 2; i < OpLength; ++i) {
+        B[i] = *((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i));
+        
+//        cout << i << ":" <<endl;
+//        B[i]->print();
+//        cout << endl;
+    }
+    
+    vector<double> f;
+    
+    f.push_back(0.0625);
+    f.push_back(0.0625);
+    
+    
+    vector<double> *r[OpLength];
+    
+    r[0] = &f;
+    r[0] = vectorTimes(r[0], gamma(1));
+    r[1] = vectorTimes(r[0], -1);
+    
+    for (unsigned long i = 2; i < OpLength; ++i) {
+        r[i - 1] =  vectorTimes(r[i-1], gamma(i));
+        r[i] = vectorTimes(r[i-1], -1);
+    }
+    
+//    B[0]->print();
+//    B[1]->print();
+    
+    for (unsigned long i = 0; i < OpLength; ++i) {
+        printvec(*r[i]);
+    }
+    
+    
+    
+    int i = OpLength - 2;
+    
+
+    ConstantTimesOperator(gamma(i+1),B[i]).print();
+    printvec(*r[i]);
+    
+    vector<double> u = QRSolve(new FilledBandedOperator(-1-i,new ConstantTimesOperator(gamma(i+1),B[i])), *r[i]);
+    
+    
+    
+    
+    
+    cout<<endl;
+    printvec(u);
+    
+    
+    
+    for (unsigned long i = 0; i < OpLength; ++i) {
+//        printvec(*r[i]);
+        delete A[i];
+    }
 }
 
 

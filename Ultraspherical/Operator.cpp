@@ -59,6 +59,32 @@ Operator *Operator::operator+(Operator *a)
     return pl;
 }
 
+Operator *Operator::operator*(Operator *a)
+{
+    return new TimesOperator(this,a);
+}
+
+vector<double> *Operator::operator*(vector<double> *a)
+{
+    vector<double> *ret = new vector<double>;
+    
+    unsigned long n = a->size();
+    
+    for (unsigned long i = 0; leftIndex(i) < n; ++i) {
+        double en = 0;
+        
+        for (unsigned long j = leftIndex(i); j < n && j <= rightIndex(i); ++j) {
+            en += getEntry(i,j)*(*a)[j];
+        }
+        
+        
+        ret->push_back(en);
+    }
+    
+    return ret;
+}
+
+
 Operator *Operator::operator*(double c)
 {
     return new ConstantTimesOperator(c,this);

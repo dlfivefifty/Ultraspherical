@@ -105,6 +105,7 @@ public:
     void print();
     
     virtual Operator *operator+(Operator *);
+    virtual Operator *operator*(Operator *);
     virtual Operator *operator*(double);
 };
 

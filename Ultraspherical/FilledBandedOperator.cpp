@@ -369,7 +369,7 @@ FilledRow *SavedOperator::getRow(unsigned long i,bool increasesize)
 
 FilledRow * SavedOperator::operator[] (unsigned long i)
 {
-    return getRow(i,false);
+    return getRow(i,true);
 }
 
 double SavedOperator::getEntry(unsigned long i,unsigned long j)
@@ -401,6 +401,11 @@ Operator *SavedOperator::operator+(Operator *a)
     pl->push_back(a);
     
     return new SavedOperator(pl);
+}
+
+Operator *SavedOperator::operator*(Operator *a)
+{
+    return new SavedOperator(new TimesOperator(this,a));
 }
 
 Operator *SavedOperator::operator*(double c)
