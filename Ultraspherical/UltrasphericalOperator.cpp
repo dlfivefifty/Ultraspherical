@@ -1,12 +1,12 @@
 
-#include "UltrasphericalRowAdder.h"
+#include "UltrasphericalOperator.h"
 #include <math.h>
 #include "AdaptiveQR.h"
 // TODO: Better to construct the Hankel vector in reverse so that it can be pop_backed as the ConvertMult vector is formed.
 
 
 
-DerivativeRowAdder::DerivativeRowAdder(unsigned int l, unsigned int m)
+DerivativeOperator::DerivativeOperator(unsigned int l, unsigned int m)
 {
     from = l;
     to = m;
@@ -16,7 +16,7 @@ long factorial(long x, long result = 1) {
     if (x == 1 || x ==0) return 1; else return factorial(x - 1, x * result);
 }
 
-double DerivativeRowAdder::getEntry(long row, long col)
+double DerivativeOperator::getEntry(long row, long col)
 {
     if (from == 0) {
         if (row == col - to)
@@ -33,24 +33,24 @@ double DerivativeRowAdder::getEntry(long row, long col)
 }
 
 
-long DerivativeRowAdder::leftIndex(unsigned long row)
+long DerivativeOperator::leftIndex(unsigned long row)
 {
     return row+2;
 }
 
-long DerivativeRowAdder::rightIndex(unsigned long row)
+long DerivativeOperator::rightIndex(unsigned long row)
 {
     return row+2;
 }
 
 
-ConversionRowAdder::ConversionRowAdder(unsigned int l, unsigned int m)
+ConversionOperator::ConversionOperator(unsigned int l, unsigned int m)
 {
     from = l;
     to = m;
 }
 
-double ConversionRowAdder::getEntry(long row, long col)
+double ConversionOperator::getEntry(long row, long col)
 {
     double c = (double) col;
     
@@ -106,18 +106,18 @@ double ConversionRowAdder::getEntry(long row, long col)
 }
 
 
-long ConversionRowAdder::leftIndex(unsigned long row)
+long ConversionOperator::leftIndex(unsigned long row)
 {
     return row;
 }
 
-long ConversionRowAdder::rightIndex(unsigned long row)
+long ConversionOperator::rightIndex(unsigned long row)
 {
     return row + (to - from)*2;
 }
 
 
-ToeplitzRowAdder::ToeplitzRowAdder(double *ain, unsigned long l, long ind)
+ToeplitzOperator::ToeplitzOperator(double *ain, unsigned long l, long ind)
 {
     //Assume symmetric
     length =l;
@@ -125,7 +125,7 @@ ToeplitzRowAdder::ToeplitzRowAdder(double *ain, unsigned long l, long ind)
     index = ind;
 }
 
-ToeplitzRowAdder::ToeplitzRowAdder(vector<double> *ain, long ind)
+ToeplitzOperator::ToeplitzOperator(vector<double> *ain, long ind)
 {
     //Assume symmetric
     length = ain->size();
@@ -141,7 +141,7 @@ ToeplitzRowAdder::ToeplitzRowAdder(vector<double> *ain, long ind)
 
 }
 
-double ToeplitzRowAdder::getEntry(long row, long col)
+double ToeplitzOperator::getEntry(long row, long col)
 {
     long ind = row - col + index;
     
@@ -152,7 +152,7 @@ double ToeplitzRowAdder::getEntry(long row, long col)
 }
 
 
-long ToeplitzRowAdder::leftIndex(unsigned long row)
+long ToeplitzOperator::leftIndex(unsigned long row)
 {
     if (row < index)
         return 0;
@@ -160,13 +160,13 @@ long ToeplitzRowAdder::leftIndex(unsigned long row)
         return row-index;
 }
 
-long ToeplitzRowAdder::rightIndex(unsigned long row)
+long ToeplitzOperator::rightIndex(unsigned long row)
 {
     return row+length+index;
 }
 
 
-HankelRowAdder::HankelRowAdder(vector<double> *ain)
+HankelOperator::HankelOperator(vector<double> *ain)
 {
     //Assume symmetric
     length = ain->size();
@@ -180,13 +180,13 @@ HankelRowAdder::HankelRowAdder(vector<double> *ain)
     }
 }
 
-HankelRowAdder::HankelRowAdder(double *ain, unsigned long l)
+HankelOperator::HankelOperator(double *ain, unsigned long l)
 {
     a = ain;
     length = l;
 }
 
-double HankelRowAdder::getEntry(long row, long col)
+double HankelOperator::getEntry(long row, long col)
 {
     if (row < 0)
         return 0;
@@ -200,7 +200,7 @@ double HankelRowAdder::getEntry(long row, long col)
 }
 
 
-long HankelRowAdder::leftIndex(unsigned long row)
+long HankelOperator::leftIndex(unsigned long row)
 {
     if (row < length)
         return 0;
@@ -208,7 +208,7 @@ long HankelRowAdder::leftIndex(unsigned long row)
         return row;
 }
 
-long HankelRowAdder::rightIndex(unsigned long row)
+long HankelOperator::rightIndex(unsigned long row)
 {
     if (row <= length)
         return length - 1;
@@ -218,7 +218,7 @@ long HankelRowAdder::rightIndex(unsigned long row)
 }
 
 
-RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ain)
+Operator *MultiplicationToeplitzOperator(unsigned int lambda, vector<double> *ain)
 {
     if (lambda <= 1) {
         unsigned long length = 2*ain->size() - 1;
@@ -233,13 +233,13 @@ RowAdder *MultiplicationToeplitzRowAdder(unsigned int lambda, vector<double> *ai
             k++;
         }
         
-        return new ToeplitzRowAdder(a, length, index);
+        return new ToeplitzOperator(a, length, index);
     }
     
-    throw "MultiplicationToeplitzRowAdder not defined";
+    throw "MultiplicationToeplitzOperator not defined";
 }
 
-RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
+Operator *MultiplicationHankelOperator(unsigned int lambda, vector<double> *ain)
 {
     if (lambda == 0) {
         if (ain->size() <= 1)
@@ -259,7 +259,7 @@ RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
             k++;
         }
         
-        return new ShiftRowAdder(new HankelRowAdder(a, length),-1);
+        return new ShiftOperator(new HankelOperator(a, length),-1);
     } else if (lambda == 1) {
         if (ain->size() <= 2)
             return NULL;
@@ -278,25 +278,25 @@ RowAdder *MultiplicationHankelRowAdder(unsigned int lambda, vector<double> *ain)
             k++;
         }
         
-        return new HankelRowAdder(a, length);
+        return new HankelOperator(a, length);
         
     }
     
-    throw "MultiplicationHankelRowAdder not defined";
+    throw "MultiplicationHankelOperator not defined";
 }
 
 
-RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
+Operator *MultiplicationOperator(unsigned int lambda, vector<double> *args)
 {
-    RowAdder *toep = MultiplicationToeplitzRowAdder(lambda,args);
-    RowAdder *han = MultiplicationHankelRowAdder(lambda,args);
+    Operator *toep = MultiplicationToeplitzOperator(lambda,args);
+    Operator *han = MultiplicationHankelOperator(lambda,args);
     
     if (han == NULL) {
         return toep;
     }
     
     
-    PlusRowAdder *pl = new PlusRowAdder(toep);
+    PlusOperator *pl = new PlusOperator(toep);
     pl->push_back(han);
     
     return pl;
@@ -306,18 +306,18 @@ RowAdder *MultiplicationRowAdder(unsigned int lambda, vector<double> *args)
 
 
 
-FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *a, vector<double> *b)
+FilledBandedOperator *DirichletD2ConvertMultiplicationMatrix(vector<double> *a, vector<double> *b)
 {
-    PlusRowAdder *pl =
-    new   PlusRowAdder(new DerivativeRowAdder(0,2));
+    PlusOperator *pl =
+    new   PlusOperator(new DerivativeOperator(0,2));
     if (a != NULL)
-        pl->push_back(new TimesRowAdder(new ConversionRowAdder(1,2),new TimesRowAdder(MultiplicationRowAdder(1,a),new DerivativeRowAdder(0,1))));
+        pl->push_back(new TimesOperator(new ConversionOperator(1,2),new TimesOperator(MultiplicationOperator(1,a),new DerivativeOperator(0,1))));
     
     if (b!= NULL)
-        pl->push_back(new TimesRowAdder(new ConversionRowAdder(0,2),MultiplicationRowAdder(0,b)));
+        pl->push_back(new TimesOperator(new ConversionOperator(0,2),MultiplicationOperator(0,b)));
     
     
-    FilledBandedMatrix *ret = new FilledBandedMatrix(-1- (int)b->size(),new ShiftRowAdder(pl,-2));
+    FilledBandedOperator *ret = new FilledBandedOperator(-1- (int)b->size(),new ShiftOperator(pl,-2));
     
     FilledRow *drrow = new FilledRow(0,RowFiller::dirichlet(1,0));
     

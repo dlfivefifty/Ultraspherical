@@ -4,20 +4,20 @@
 #define Ultraspherical_Multiplication_Matrix_h
 
 #include <iostream>
-#include "FilledBandedMatrix.h" 
-#include "RowAdder.h"
+#include "FilledBandedOperator.h" 
+#include "Operator.h"
 #include <vector>
 
 using namespace std; 
 
 
-class ConversionRowAdder : public RowAdder
+class ConversionOperator : public Operator
 {
     unsigned int from,to;
     //TODO: Implement other conversion operators
     
 public:
-    ConversionRowAdder(unsigned int l, unsigned int m);
+    ConversionOperator(unsigned int l, unsigned int m);
     
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
@@ -25,12 +25,12 @@ public:
 };
 
 
-class DerivativeRowAdder : public RowAdder
+class DerivativeOperator : public Operator
 {
     unsigned int from,to;
 public:
     
-    DerivativeRowAdder(unsigned int l, unsigned int m);
+    DerivativeOperator(unsigned int l, unsigned int m);
     
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
@@ -39,7 +39,7 @@ public:
 
 
 
-class ToeplitzRowAdder : public RowAdder
+class ToeplitzOperator : public Operator
 {
     //TODO: Not really Toeplitz
     double *a;
@@ -47,31 +47,31 @@ class ToeplitzRowAdder : public RowAdder
     long index;
     
 public:
-    ToeplitzRowAdder(vector<double> *, long);
-    ToeplitzRowAdder(double *, unsigned long, long);
+    ToeplitzOperator(vector<double> *, long);
+    ToeplitzOperator(double *, unsigned long, long);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
-class HankelRowAdder : public RowAdder
+class HankelOperator : public Operator
 {
     double *a;
     unsigned long length;
     
 public:
-    HankelRowAdder(vector<double> *a);
-    HankelRowAdder(double *, unsigned long);
+    HankelOperator(vector<double> *a);
+    HankelOperator(double *, unsigned long);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
 
-RowAdder *MultiplicationRowAdder(unsigned int, vector<double> *);
+Operator *MultiplicationOperator(unsigned int, vector<double> *);
 
 
-FilledBandedMatrix *DirichletD2ConvertMultiplicationMatrix(vector<double> *,vector<double> *);
+FilledBandedOperator *DirichletD2ConvertMultiplicationMatrix(vector<double> *,vector<double> *);
 
 
 

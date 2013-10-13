@@ -23,7 +23,7 @@ void mexFunction ( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     // main(argc,argv);
     
     //First entry is lower row, it's important!
-//    FilledBandedMatrix bnd(-2,&D2Dirichlet);
+//    FilledBandedOperator bnd(-2,&D2Dirichlet);
 //    bnd.increaseSize();
 //    bnd.increaseSize();
 //    bnd.increaseSize();    

@@ -12,8 +12,8 @@
 
 #include "mathlink.h"
 
-#include "FilledBandedMatrix.h" // stop multiple definition of RowFiller class. 
-#include "UltrasphericalRowAdder.h"
+#include "FilledBandedOperator.h" // stop multiple definition of RowFiller class. 
+#include "UltrasphericalOperator.h"
 //
 ////#include "mex.h"
 #include "AdaptiveQR.h"
@@ -89,7 +89,7 @@ void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, d
         b.push_back(bin[i]);
     }
     
-    FilledBandedMatrix *drbnd = DirichletD2ConvertMultiplicationMatrix(&a,&b);
+    FilledBandedOperator *drbnd = DirichletD2ConvertMultiplicationMatrix(&a,&b);
     drbnd->increaseSize();
     
     vector<double> f;

@@ -1,5 +1,5 @@
 //
-//  RowAdder.c
+//  Operator.c
 //  Ultraspherical
 //
 //  Created by Sheehan Olver on 8/10/13.
@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-#include "RowAdder.h"
+#include "Operator.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,30 +18,30 @@
 
 
 
-RowAdder::RowAdder()
+Operator::Operator()
 {
     
 }
 
-double RowAdder::getEntry(long k, long j)
+double Operator::getEntry(long k, long j)
 {
     cout << "getEntry NOT DEFINED!!"<<endl;
     return -1;
 }
 
-long RowAdder::leftIndex(unsigned long k)
+long Operator::leftIndex(unsigned long k)
 {
     cout << "leftIndex NOT DEFINED!!"<<endl;
     return -1;
 }
-long  RowAdder::rightIndex(unsigned long k)
+long  Operator::rightIndex(unsigned long k)
 {
     cout << "leftIndex NOT DEFINED!!"<<endl;
     return -1;
 }
 
 
-void RowAdder::print()
+void Operator::print()
 {
     for (int i = 0; i < 6; ++i) {
         for(int j = 0; j < 12; ++j)
@@ -52,22 +52,22 @@ void RowAdder::print()
 }
 
 
-PlusRowAdder::PlusRowAdder(RowAdder *adder)
+PlusOperator::PlusOperator(Operator *adder)
 {
-    summands = new vector<RowAdder *>;
+    summands = new vector<Operator *>;
     summands->push_back(adder);
 }
 
-void PlusRowAdder::push_back(RowAdder *add)
+void PlusOperator::push_back(Operator *add)
 {
     summands->push_back(add);
 }
 
-double PlusRowAdder::getEntry(long k, long j)
+double PlusOperator::getEntry(long k, long j)
 {
     double ret = 0;
     //    cout << "createRow " << k <<": \n";
-    for(RowAdder *i : *summands) {
+    for(Operator *i : *summands) {
         ret += i->getEntry(k, j);
     }
     
@@ -78,12 +78,12 @@ double PlusRowAdder::getEntry(long k, long j)
     return ret;
 }
 
-long PlusRowAdder::leftIndex(unsigned long row)
+long PlusOperator::leftIndex(unsigned long row)
 {
     //TODO: change -1
     long ret = -1000;
     
-    for(RowAdder *i : *summands) {
+    for(Operator *i : *summands) {
         long li = i->leftIndex(row);
         
         if (ret == -1000)
@@ -95,12 +95,12 @@ long PlusRowAdder::leftIndex(unsigned long row)
     return ret;
 }
 
-long PlusRowAdder::rightIndex(unsigned long row)
+long PlusOperator::rightIndex(unsigned long row)
 {
     //TODO: change -1
     long ret = -1000;
     
-    for(RowAdder *i : *summands) {
+    for(Operator *i : *summands) {
         long li = i->rightIndex(row);
         
         ret = max(ret, li);
@@ -110,7 +110,7 @@ long PlusRowAdder::rightIndex(unsigned long row)
 }
 
 
-TimesRowAdder::TimesRowAdder(RowAdder *aa, RowAdder *bb)
+TimesOperator::TimesOperator(Operator *aa, Operator *bb)
 {
     a = aa;
     b = bb;
@@ -119,17 +119,17 @@ TimesRowAdder::TimesRowAdder(RowAdder *aa, RowAdder *bb)
 
 
 
-long TimesRowAdder::leftIndex(unsigned long row)
+long TimesOperator::leftIndex(unsigned long row)
 {
     
     return b->leftIndex(a->leftIndex(row));
 }
 
-long TimesRowAdder::rightIndex(unsigned long row)
+long TimesOperator::rightIndex(unsigned long row)
 {
     return b->rightIndex(a->rightIndex(row));
 }
-double TimesRowAdder::getEntry(long k, long j)
+double TimesOperator::getEntry(long k, long j)
 {
     double ret = 0;
 
@@ -140,7 +140,7 @@ double TimesRowAdder::getEntry(long k, long j)
 }
 
 
-DoubleTimesRowAdder::DoubleTimesRowAdder(double aa, RowAdder *bb)
+DoubleTimesOperator::DoubleTimesOperator(double aa, Operator *bb)
 {
     a = aa;
     b = bb;
@@ -149,40 +149,40 @@ DoubleTimesRowAdder::DoubleTimesRowAdder(double aa, RowAdder *bb)
 
 
 
-long DoubleTimesRowAdder::leftIndex(unsigned long row)
+long DoubleTimesOperator::leftIndex(unsigned long row)
 {
     return b->leftIndex(row);
 }
 
-long DoubleTimesRowAdder::rightIndex(unsigned long row)
+long DoubleTimesOperator::rightIndex(unsigned long row)
 {
     return b->rightIndex(row);
 }
-double DoubleTimesRowAdder::getEntry(long k, long j)
+double DoubleTimesOperator::getEntry(long k, long j)
 {
     return a*b->getEntry(k, j);
 }
 
 
 
-ShiftRowAdder::ShiftRowAdder(RowAdder *a, long s)
+ShiftOperator::ShiftOperator(Operator *a, long s)
 {
     adder = a;
     shift = s;
 }
 
-double ShiftRowAdder::getEntry(long row, long col)
+double ShiftOperator::getEntry(long row, long col)
 {
     return adder->getEntry(row + shift, col);
 }
 
 
-long ShiftRowAdder::leftIndex(unsigned long row)
+long ShiftOperator::leftIndex(unsigned long row)
 {
     return adder->leftIndex(row + shift);
 }
 
-long ShiftRowAdder::rightIndex(unsigned long row)
+long ShiftOperator::rightIndex(unsigned long row)
 {
     return adder->rightIndex(row + shift);
 }

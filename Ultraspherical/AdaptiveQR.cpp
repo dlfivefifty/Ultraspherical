@@ -29,7 +29,7 @@ void printvec(vector<double> c)
 
 
 
-vector<double> QRSolve(FilledBandedMatrix *B,vector<double> c)
+vector<double> QRSolve(FilledBandedOperator *B,vector<double> c)
 {  
     
     double error = 1;

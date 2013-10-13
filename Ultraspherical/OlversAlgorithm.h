@@ -10,22 +10,22 @@
 #define __Ultraspherical__OlversAlgorithm__
 
 #include <iostream>
-#include "UltrasphericalRowAdder.h"
+#include "UltrasphericalOperator.h"
 
-RowAdder *ConstantOperator(double);
+Operator *ConstantOperator(double);
 
-class RSRowAdder : public RowAdder
+class RSOperator : public Operator
 {
     
 public:
-    RSRowAdder();
+    RSOperator();
     
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
-RowAdder *RSListRowAdder(double *, double *, unsigned long n);
+Operator *RSListOperator(double *, double *, unsigned long n);
 
 
 #endif /* defined(__Ultraspherical__OlversAlgorithm__) */

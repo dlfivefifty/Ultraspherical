@@ -1,13 +1,13 @@
 //
-//  BandedMatrix.cpp
+//  BandedOperator.cpp
 //  Ultraspherical
 //
 //  Created by Sheehan Olver on 04/06/2012.
 //  Copyright (c) 2012 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#include "FilledBandedMatrix.h"
-#include "UltrasphericalRowAdder.h"
+#include "FilledBandedOperator.h"
+#include "UltrasphericalOperator.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -284,7 +284,7 @@ FilledRow *FilledRow::operator+(FilledRow *row)
 }
 
 
-FilledBandedMatrix::FilledBandedMatrix(const int low, RowAdder *a)
+FilledBandedOperator::FilledBandedOperator(const int low, Operator *a)
 {
     lowerIndex = low;
     adder = a;
@@ -293,7 +293,7 @@ FilledBandedMatrix::FilledBandedMatrix(const int low, RowAdder *a)
 }
 
 
-FilledBandedMatrix::~FilledBandedMatrix()
+FilledBandedOperator::~FilledBandedOperator()
 {
     for (unsigned long i = 0; i < rows.size(); i++) {
         delete rows[i];
@@ -302,35 +302,35 @@ FilledBandedMatrix::~FilledBandedMatrix()
 
 
 
-int FilledBandedMatrix::lower()
+int FilledBandedOperator::lower()
 {
     // Returns zero if the band starts on the diagonal
     // -1 if there is one subdiagonal...
     return lowerIndex;
 }
 
-void FilledBandedMatrix::setLower(int low)
+void FilledBandedOperator::setLower(int low)
 {
     lowerIndex = low;
 }
 
 
-unsigned long FilledBandedMatrix::size()
+unsigned long FilledBandedOperator::size()
 {
     return rows.size();
 }
 
-unsigned long FilledBandedMatrix::columnSize()
+unsigned long FilledBandedOperator::columnSize()
 {
     return rows.back()->rightIndex();
 }
 
-unsigned long FilledBandedMatrix::columnSize(unsigned long col)
+unsigned long FilledBandedOperator::columnSize(unsigned long col)
 {
     return col - lower() + 1;
 }
 
-unsigned long FilledBandedMatrix::leftIndex(unsigned long row)
+unsigned long FilledBandedOperator::leftIndex(unsigned long row)
 {
     long li = (*this)[row]->leftIndex();
     
@@ -340,13 +340,13 @@ unsigned long FilledBandedMatrix::leftIndex(unsigned long row)
         return 0;
 }
 
-unsigned long FilledBandedMatrix::rightIndex(unsigned long row)
+unsigned long FilledBandedOperator::rightIndex(unsigned long row)
 {
     return (*this)[row]->rightIndex();
 }
 
 
-FilledRow *FilledBandedMatrix::getRow(unsigned long i,bool increasesize)
+FilledRow *FilledBandedOperator::getRow(unsigned long i,bool increasesize)
 {    
     if(i >= size()) {
         if(increasesize) {
@@ -361,51 +361,51 @@ FilledRow *FilledBandedMatrix::getRow(unsigned long i,bool increasesize)
     }
 }
 
-FilledRow * FilledBandedMatrix::operator[] (unsigned long i)
+FilledRow * FilledBandedOperator::operator[] (unsigned long i)
 {
     return getRow(i,false);
 }
 
-double FilledBandedMatrix::getEntry(unsigned long i,unsigned long j)
+double FilledBandedOperator::getEntry(unsigned long i,unsigned long j)
 {    
     return (*(*this)[i])[j];
 }
 
-double FilledBandedMatrix::getEntry(unsigned long i,unsigned long j,bool increasesize)
+double FilledBandedOperator::getEntry(unsigned long i,unsigned long j,bool increasesize)
 {    
     return (*getRow(i, increasesize))[j];
 }
 
 
-void FilledBandedMatrix::increaseSize()
+void FilledBandedOperator::increaseSize()
 {
     rows.push_back(createRow(size()));
 }
 
-void FilledBandedMatrix::increaseSize(unsigned long i)
+void FilledBandedOperator::increaseSize(unsigned long i)
 {
     for(unsigned long j = size(); j <= i; j++)
         increaseSize();
 }
 
-void FilledBandedMatrix::push_back(FilledRow *row)
+void FilledBandedOperator::push_back(FilledRow *row)
 {
     rows.push_back(row);
 }
 
 
-void FilledBandedMatrix::setAdder(RowAdder *a)
+void FilledBandedOperator::setAdder(Operator *a)
 {
     adder = a;
 }
 
-RowAdder * FilledBandedMatrix::getAdder()
+Operator * FilledBandedOperator::getAdder()
 {
     return adder;
 }
 
 
-FilledRow *FilledBandedMatrix::createRow(unsigned long k)
+FilledRow *FilledBandedOperator::createRow(unsigned long k)
 {
     
     
@@ -421,18 +421,18 @@ FilledRow *FilledBandedMatrix::createRow(unsigned long k)
 
 
 
-void FilledBandedMatrix::dropFirst(unsigned long row)
+void FilledBandedOperator::dropFirst(unsigned long row)
 {
     rows[row]->dropFirst();
 }
 
 
-void FilledBandedMatrix::setEntry(unsigned long i,unsigned long j,double val)
+void FilledBandedOperator::setEntry(unsigned long i,unsigned long j,double val)
 {
     setEntry(i,j,false);
 }
 
-void FilledBandedMatrix::setEntry(unsigned long i,unsigned long j,double val,bool increasesize)
+void FilledBandedOperator::setEntry(unsigned long i,unsigned long j,double val,bool increasesize)
 {    
     for(unsigned long k = size(); k <= i; k++)
     {
@@ -444,7 +444,7 @@ void FilledBandedMatrix::setEntry(unsigned long i,unsigned long j,double val,boo
 
 
 
-void FilledBandedMatrix::print()
+void FilledBandedOperator::print()
 {
 
     for(unsigned long i = 0; i < size()+3; i++)
@@ -465,7 +465,7 @@ void FilledBandedMatrix::print()
 }
 
 
-void FilledBandedMatrix::applyGivens(unsigned long row1, unsigned long row2, vector<double> *c)
+void FilledBandedOperator::applyGivens(unsigned long row1, unsigned long row2, vector<double> *c)
 {
     unsigned long col1 = row1;    
     if(leftIndex(row2) < leftIndex(row1))
@@ -529,7 +529,7 @@ void FilledBandedMatrix::applyGivens(unsigned long row1, unsigned long row2, vec
 }
 
 
-double FilledBandedMatrix::rowDot(unsigned long row,unsigned long colm,unsigned long colM,vector<double> *r)
+double FilledBandedOperator::rowDot(unsigned long row,unsigned long colm,unsigned long colM,vector<double> *r)
 {
     double ret = 0;
     

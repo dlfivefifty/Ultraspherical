@@ -9,9 +9,9 @@
 #ifndef Ultraspherical_AdaptiveQR_h
 #define Ultraspherical_AdaptiveQR_h
 
-#include "FilledBandedMatrix.h"
+#include "FilledBandedOperator.h"
 
-vector<double> QRSolve(FilledBandedMatrix *,vector<double>);
+vector<double> QRSolve(FilledBandedOperator *,vector<double>);
 
 void printvec(vector<double>);
 

@@ -1,13 +1,13 @@
 //
-//  RowAdder.h
+//  Operator.h
 //  Ultraspherical
 //
 //  Created by Sheehan Olver on 8/10/13.
 //  Copyright (c) 2013 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#ifndef Ultraspherical_RowAdder_h
-#define Ultraspherical_RowAdder_h
+#ifndef Ultraspherical_Operator_h
+#define Ultraspherical_Operator_h
 
 
 #include <iostream>
@@ -17,10 +17,10 @@ using namespace std;
 
 
 
-class RowAdder
+class Operator
 {
 public:
-    RowAdder();
+    Operator();
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
@@ -30,48 +30,48 @@ public:
 
 
 
-class PlusRowAdder : public RowAdder
+class PlusOperator : public Operator
 {
-    vector<RowAdder *> *summands;
+    vector<Operator *> *summands;
 public:
-    PlusRowAdder(RowAdder *rowAdd);
+    PlusOperator(Operator *rowAdd);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
-    void push_back(RowAdder *rowAdd);
+    void push_back(Operator *rowAdd);
     
 };
 
 
-class TimesRowAdder : public RowAdder
+class TimesOperator : public Operator
 {
-    RowAdder *a;
-    RowAdder *b;
+    Operator *a;
+    Operator *b;
 public:
-    TimesRowAdder(RowAdder *aa, RowAdder *bb);
+    TimesOperator(Operator *aa, Operator *bb);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
-class DoubleTimesRowAdder : public RowAdder
+class DoubleTimesOperator : public Operator
 {
     double a;
-    RowAdder *b;
+    Operator *b;
 public:
-    DoubleTimesRowAdder(double a, RowAdder *bb);
+    DoubleTimesOperator(double a, Operator *bb);
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
 
-class ShiftRowAdder : public RowAdder
+class ShiftOperator : public Operator
 {
-    RowAdder *adder;
+    Operator *adder;
     long shift;
 public:
-    ShiftRowAdder(RowAdder *, long);
+    ShiftOperator(Operator *, long);
     
     virtual double getEntry(long,long);
     virtual long leftIndex(unsigned long);

@@ -11,23 +11,23 @@
 
 
 
-RowAdder *ConstantOperator(double c)
+Operator *ConstantOperator(double c)
 {
     double *one = (double *)malloc(sizeof(double));
     
     *one = c;
     
-    return new ToeplitzRowAdder(one, 1,0);
+    return new ToeplitzOperator(one, 1,0);
 }
 
 
 
 
-RSRowAdder::RSRowAdder()
+RSOperator::RSOperator()
 {
 }
 
-double RSRowAdder::getEntry(long row, long col)
+double RSOperator::getEntry(long row, long col)
 {
     double c = (double) col + 2;
     double r = 1/((double)4 + 2*row);
@@ -45,7 +45,7 @@ double RSRowAdder::getEntry(long row, long col)
 }
 
 
-long RSRowAdder::leftIndex(unsigned long row)
+long RSOperator::leftIndex(unsigned long row)
 {
     if (row < 2) {
         return 0;
@@ -53,19 +53,19 @@ long RSRowAdder::leftIndex(unsigned long row)
         return row - 2;
 }
 
-long RSRowAdder::rightIndex(unsigned long row)
+long RSOperator::rightIndex(unsigned long row)
 {
     return row + 2;
 }
 
 
-RowAdder *RSListRowAdder(double *a, double *s, unsigned long n)
+Operator *RSListOperator(double *a, double *s, unsigned long n)
 {
     if(n < 1)
         return NULL;
         
     
-    PlusRowAdder *pl = new PlusRowAdder(new DoubleTimesRowAdder(a[0], new RSRowAdder()));
+    PlusOperator *pl = new PlusOperator(new DoubleTimesOperator(a[0], new RSOperator()));
     pl->push_back(ConstantOperator(s[0]));
     
     

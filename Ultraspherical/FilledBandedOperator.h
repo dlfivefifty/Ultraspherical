@@ -1,18 +1,18 @@
 //
-//  BandedMatrix.h
+//  BandedOperator.h
 //  Ultraspherical
 //
 //  Created by Sheehan Olver on 04/06/2012.
 //  Copyright (c) 2012 School of Mathematics and Statistics, The University of Sydney. All rights reserved.
 //
 
-#ifndef Ultraspherical_BandedMatrix_extras_h
-#define Ultraspherical_BandedMatrix_extras_h
+#ifndef Ultraspherical_BandedOperator_extras_h
+#define Ultraspherical_BandedOperator_extras_h
 
 #include <iostream>
 #include <vector>
 
-#include "RowAdder.h"
+#include "Operator.h"
 
 
 #define NUMFILLERS 2
@@ -84,16 +84,16 @@ public:
 
 
 
-class FilledBandedMatrix
+class FilledBandedOperator
 {
     vector<FilledRow *> rows;
     int lowerIndex;
-    RowAdder *adder;
+    Operator *adder;
     
     
 public:
-    FilledBandedMatrix(const int, RowAdder *add);
-    ~FilledBandedMatrix();
+    FilledBandedOperator(const int, Operator *add);
+    ~FilledBandedOperator();
     int lower();
     void setLower(int);
     void dropFirst(unsigned long);
@@ -116,8 +116,8 @@ public:
     
     void push_back(FilledRow *);
     
-    void setAdder(RowAdder *);
-    RowAdder *getAdder();
+    void setAdder(Operator *);
+    Operator *getAdder();
     
     void applyGivens(unsigned long,unsigned long,vector<double> *);
     
