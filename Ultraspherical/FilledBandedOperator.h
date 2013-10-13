@@ -84,7 +84,7 @@ public:
 
 
 
-class FilledBandedOperator
+class FilledBandedOperator : public Operator
 {
     vector<FilledRow *> rows;
     int lowerIndex;
@@ -111,8 +111,8 @@ public:
     FilledRow *operator[] (unsigned long);
     void print();
     
-    unsigned long leftIndex(unsigned long);
-    unsigned long rightIndex(unsigned long);
+    long leftIndex(unsigned long);
+    long rightIndex(unsigned long);
     
     void push_back(FilledRow *);
     

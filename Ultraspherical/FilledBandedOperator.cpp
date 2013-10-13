@@ -330,7 +330,7 @@ unsigned long FilledBandedOperator::columnSize(unsigned long col)
     return col - lower() + 1;
 }
 
-unsigned long FilledBandedOperator::leftIndex(unsigned long row)
+long FilledBandedOperator::leftIndex(unsigned long row)
 {
     long li = (*this)[row]->leftIndex();
     
@@ -340,7 +340,7 @@ unsigned long FilledBandedOperator::leftIndex(unsigned long row)
         return 0;
 }
 
-unsigned long FilledBandedOperator::rightIndex(unsigned long row)
+long FilledBandedOperator::rightIndex(unsigned long row)
 {
     return (*this)[row]->rightIndex();
 }
