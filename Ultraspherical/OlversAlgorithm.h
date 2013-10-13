@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "UltrasphericalOperator.h"
+#include "FilledBandedOperator.h"
 
 Operator *ConstantOperator(double);
 
@@ -20,7 +21,7 @@ class RSOperator : public Operator
 public:
     RSOperator();
     
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };

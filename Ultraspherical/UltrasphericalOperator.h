@@ -19,7 +19,7 @@ class ConversionOperator : public Operator
 public:
     ConversionOperator(unsigned int l, unsigned int m);
     
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
@@ -32,7 +32,7 @@ public:
     
     DerivativeOperator(unsigned int l, unsigned int m);
     
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
@@ -49,7 +49,7 @@ class ToeplitzOperator : public Operator
 public:
     ToeplitzOperator(vector<double> *, long);
     ToeplitzOperator(double *, unsigned long, long);
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
@@ -62,7 +62,7 @@ class HankelOperator : public Operator
 public:
     HankelOperator(vector<double> *a);
     HankelOperator(double *, unsigned long);
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };

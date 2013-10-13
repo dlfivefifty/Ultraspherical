@@ -21,9 +21,12 @@ class Operator
 {
 public:
     Operator();
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned  long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
+    
+    virtual Operator *operator+(Operator *);
+    virtual Operator *operator*(double);
     
     void print();
 };
@@ -35,10 +38,13 @@ class PlusOperator : public Operator
     vector<Operator *> *summands;
 public:
     PlusOperator(Operator *rowAdd);
-    virtual double getEntry(long,long);
+    ~PlusOperator();
+    virtual double getEntry(unsigned  long,unsigned  long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
     void push_back(Operator *rowAdd);
+    
+    
     
 };
 
@@ -49,18 +55,18 @@ class TimesOperator : public Operator
     Operator *b;
 public:
     TimesOperator(Operator *aa, Operator *bb);
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned  long,unsigned  long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
 
-class DoubleTimesOperator : public Operator
+class ConstantTimesOperator : public Operator
 {
     double a;
     Operator *b;
 public:
-    DoubleTimesOperator(double a, Operator *bb);
-    virtual double getEntry(long,long);
+    ConstantTimesOperator(double a, Operator *bb);
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };
@@ -73,7 +79,23 @@ class ShiftOperator : public Operator
 public:
     ShiftOperator(Operator *, long);
     
-    virtual double getEntry(long,long);
+    virtual double getEntry(unsigned long,unsigned long);
+    virtual long leftIndex(unsigned long);
+    virtual long rightIndex(unsigned long);
+};
+
+class SkipOperator : public Operator
+{
+    Operator *op;
+    unsigned long row_start,row_skip,col_start,col_skip;
+    
+public:
+    SkipOperator(Operator *,unsigned long,unsigned long,unsigned long,unsigned long);
+    
+    unsigned long shiftRow(unsigned long);
+    unsigned long shiftColumn(unsigned long);
+    
+    virtual double getEntry(unsigned long,unsigned long);
     virtual long leftIndex(unsigned long);
     virtual long rightIndex(unsigned long);
 };

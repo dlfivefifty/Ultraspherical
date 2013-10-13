@@ -102,7 +102,10 @@ public:
     
     long leftIndex(unsigned long);
     long rightIndex(unsigned long);
-    void print();    
+    void print();
+    
+    virtual Operator *operator+(Operator *);
+    virtual Operator *operator*(double);
 };
 
 

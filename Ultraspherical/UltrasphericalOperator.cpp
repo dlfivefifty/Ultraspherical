@@ -16,7 +16,7 @@ long factorial(long x, long result = 1) {
     if (x == 1 || x ==0) return 1; else return factorial(x - 1, x * result);
 }
 
-double DerivativeOperator::getEntry(long row, long col)
+double DerivativeOperator::getEntry(unsigned long row, unsigned long col)
 {
     if (from == 0) {
         if (row == col - to)
@@ -50,7 +50,7 @@ ConversionOperator::ConversionOperator(unsigned int l, unsigned int m)
     to = m;
 }
 
-double ConversionOperator::getEntry(long row, long col)
+double ConversionOperator::getEntry(unsigned long row, unsigned long col)
 {
     double c = (double) col;
     
@@ -141,7 +141,7 @@ ToeplitzOperator::ToeplitzOperator(vector<double> *ain, long ind)
 
 }
 
-double ToeplitzOperator::getEntry(long row, long col)
+double ToeplitzOperator::getEntry(unsigned long row, unsigned long col)
 {
     long ind = row - col + index;
     
@@ -186,11 +186,8 @@ HankelOperator::HankelOperator(double *ain, unsigned long l)
     length = l;
 }
 
-double HankelOperator::getEntry(long row, long col)
-{
-    if (row < 0)
-        return 0;
-    
+double HankelOperator::getEntry(unsigned long row, unsigned long col)
+{    
     long ind = row + col;
     
     if (ind >= length)

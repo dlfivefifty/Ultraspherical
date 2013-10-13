@@ -394,6 +394,22 @@ void SavedOperator::increaseSize(unsigned long i)
         increaseSize();
 }
 
+
+Operator *SavedOperator::operator+(Operator *a)
+{
+    PlusOperator *pl = new PlusOperator(this);
+    pl->push_back(a);
+    
+    return new SavedOperator(pl);
+}
+
+Operator *SavedOperator::operator*(double c)
+{
+    return new SavedOperator(new ConstantTimesOperator(c,this));
+}
+
+
+
 void FilledBandedOperator::push_back(FilledRow *row)
 {
     rows.push_back(row);

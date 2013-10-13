@@ -259,6 +259,22 @@ void airyExample()
     }
 }
 
+void olversAlgorithm()
+{
+//    ConstantOperator(1)->print();
+
+    Operator *op = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
+    op = *op + (*ConstantOperator(1))*(0);
+    
+    op->print();
+    
+    for (int i =0; i < 5; ++i) {
+        cout << op->leftIndex(i) <<", " << op->rightIndex(i) << endl;
+    }
+    
+    delete op;
+}
+
 
 
 int main(int argc, const char * argv[])
@@ -274,6 +290,9 @@ int main(int argc, const char * argv[])
                 return 0;
             case 'a':
                 airyExample();
+                return 0;
+            case 'o':
+                olversAlgorithm();
                 return 0;
             default:
                 break;
@@ -330,9 +349,6 @@ int main(int argc, const char * argv[])
 
 
     
-    ConstantOperator(1)->print();
-    
-    RSOperator().print();
     
     return 0;
 }

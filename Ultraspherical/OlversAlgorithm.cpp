@@ -27,7 +27,7 @@ RSOperator::RSOperator()
 {
 }
 
-double RSOperator::getEntry(long row, long col)
+double RSOperator::getEntry(unsigned long row, unsigned long col)
 {
     double c = (double) col + 2;
     double r = 1/((double)4 + 2*row);
@@ -65,7 +65,7 @@ Operator *RSListOperator(double *a, double *s, unsigned long n)
         return NULL;
         
     
-    PlusOperator *pl = new PlusOperator(new DoubleTimesOperator(a[0], new RSOperator()));
+    PlusOperator *pl = new PlusOperator(new ConstantTimesOperator(a[0], new RSOperator()));
     pl->push_back(ConstantOperator(s[0]));
     
     

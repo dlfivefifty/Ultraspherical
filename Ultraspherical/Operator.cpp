@@ -23,7 +23,7 @@ Operator::Operator()
     
 }
 
-double Operator::getEntry(long k, long j)
+double Operator::getEntry(unsigned long k, unsigned long j)
 {
     cout << "getEntry NOT DEFINED!!"<<endl;
     return -1;
@@ -51,6 +51,19 @@ void Operator::print()
     }
 }
 
+Operator *Operator::operator+(Operator *a)
+{
+    PlusOperator *pl = new PlusOperator(this);
+    pl->push_back(a);
+    
+    return pl;
+}
+
+Operator *Operator::operator*(double c)
+{
+    return new ConstantTimesOperator(c,this);
+}
+
 
 PlusOperator::PlusOperator(Operator *adder)
 {
@@ -58,12 +71,18 @@ PlusOperator::PlusOperator(Operator *adder)
     summands->push_back(adder);
 }
 
+PlusOperator::~PlusOperator()
+{
+    //TODO: Delete entries?
+    delete summands;
+}
+
 void PlusOperator::push_back(Operator *add)
 {
     summands->push_back(add);
 }
 
-double PlusOperator::getEntry(long k, long j)
+double PlusOperator::getEntry(unsigned long k, unsigned long j)
 {
     double ret = 0;
     //    cout << "createRow " << k <<": \n";
@@ -129,7 +148,7 @@ long TimesOperator::rightIndex(unsigned long row)
 {
     return b->rightIndex(a->rightIndex(row));
 }
-double TimesOperator::getEntry(long k, long j)
+double TimesOperator::getEntry(unsigned long k, unsigned long j)
 {
     double ret = 0;
 
@@ -140,7 +159,7 @@ double TimesOperator::getEntry(long k, long j)
 }
 
 
-DoubleTimesOperator::DoubleTimesOperator(double aa, Operator *bb)
+ConstantTimesOperator::ConstantTimesOperator(double aa, Operator *bb)
 {
     a = aa;
     b = bb;
@@ -149,16 +168,16 @@ DoubleTimesOperator::DoubleTimesOperator(double aa, Operator *bb)
 
 
 
-long DoubleTimesOperator::leftIndex(unsigned long row)
+long ConstantTimesOperator::leftIndex(unsigned long row)
 {
     return b->leftIndex(row);
 }
 
-long DoubleTimesOperator::rightIndex(unsigned long row)
+long ConstantTimesOperator::rightIndex(unsigned long row)
 {
     return b->rightIndex(row);
 }
-double DoubleTimesOperator::getEntry(long k, long j)
+double ConstantTimesOperator::getEntry(unsigned long k, unsigned long j)
 {
     return a*b->getEntry(k, j);
 }
@@ -171,7 +190,7 @@ ShiftOperator::ShiftOperator(Operator *a, long s)
     shift = s;
 }
 
-double ShiftOperator::getEntry(long row, long col)
+double ShiftOperator::getEntry(unsigned long row, unsigned long col)
 {
     return adder->getEntry(row + shift, col);
 }
@@ -186,6 +205,48 @@ long ShiftOperator::rightIndex(unsigned long row)
 {
     return adder->rightIndex(row + shift);
 }
+
+
+SkipOperator::SkipOperator(Operator *a, unsigned long rst,unsigned long rskip,unsigned long cst,unsigned long cskip)
+{
+    op=a;
+    row_start = rst;
+    row_skip = rskip;
+    col_start = cst;
+    col_skip = cskip;
+}
+
+unsigned long SkipOperator::shiftRow(unsigned long r)
+{
+    return row_skip*r + row_start;
+}
+
+unsigned long SkipOperator::shiftColumn(unsigned long r)
+{
+    return col_skip*r + col_start;
+    
+}
+
+
+
+double SkipOperator::getEntry(unsigned long row, unsigned long col)
+{
+    return op->getEntry(shiftRow(row), shiftColumn(col));
+}
+
+
+long SkipOperator::leftIndex(unsigned long row)
+{
+    return (op->leftIndex(shiftRow(row))-col_start)/col_skip;
+}
+
+long SkipOperator::rightIndex(unsigned long row)
+{
+    return (op->rightIndex(shiftRow(row))-col_start)/col_skip;
+}
+
+
+
 
 
 
