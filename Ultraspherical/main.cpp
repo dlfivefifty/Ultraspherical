@@ -270,6 +270,8 @@ vector<double> *vectorTimes(vector<double> *a, double c)
     return ret;
 }
 
+
+
 vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
 {
     vector<double> *ret = new vector<double>;
@@ -282,7 +284,7 @@ vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
             en += (*a)[i];
         
         if (i < m)
-            en += (*a)[i];
+            en += (*b)[i];
         
         ret->push_back(en);
     }
@@ -346,33 +348,63 @@ void olversAlgorithm()
 //    B[0]->print();
 //    B[1]->print();
     
-    for (unsigned long i = 0; i < OpLength; ++i) {
-        printvec(*r[i]);
-    }
     
     
-    
-    int i = OpLength - 2;
     
 
-    ConstantTimesOperator(gamma(i+1),B[i]).print();
-    printvec(*r[i]);
     
-    vector<double> u = QRSolve(new FilledBandedOperator(-1-i,new ConstantTimesOperator(gamma(i+1),B[i])), *r[i]);
+#define Rsup(i) ((*B[i-1])*(beta(i)*gamma(i+1)))
+#define Rdiag(i) (((*B[i])*gamma(i+1)))
     
-    
-    
-    
-    
-    cout<<endl;
-    printvec(u);
+//    cout << endl;
+//    Rsup(i-1)->print();
+//    
+//    cout << endl;
+//    Rdiag(i)->print();
     
     
+//    cout <<endl << "r[" << i <<"]: "<< endl;
     
-    for (unsigned long i = 0; i < OpLength; ++i) {
-//        printvec(*r[i]);
-        delete A[i];
+//    printvec(*r[i]);
+    
+    
+    //Block back substitution
+    vector<double> u[OpLength - 1];
+//    
+//    
+    int i = OpLength - 2;
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+//    
+    for (i = OpLength - 3; i >= 1; --i) {
+        r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(&u[i+1]),-1));
+        u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
     }
+    
+    i = 0;
+    r[i] = vectorPlus(r[i],vectorTimes((&u[i+1]),-beta(i)*gamma(i+1)));
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+//
+//    
+//
+//
+//    
+//
+//    
+//
+//    
+
+    
+    for (unsigned long i = 0; i < OpLength - 1; ++i) {
+        cout <<endl << "u[" << i <<"]: "<< endl;
+        printvec(u[i]);
+    }
+//
+    
+    
+//    for (unsigned long i = 0; i < OpLength; ++i) {
+////        printvec(*r[i]);
+//        delete A[i];
+//    }
 }
 
 
