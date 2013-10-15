@@ -29,4 +29,7 @@ public:
 Operator *RSListOperator(double *, double *, unsigned long n);
 
 
+vector<vector<double> *> *poisson(vector<double> *);
+
+
 #endif /* defined(__Ultraspherical__OlversAlgorithm__) */

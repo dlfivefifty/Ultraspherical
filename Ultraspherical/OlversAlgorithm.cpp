@@ -8,6 +8,9 @@
 
 #include "OlversAlgorithm.h"
 
+#include "AdaptiveQR.h"
+
+#include <math.h>
 
 
 
@@ -73,5 +76,162 @@ Operator *RSListOperator(double *a, double *s, unsigned long n)
     return pl;
 }
 
+
+vector<double> *vectorTimes(vector<double> *a, double c)
+{
+    vector<double> *ret = new vector<double>;
+    for (double en : *a)
+    {
+        ret->push_back(c*en);
+    }
+    
+    return ret;
+}
+
+
+
+vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
+{
+    vector<double> *ret = new vector<double>;
+    
+    unsigned long n = a->size(),m = b->size();
+    
+    for (unsigned long i = 0; i < max(n,m); ++i) {
+        double en = 0;
+        if(i < n)
+            en += (*a)[i];
+        
+        if (i < m)
+            en += (*b)[i];
+        
+        ret->push_back(en);
+    }
+    
+    return ret;
+}
+
+
+double norm(vector<double> *a)
+{
+    double ret = 0;
+    
+    for(double i : *a)
+        ret += i*i;
+    
+    return sqrt(ret);
+}
+
+
+vector<vector<double> *> *poisson(vector<double> *f)
+{
+    
+    
+    Operator *S = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
+    Operator *I = new SavedOperator(ConstantOperator(1));
+    
+#define beta(k) S->getEntry(k,k+1)
+#define gamma(k) S->getEntry(k,k-1)
+    
+    
+    vector<vector<double> *> r;
+    
+    
+    r.push_back(vectorTimes(f, gamma(1)));
+    r.push_back(vectorTimes(r[0], -1));
+    
+    
+    
+    
+    for (unsigned long i = 2;  -norm(r[i-2])/S->getEntry(i-2, i-2) > 1.0E-50; ++i) {
+        r[i - 1] =  vectorTimes(r[i-1], gamma(i));
+        r.push_back(vectorTimes(r[i-1], -1));
+    }
+    
+    const long OpLength = r.size();
+    
+    Operator *A[OpLength];
+    Operator *B[OpLength];
+    
+    
+    
+    for (unsigned long i = 0; i < OpLength; ++i) {
+        A[i] = (*S) + (*I)*S->getEntry(i,i);
+        
+        //        A[i]->print();
+    }
+    
+    
+    
+    B[0] = A[0];
+    B[1] = *((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1));
+    //    cout << "1: " << endl; // << beta(0) << " " << gamma(2) << endl;
+    //    B[1]->print();
+    //    cout << endl;
+    
+    for (unsigned long i = 2; i < OpLength; ++i) {
+        B[i] = *((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i));
+        
+        //        cout << i << ":" <<endl;
+        //        B[i]->print();
+        //        cout << endl;
+    }
+    
+    
+    
+    
+    
+    //    B[0]->print();
+    //    B[1]->print();
+    
+    
+    
+    
+    
+    
+#define Rsup(i) ((*B[i-1])*(beta(i)*gamma(i+1)))
+#define Rdiag(i) (((*B[i])*gamma(i+1)))
+    
+    //    cout << endl;
+    //    Rsup(i-1)->print();
+    //
+    //    cout << endl;
+    //    Rdiag(i)->print();
+    
+    
+    //    cout <<endl << "r[" << i <<"]: "<< endl;
+    
+    //    printvec(*r[i]);
+    
+    
+    //Block back substitution
+    vector<double> *u[OpLength - 1];
+    //
+    //
+    int i = (int)OpLength - 2;
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    //
+    for (i = (int)OpLength - 3; i >= 1; --i) {
+        r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(u[i+1]),-1));
+//        cout<< "r:"<<endl;
+//        printvec(*r[i]);
+        u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+//        cout<<endl<< "u:"<<endl;
+//        printvec(*u[i]);
+    }
+    
+    i = 0;
+    r[i] = vectorPlus(r[i],vectorTimes((u[i+1]),-beta(i)*gamma(i+1)));
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    //
+
+    
+    vector<vector<double> *> *uret = new vector<vector<double> *>;
+    
+    for(long i = 0; i < OpLength - 1; ++i)
+        uret->push_back(u[i]);
+    
+    return uret;
+    
+}
 
 
