@@ -296,14 +296,38 @@ vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
 
 void olversAlgorithm()
 {
-//    ConstantOperator(1)->print();
+    vector<double> f;
+    
+    f.push_back(0.0625);
+    f.push_back(0.0625);
 
-#define OpLength 10
-    Operator *A[OpLength];
-    Operator *B[OpLength];
+    
+    
     
     Operator *S = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
     Operator *I = new SavedOperator(ConstantOperator(1));
+    
+#define beta(k) S->getEntry(k,k+1)
+#define gamma(k) S->getEntry(k,k-1)
+    
+#define OpLength 10
+    vector<vector<double> *> r;
+    
+    
+    r.push_back(vectorTimes(&f, gamma(1)));
+    r.push_back(vectorTimes(r[0], -1));
+    
+    for (unsigned long i = 2; i < OpLength; ++i) {
+        r[i - 1] =  vectorTimes(r[i-1], gamma(i));
+        r.push_back(vectorTimes(r[i-1], -1));
+    }
+    
+    
+
+    Operator *A[OpLength];
+    Operator *B[OpLength];
+    
+
     
     for (unsigned long i = 0; i < OpLength; ++i) {
         A[i] = (*S) + (*I)*S->getEntry(i,i);
@@ -311,8 +335,7 @@ void olversAlgorithm()
 //        A[i]->print();
     }
     
-#define beta(k) S->getEntry(k,k+1)
-#define gamma(k) S->getEntry(k,k-1)
+
     
     B[0] = A[0];
     B[1] = *((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1));
@@ -328,23 +351,10 @@ void olversAlgorithm()
 //        cout << endl;
     }
     
-    vector<double> f;
-    
-    f.push_back(0.0625);
-    f.push_back(0.0625);
+
     
     
-    vector<double> *r[OpLength];
-    
-    r[0] = &f;
-    r[0] = vectorTimes(r[0], gamma(1));
-    r[1] = vectorTimes(r[0], -1);
-    
-    for (unsigned long i = 2; i < OpLength; ++i) {
-        r[i - 1] =  vectorTimes(r[i-1], gamma(i));
-        r[i] = vectorTimes(r[i-1], -1);
-    }
-    
+
 //    B[0]->print();
 //    B[1]->print();
     
