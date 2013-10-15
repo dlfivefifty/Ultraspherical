@@ -29,7 +29,7 @@ void printvec(vector<double> c)
 
 
 
-vector<double> QRSolve(FilledBandedOperator *B,vector<double> c)
+vector<double> *QRSolve(FilledBandedOperator *B,vector<double> c)
 {  
     
     double error = 1;
@@ -79,16 +79,17 @@ vector<double> QRSolve(FilledBandedOperator *B,vector<double> c)
 //        printvec(c);       
     
     
-    vector<double> r = c;
+    vector<double> *r = new vector<double>;
+    *r = c;
     
     
 //        printvec(c);    
     
-    r[col] = c[col]/B->getEntry(col, col,true);
+    (*r)[col] = c[col]/B->getEntry(col, col,true);
     
     vector<double> s;
     for(int i = 0; i < (*B)[col]->fillSize(); i++)
-        s.push_back((*B)[col]->fillGenerate(i,col)*r[col]);
+        s.push_back((*B)[col]->fillGenerate(i,col)*(*r)[col]);
     unsigned long rbnd;
     long csize = col+1;
     
@@ -98,19 +99,19 @@ vector<double> QRSolve(FilledBandedOperator *B,vector<double> c)
         if(rbnd >= csize) {
             rbnd = csize-1;
             
-            r[row] = (c[row]-B->rowDot(row,row+1,rbnd,&r))/B->getEntry(row,row,true);
+            (*r)[row] = (c[row]-B->rowDot(row,row+1,rbnd,r))/B->getEntry(row,row,true);
         } else {      
             //scont is the contribution from higher fills
             double scont = 0;
             for(int i = 0; i < (*B)[row]->fillSize(); i++)
                 scont += s[i]*(*B)[row]->getFill(i);    
         
-            r[row] = (c[row]-B->rowDot(row,row+1,rbnd,&r) - scont)/B->getEntry(row,row,true);
+            (*r)[row] = (c[row]-B->rowDot(row,row+1,rbnd,r) - scont)/B->getEntry(row,row,true);
 //            
             for(int i = 0; i < (*B)[row]->fillSize(); i++)
             {
 //                (*B)[rbnd];
-                s[i]+=(*B)[rbnd]->fillGenerate(i,rbnd)*r[rbnd];                            
+                s[i]+=(*B)[rbnd]->fillGenerate(i,rbnd)*(*r)[rbnd];
             }
         }
     }

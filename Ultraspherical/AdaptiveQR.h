@@ -11,7 +11,7 @@
 
 #include "FilledBandedOperator.h"
 
-vector<double> QRSolve(FilledBandedOperator *,vector<double>);
+vector<double> *QRSolve(FilledBandedOperator *,vector<double>);
 
 void printvec(vector<double>);
 

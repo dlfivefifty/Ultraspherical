@@ -154,7 +154,7 @@ void smallbandExample()
     
     t1 = clock();
     
-    vector<double> c = QRSolve(drbnd,b);
+    vector<double> c = *QRSolve(drbnd,b);
     
     t2 = clock();
     //            printvec(b);
@@ -203,7 +203,7 @@ void cosbandExample()
         
         t1 = clock();                
         
-        vector<double> c = QRSolve(drbnd,b);
+        vector<double> c = *QRSolve(drbnd,b);
         
         t2 = clock();
         //            printvec(b);
@@ -248,7 +248,7 @@ void airyExample()
         
         t1 = clock();                
         
-        vector<double> c = QRSolve(drbnd,b);
+        vector<double> c = *QRSolve(drbnd,b);
         
         t2 = clock();
         //    printvec(c);
@@ -293,6 +293,15 @@ vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
 }
 
 
+double norm(vector<double> *a)
+{
+    double ret = 0;
+    
+    for(double i : *a)
+        ret += i*i;
+    
+    return sqrt(ret);
+}
 
 void olversAlgorithm()
 {
@@ -317,12 +326,15 @@ void olversAlgorithm()
     r.push_back(vectorTimes(&f, gamma(1)));
     r.push_back(vectorTimes(r[0], -1));
     
-    for (unsigned long i = 2; i < OpLength; ++i) {
+    
+
+
+    for (unsigned long i = 2;  -norm(r[i-2])/S->getEntry(i-2, i-2) > 1.0E-100; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         r.push_back(vectorTimes(r[i-1], -1));
     }
     
-    
+//    const long OpLength = r.size();
 
     Operator *A[OpLength];
     Operator *B[OpLength];
@@ -383,16 +395,16 @@ void olversAlgorithm()
 //    
 //    
     int i = OpLength - 2;
-    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
 //    
     for (i = OpLength - 3; i >= 1; --i) {
         r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(&u[i+1]),-1));
-        u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+        u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
     }
     
     i = 0;
     r[i] = vectorPlus(r[i],vectorTimes((&u[i+1]),-beta(i)*gamma(i+1)));
-    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
 //
 //    
 //
@@ -473,7 +485,7 @@ int main(int argc, const char * argv[])
     
     
     
-    vector<double> c = QRSolve(drbnd,b);
+    vector<double> c = *QRSolve(drbnd,b);
     
     printvec(c);
     
