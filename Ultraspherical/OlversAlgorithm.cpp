@@ -140,67 +140,36 @@ vector<vector<double> *> *poisson(vector<double> *f)
     r.push_back(vectorTimes(r[0], -1));
     
     
+    vector<Operator *> A, B;
     
+    A.push_back((*S) + (*I)*S->getEntry(0,0));
+    A.push_back((*S) + (*I)*S->getEntry(1,1));
+    B.push_back(A[0]);
+    B.push_back(*((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1)));
     
-    for (unsigned long i = 2;  -norm(r[i-2])/S->getEntry(i-2, i-2) > 1.0E-50; ++i) {
+#define dabs(d) d < 0? -d : d
+    
+    for (unsigned long i = 2;  norm(r[i-2])/dabs(B[i-2]->getEntry(0,0)) > 1.0E-16; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         r.push_back(vectorTimes(r[i-1], -1));
+        A.push_back((*S) + (*I)*S->getEntry(i,i));
+        B.push_back(*((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i)));
     }
     
     const long OpLength = r.size();
     
-    Operator *A[OpLength];
-    Operator *B[OpLength];
+    
+
     
     
     
-    for (unsigned long i = 0; i < OpLength; ++i) {
-        A[i] = (*S) + (*I)*S->getEntry(i,i);
-        
-        //        A[i]->print();
-    }
-    
-    
-    
-    B[0] = A[0];
-    B[1] = *((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1));
-    //    cout << "1: " << endl; // << beta(0) << " " << gamma(2) << endl;
-    //    B[1]->print();
-    //    cout << endl;
-    
-    for (unsigned long i = 2; i < OpLength; ++i) {
-        B[i] = *((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i));
-        
-        //        cout << i << ":" <<endl;
-        //        B[i]->print();
-        //        cout << endl;
-    }
-    
-    
-    
-    
-    
-    //    B[0]->print();
-    //    B[1]->print();
-    
-    
-    
+   
     
     
     
 #define Rsup(i) ((*B[i-1])*(beta(i)*gamma(i+1)))
 #define Rdiag(i) (((*B[i])*gamma(i+1)))
-    
-    //    cout << endl;
-    //    Rsup(i-1)->print();
-    //
-    //    cout << endl;
-    //    Rdiag(i)->print();
-    
-    
-    //    cout <<endl << "r[" << i <<"]: "<< endl;
-    
-    //    printvec(*r[i]);
+
     
     
     //Block back substitution
