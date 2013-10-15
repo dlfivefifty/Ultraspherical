@@ -319,7 +319,7 @@ void olversAlgorithm()
 #define beta(k) S->getEntry(k,k+1)
 #define gamma(k) S->getEntry(k,k-1)
     
-#define OpLength 10
+
     vector<vector<double> *> r;
     
     
@@ -329,12 +329,12 @@ void olversAlgorithm()
     
 
 
-    for (unsigned long i = 2;  -norm(r[i-2])/S->getEntry(i-2, i-2) > 1.0E-100; ++i) {
+    for (unsigned long i = 2;  -norm(r[i-2])/S->getEntry(i-2, i-2) > 1.0E-60; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         r.push_back(vectorTimes(r[i-1], -1));
     }
     
-//    const long OpLength = r.size();
+    const long OpLength = r.size();
 
     Operator *A[OpLength];
     Operator *B[OpLength];
@@ -391,20 +391,20 @@ void olversAlgorithm()
     
     
     //Block back substitution
-    vector<double> u[OpLength - 1];
+    vector<double> *u[OpLength - 1];
 //    
 //    
-    int i = OpLength - 2;
-    u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    int i = (int)OpLength - 2;
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
 //    
-    for (i = OpLength - 3; i >= 1; --i) {
-        r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(&u[i+1]),-1));
-        u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    for (i = (int)OpLength - 3; i >= 1; --i) {
+        r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(u[i+1]),-1));
+        u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
     }
     
     i = 0;
-    r[i] = vectorPlus(r[i],vectorTimes((&u[i+1]),-beta(i)*gamma(i+1)));
-    u[i] = *QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    r[i] = vectorPlus(r[i],vectorTimes((u[i+1]),-beta(i)*gamma(i+1)));
+    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
 //
 //    
 //
@@ -418,7 +418,7 @@ void olversAlgorithm()
     
     for (unsigned long i = 0; i < OpLength - 1; ++i) {
         cout <<endl << "u[" << i <<"]: "<< endl;
-        printvec(u[i]);
+        printvec(*u[i]);
     }
 //
     
