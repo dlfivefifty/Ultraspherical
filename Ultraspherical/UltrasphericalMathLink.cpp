@@ -24,7 +24,7 @@
 
 extern "C" void ultraSolve( double *, long, double *, long, double *, long, double *, long);
 
-extern "C" void poissonSolve( double *, long, double *, long, double *, long, double *, long);
+extern "C" void poissonSolve( void );
 
 
 void toUSeries(double *fin, long fn)
@@ -78,34 +78,65 @@ void toC2Series(double *fin, long fn)
 }
 
 
-void poissonSolve( double *ain, long n, double *bin, long m, double *bc, long k, double *fin, long fn)
+void poissonSolve( void)
 {
 //    ultraSolve(ain,n,bin,m,bc,k,fin,fn);
     
-    vector<double> f;
+    vector<vector<double> *> fin;
     
-    f.push_back(0.0625);
-    f.push_back(0.0625);
+    const char *head;
+    int n,m;
     
-    vector<vector<double> *> *uret = poisson(&f);
+    MLGetFunction(stdlink, &head, &n);
+    MLGetFunction(stdlink, &head, &m);
     
     
-    double cret[3];
     
-  //  MLPutReal64List(stdlink, cret, (int)3);
-    
-    cret[0] = 1;
-    MLPutFunction(stdlink, "List", (int)uret->size());
-    
-    for (vector<double> * j : *uret) {
+    for (int j = 0; j < m; ++j) {
+        vector<double> *fk = new vector<double>;
+        
+        MLGetFunction(stdlink, &head, &n);
+        for (int i = 0; i < n; ++i) {
+            double d;
+            MLGetDouble(stdlink, &d);
+            fk->push_back(d);
+        }
+        
+        fin.push_back(fk);
+    }
+
+
+    MLPutFunction(stdlink, "List", (int)fin.size());
+
+    for (vector<double> * j : fin) {
         MLPutFunction(stdlink, "List",(int)j->size());
         for (double i : *j)
             MLPutDouble(stdlink, i);
     }
 
-//    MLPutDouble(stdlink, 1);
-//    MLPutDouble(stdlink, 2);
-//    MLPutReal64List(stdlink, cret, (int)3);
+
+    
+    
+//    
+//    f.push_back(0.0625);
+//    f.push_back(0.0625);
+    
+//    vector<vector<double> *> *uret = poisson(&f);
+//    
+//    
+//    double cret[3];
+//    
+//  //  MLPutReal64List(stdlink, cret, (int)3);
+//    
+//    cret[0] = 1;
+//    MLPutFunction(stdlink, "List", (int)uret->size());
+//    
+//    for (vector<double> * j : *uret) {
+//        MLPutFunction(stdlink, "List",(int)j->size());
+//        for (double i : *j)
+//            MLPutDouble(stdlink, i);
+//    }
+
 }
 
 void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, double *fin, long fn)

@@ -10,7 +10,7 @@
 
 #include "AdaptiveQR.h"
 
-#include <math.h>
+#include <cmath>
 
 
 
@@ -111,6 +111,17 @@ vector<double> *vectorPlus(vector<double> *a, vector<double> *b)
 }
 
 
+void vectorDrop(vector<double> *a,double tol)
+{
+    while (!a->empty() && abs(a->back()) < tol) {
+        a->pop_back();
+    }
+    
+    if (a->empty())
+        a->push_back(0);
+}
+
+
 double norm(vector<double> *a)
 {
     double ret = 0;
@@ -183,6 +194,11 @@ vector<vector<double> *> *poisson(vector<double> *f)
         r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(u[i+1]),-1));
 //        cout<< "r:"<<endl;
 //        printvec(*r[i]);
+        
+        
+        //TODO: better tol
+        vectorDrop(r[i],norm(r[i])*10E-20);
+        
         u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
 //        cout<<endl<< "u:"<<endl;
 //        printvec(*u[i]);
@@ -190,6 +206,7 @@ vector<vector<double> *> *poisson(vector<double> *f)
     
     i = 0;
     r[i] = vectorPlus(r[i],vectorTimes((u[i+1]),-beta(i)*gamma(i+1)));
+    vectorDrop(r[i],norm(r[i])*10E-20);
     u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
     //
 

@@ -289,7 +289,7 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 /********************************* end header *********************************/
 void ultraSolve P(( double *, long, double *, long, double *, long, double *, long));
 
-void poissonSolve P(( double *, long, double *, long, double *, long, double *, long));
+void poissonSolve P(( void ));
 
 
 
@@ -328,7 +328,7 @@ L0:	return res;
 } /* _tr0 */
 
 
-void poissonSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2, double * _tp3, long _tpl3, double * _tp4, long _tpl4));
+void poissonSolve P(( void));
 
 #if MLPROTOTYPES
 static int _tr1( MLINK mlp)
@@ -337,29 +337,13 @@ static int _tr1(mlp) MLINK mlp;
 #endif
 {
 	int	res = 0;
-	double * _tp1;
-	long _tpl1;
-	double * _tp2;
-	long _tpl2;
-	double * _tp3;
-	long _tpl3;
-	double * _tp4;
-	long _tpl4;
-	if ( ! MLGetRealList( mlp, &_tp1, &_tpl1) ) goto L0;
-	if ( ! MLGetRealList( mlp, &_tp2, &_tpl2) ) goto L1;
-	if ( ! MLGetRealList( mlp, &_tp3, &_tpl3) ) goto L2;
-	if ( ! MLGetRealList( mlp, &_tp4, &_tpl4) ) goto L3;
-	if ( ! MLNewPacket(mlp) ) goto L4;
+		if( !mlp) return res; /* avoid unused parameter warning */
 
-	poissonSolve(_tp1, _tpl1, _tp2, _tpl2, _tp3, _tpl3, _tp4, _tpl4);
+	poissonSolve();
 
 	res = 1;
-L4:	MLDisownRealList( mlp, _tp4, _tpl4);
-L3:	MLDisownRealList( mlp, _tp3, _tpl3);
-L2:	MLDisownRealList( mlp, _tp2, _tpl2);
-L1:	MLDisownRealList( mlp, _tp1, _tpl1);
 
-L0:	return res;
+	return res;
 } /* _tr1 */
 
 
@@ -370,7 +354,7 @@ static struct func {
 	const char  *f_name;
 	} _tramps[2] = {
 		{ 4, 0, _tr0, "ultraSolve" },
-		{ 4, 0, _tr1, "poissonSolve" }
+		{-1, 1, _tr1, "poissonSolve" }
 		};
 
 static const char* evalstrs[] = {
@@ -405,7 +389,7 @@ int MLInstall(mlp) MLINK mlp;
 	_res = MLConnect(mlp);
 	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List,j_List,bc_List,fn_List]", (char *)"{ i, j, bc, fn }", 0);
 	if (_res) _res = _doevalstr( mlp, 0);
-	if (_res) _res = _definepattern(mlp, (char *)"PoissonSolve[i_List,j_List,bc_List,fn_List]", (char *)"{ i, j, bc, fn }", 1);
+	if (_res) _res = _definepattern(mlp, (char *)"PoissonSolve[A:{___List}]", (char *)"{ A }", 1);
 	if (_res) _res = _doevalstr( mlp, 1);
 	if (_res) _res = MLPutSymbol( mlp, "End");
 	if (_res) _res = MLFlush( mlp);
