@@ -29,6 +29,7 @@ public:
 Operator *RSListOperator(double *, double *, unsigned long n);
 
 
+vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f);
 vector<vector<double> *> *poisson(vector<double> *);
 
 

@@ -132,12 +132,16 @@ double norm(vector<double> *a)
     return sqrt(ret);
 }
 
-
 vector<vector<double> *> *poisson(vector<double> *f)
+{
+    return adaptiveSylvester(new SkipOperator(new RSOperator(), 0, 2, 0, 2),f);
+}
+
+vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f)
 {
     
     
-    Operator *S = new SavedOperator(new SkipOperator(new RSOperator(), 0, 2, 0, 2));
+    Operator *S = new SavedOperator(Sin);
     Operator *I = new SavedOperator(ConstantOperator(1));
     
 #define beta(k) S->getEntry(k,k+1)
@@ -155,7 +159,7 @@ vector<vector<double> *> *poisson(vector<double> *f)
     
     A.push_back((*S) + (*I)*S->getEntry(0,0));
     A.push_back((*S) + (*I)*S->getEntry(1,1));
-    B.push_back(A[0]);
+    B.push_back((*A[0])*1);  //Hack to copy A[0]
     B.push_back(*((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1)));
     
 #define dabs(d) d < 0? -d : d
@@ -182,13 +186,16 @@ vector<vector<double> *> *poisson(vector<double> *f)
 #define Rdiag(i) (((*B[i])*gamma(i+1)))
 
     
+
+    
     
     //Block back substitution
     vector<double> *u[OpLength - 1];
     //
     //
     int i = (int)OpLength - 2;
-    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    FilledBandedOperator fillop = FilledBandedOperator(-1-i, Rdiag(i));
+    u[i] = QRSolve(&fillop, *r[i]);
     //
     for (i = (int)OpLength - 3; i >= 1; --i) {
         r[i] = vectorPlus(r[i],vectorTimes((*Rsup(i))*(u[i+1]),-1));
@@ -199,7 +206,8 @@ vector<vector<double> *> *poisson(vector<double> *f)
         //TODO: better tol
         vectorDrop(r[i],norm(r[i])*10E-20);
         
-        u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+        fillop = FilledBandedOperator(-1-i, Rdiag(i));
+        u[i] = QRSolve(&fillop, *r[i]);
 //        cout<<endl<< "u:"<<endl;
 //        printvec(*u[i]);
     }
@@ -207,7 +215,9 @@ vector<vector<double> *> *poisson(vector<double> *f)
     i = 0;
     r[i] = vectorPlus(r[i],vectorTimes((u[i+1]),-beta(i)*gamma(i+1)));
     vectorDrop(r[i],norm(r[i])*10E-20);
-    u[i] = QRSolve(new FilledBandedOperator(-1-i, Rdiag(i)), *r[i]);
+    
+    fillop = FilledBandedOperator(-1-i, Rdiag(i));
+    u[i] = QRSolve(&fillop, *r[i]);
     //
 
     
@@ -215,6 +225,21 @@ vector<vector<double> *> *poisson(vector<double> *f)
     
     for(long i = 0; i < OpLength - 1; ++i)
         uret->push_back(u[i]);
+    
+    
+    for (Operator *op : A)
+        delete op;
+
+    for (Operator *op : B)
+        delete op;
+    
+    for (vector<double> *re : r)
+        delete re;
+
+    
+    
+    delete S;
+    delete I;
     
     return uret;
     
