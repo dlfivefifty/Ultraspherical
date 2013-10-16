@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FE9FF0C9-B3D3-4FAE-B2F9-99A4B52A9C7F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Ultraspherical</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D165B779-C859-4AD0-961C-F89E2F20CD19</key>
+		<string>https://github.com/dlfivefifty/Ultraspherical.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Ultraspherical.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D165B779-C859-4AD0-961C-F89E2F20CD19</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/dlfivefifty/Ultraspherical.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D165B779-C859-4AD0-961C-F89E2F20CD19</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D165B779-C859-4AD0-961C-F89E2F20CD19</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Ultraspherical</string>
+		</dict>
+	</array>
+</dict>
+</plist>
