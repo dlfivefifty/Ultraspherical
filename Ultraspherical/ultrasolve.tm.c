@@ -1,6 +1,6 @@
 /*
- * This file automatically produced by /Applications/Mathematica.app/SystemFiles/Links/MathLink/DeveloperKit/MacOSX-x86-64/CompilerAdditions/mprep from:
- *	Ultraspherical/ultrasolve.tm
+ * This file automatically produced by mprep from:
+ *	ultrasolve.tm
  * mprep Revision 16 Copyright (c) Wolfram Research, Inc. 1990-2009
  */
 
@@ -287,12 +287,10 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 #endif /* (DARWIN_MATHLINK && CARBON_MPREP */
 
 /********************************* end header *********************************/
-
-
-# line 2 "Ultraspherical/ultrasolve.tm"
 void ultraSolve P(( double *, long, double *, long, double *, long, double *, long));
 
-# line 296 "Ultraspherical/ultrasolve.tm.c"
+void poissonSolve P(( double *, long, double *, long, double *, long, double *, long));
+
 
 
 void ultraSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2, double * _tp3, long _tpl3, double * _tp4, long _tpl4));
@@ -330,13 +328,49 @@ L0:	return res;
 } /* _tr0 */
 
 
+void poissonSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2, double * _tp3, long _tpl3, double * _tp4, long _tpl4));
+
+#if MLPROTOTYPES
+static int _tr1( MLINK mlp)
+#else
+static int _tr1(mlp) MLINK mlp;
+#endif
+{
+	int	res = 0;
+	double * _tp1;
+	long _tpl1;
+	double * _tp2;
+	long _tpl2;
+	double * _tp3;
+	long _tpl3;
+	double * _tp4;
+	long _tpl4;
+	if ( ! MLGetRealList( mlp, &_tp1, &_tpl1) ) goto L0;
+	if ( ! MLGetRealList( mlp, &_tp2, &_tpl2) ) goto L1;
+	if ( ! MLGetRealList( mlp, &_tp3, &_tpl3) ) goto L2;
+	if ( ! MLGetRealList( mlp, &_tp4, &_tpl4) ) goto L3;
+	if ( ! MLNewPacket(mlp) ) goto L4;
+
+	poissonSolve(_tp1, _tpl1, _tp2, _tpl2, _tp3, _tpl3, _tp4, _tpl4);
+
+	res = 1;
+L4:	MLDisownRealList( mlp, _tp4, _tpl4);
+L3:	MLDisownRealList( mlp, _tp3, _tpl3);
+L2:	MLDisownRealList( mlp, _tp2, _tpl2);
+L1:	MLDisownRealList( mlp, _tp1, _tpl1);
+
+L0:	return res;
+} /* _tr1 */
+
+
 static struct func {
 	int   f_nargs;
 	int   manual;
 	int   (*f_func)P((MLINK));
 	const char  *f_name;
-	} _tramps[1] = {
-		{ 4, 0, _tr0, "ultraSolve" }
+	} _tramps[2] = {
+		{ 4, 0, _tr0, "ultraSolve" },
+		{ 4, 0, _tr1, "poissonSolve" }
 		};
 
 static const char* evalstrs[] = {
@@ -345,9 +379,14 @@ static const char* evalstrs[] = {
 	"+ ... + an T_n(x)) u' + (b0 T0(x) + ... + bn T_n(x)) u = f0 T0(x",
 	") + ... + fn T_n(x), u(-1) = bc0, u(1) = bc1.\"",
 	(const char*)0,
+	"PoissonSolve::usage = \"UltrasphericalSolve[{a0,...,an},{b0,...,b",
+	"n},{bc0,bc1},{f0,...,fn}] solves the ODE u'' + (a0 T0(x) + ... +",
+	" an T_n(x)) u' + (b0 T0(x) + ... + bn T_n(x)) u = f0 T0(x) + ...",
+	" + fn T_n(x), u(-1) = bc0, u(1) = bc1.\"",
+	(const char*)0,
 	(const char*)0
 };
-#define CARDOF_EVALSTRS 1
+#define CARDOF_EVALSTRS 2
 
 static int _definepattern P(( MLINK, char*, char*, int));
 
@@ -366,6 +405,8 @@ int MLInstall(mlp) MLINK mlp;
 	_res = MLConnect(mlp);
 	if (_res) _res = _definepattern(mlp, (char *)"UltrasphericalSolve[i_List,j_List,bc_List,fn_List]", (char *)"{ i, j, bc, fn }", 0);
 	if (_res) _res = _doevalstr( mlp, 0);
+	if (_res) _res = _definepattern(mlp, (char *)"PoissonSolve[i_List,j_List,bc_List,fn_List]", (char *)"{ i, j, bc, fn }", 1);
+	if (_res) _res = _doevalstr( mlp, 1);
 	if (_res) _res = MLPutSymbol( mlp, "End");
 	if (_res) _res = MLFlush( mlp);
 	return _res;
@@ -378,7 +419,7 @@ int MLDoCallPacket( MLINK mlp)
 int MLDoCallPacket( mlp) MLINK mlp;
 #endif
 {
-	return _MLDoCallPacket( mlp, _tramps, 1);
+	return _MLDoCallPacket( mlp, _tramps, 2);
 } /* MLDoCallPacket */
 
 /******************************* begin trailer ********************************/

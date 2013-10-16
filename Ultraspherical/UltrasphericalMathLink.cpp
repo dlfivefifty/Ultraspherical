@@ -17,11 +17,14 @@
 //
 ////#include "mex.h"
 #include "AdaptiveQR.h"
+#include "OlversAlgorithm.h"
 
 #include <vector>
 
 
 extern "C" void ultraSolve( double *, long, double *, long, double *, long, double *, long);
+
+extern "C" void poissonSolve( double *, long, double *, long, double *, long, double *, long);
 
 
 void toUSeries(double *fin, long fn)
@@ -75,6 +78,32 @@ void toC2Series(double *fin, long fn)
 }
 
 
+void poissonSolve( double *ain, long n, double *bin, long m, double *bc, long k, double *fin, long fn)
+{
+//    ultraSolve(ain,n,bin,m,bc,k,fin,fn);
+    
+    vector<double> f;
+    
+    f.push_back(0.0625);
+    f.push_back(0.0625);
+    
+    vector<vector<double> *> *uret = poisson(&f);
+    
+    
+    double cret[3];
+    
+  //  MLPutReal64List(stdlink, cret, (int)3);
+    
+    cret[0] = 1;
+    MLPutFunction(stdlink, "List",(int)(*uret)[0]->size());
+    for (int i = 0; i < (*uret)[0]->size(); ++i) {
+        MLPutDouble(stdlink, (*(*uret)[0])[i]);
+    }
+//    MLPutDouble(stdlink, 1);
+//    MLPutDouble(stdlink, 2);
+//    MLPutReal64List(stdlink, cret, (int)3);
+}
+
 void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, double *fin, long fn)
 {
     vector<double> a, b;
@@ -106,17 +135,17 @@ void ultraSolve( double *ain, long n, double *bin, long m, double *bc, long k, d
     }
 
     
-    vector<double> c = QRSolve(drbnd,f);   
+    vector<double> *c = QRSolve(drbnd,f);
     
     
-    double cret[c.size()];
+    double cret[c->size()];
     
-    for(long i = 0; i < c.size(); i++)
-        cret[i] = c[i];
+    for(long i = 0; i < c->size(); i++)
+        cret[i] = (*c)[i];
     
     
     
-    MLPutReal64List(stdlink, cret, (int)c.size());
+    MLPutReal64List(stdlink, cret, (int)c->size());
     
     delete drbnd;
     
