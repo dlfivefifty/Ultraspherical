@@ -132,14 +132,15 @@ double norm(vector<double> *a)
     return sqrt(ret);
 }
 
-vector<vector<double> *> *poisson(vector<double> *f)
-{
-    return adaptiveSylvester(new SkipOperator(new RSOperator(), 0, 2, 0, 2),f);
-}
-
-vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f)
+vector<vector<double> *> *poisson(vector<vector<double> *> *F)
 {
     
+    
+    return adaptiveSylvester(new SkipOperator(new RSOperator(), 0, 2, 0, 2),F);
+}
+
+vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double> *> *F)
+{
     
     Operator *S = new SavedOperator(Sin);
     Operator *I = new SavedOperator(ConstantOperator(1));
@@ -150,9 +151,18 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f)
     
     vector<vector<double> *> r;
     
+    unsigned long n = F->size();
     
-    r.push_back(vectorTimes(f, gamma(1)));
-    r.push_back(vectorTimes(r[0], -1));
+    if (n == 0)
+        return new vector<vector<double> *>;
+    
+    
+    r.push_back(vectorTimes((*F)[0], gamma(1)));
+    
+    if (1 < n)
+        r.push_back(vectorPlus((*F)[1],vectorTimes(r[0], -1)));
+    else
+        r.push_back(vectorTimes(r[0], -1));
     
     
     vector<Operator *> A, B;
@@ -164,9 +174,21 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f)
     
 #define dabs(d) d < 0? -d : d
     
+    
+
+    
     for (unsigned long i = 2;  norm(r[i-2])/dabs(B[i-2]->getEntry(0,0)) > 1.0E-16; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
-        r.push_back(vectorTimes(r[i-1], -1));
+        
+        if (i < n)
+            r.push_back(vectorPlus((*F)[i],vectorTimes(r[i-1], -1)));
+        else
+            r.push_back(vectorTimes(r[i-1], -1));
+            
+
+
+        
+        
         A.push_back((*S) + (*I)*S->getEntry(i,i));
         B.push_back(*((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i)));
     }

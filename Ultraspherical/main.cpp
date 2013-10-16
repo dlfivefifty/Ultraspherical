@@ -263,21 +263,25 @@ void airyExample()
 
 void olversAlgorithm()
 {
+    vector<vector<double> *> F;
     vector<double> f;
+    f.push_back(0.0625);
+    f.push_back(0.0625);
     
-    f.push_back(0.0625);
-    f.push_back(0.0625);
+    F.push_back(&f);
 
-    vector<vector<double> *> *uret = poisson(&f);
+    vector<vector<double> *> *uret = poisson(&F);
     
     int i = 0;
     for (vector<double> * ui  : *uret) {
         cout <<endl << "u[" << i <<"]: "<< endl;
         printvec(*ui);
         ++i;
+        
+        delete ui;
     }
 //
-    
+    delete uret;
     
 //    for (unsigned long i = 0; i < OpLength; ++i) {
 ////        printvec(*r[i]);

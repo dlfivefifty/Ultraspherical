@@ -29,8 +29,8 @@ public:
 Operator *RSListOperator(double *, double *, unsigned long n);
 
 
-vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<double> *f);
-vector<vector<double> *> *poisson(vector<double> *);
+vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double> *> *);
+vector<vector<double> *> *poisson(vector<vector<double> *> *f);
 
 
 #endif /* defined(__Ultraspherical__OlversAlgorithm__) */
