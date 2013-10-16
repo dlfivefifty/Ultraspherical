@@ -95,10 +95,14 @@ void poissonSolve( double *ain, long n, double *bin, long m, double *bc, long k,
   //  MLPutReal64List(stdlink, cret, (int)3);
     
     cret[0] = 1;
-    MLPutFunction(stdlink, "List",(int)(*uret)[0]->size());
-    for (int i = 0; i < (*uret)[0]->size(); ++i) {
-        MLPutDouble(stdlink, (*(*uret)[0])[i]);
+    MLPutFunction(stdlink, "List", (int)uret->size());
+    
+    for (vector<double> * j : *uret) {
+        MLPutFunction(stdlink, "List",(int)j->size());
+        for (double i : *j)
+            MLPutDouble(stdlink, i);
     }
+
 //    MLPutDouble(stdlink, 1);
 //    MLPutDouble(stdlink, 2);
 //    MLPutReal64List(stdlink, cret, (int)3);
