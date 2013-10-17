@@ -175,10 +175,12 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
     
     
     
+#define Rsup(i) ((*B[i-1])*(beta(i)*gamma(i+1)))
+#define Rdiag(i) (((*B[i])*gamma(i+1)))
     
 
     double err = norm(r[0])/fabs(B[0]->getEntry(0,0));
-    for (unsigned long i = 2;  err > 1.0E-30; ++i) {
+    for (unsigned long i = 2;  err > 1.0E-16; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         
         if (i < n)
@@ -193,8 +195,9 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
         A.push_back((*S) + (*I)*S->getEntry(i,i));
         B.push_back(*((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i)));
         
+        FilledBandedOperator fillop = FilledBandedOperator(-1-((int)i-1), Rdiag(i-1));
         
-        err = norm(r[i-1])/fabs(B[i-1]->getEntry(0,0));
+        err = norm(QRSolve(&fillop, *r[i-1]));
     }
     
     const long OpLength = r.size();
@@ -208,8 +211,7 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
     
     
     
-#define Rsup(i) ((*B[i-1])*(beta(i)*gamma(i+1)))
-#define Rdiag(i) (((*B[i])*gamma(i+1)))
+
 
     
 
