@@ -1,6 +1,6 @@
 
 #include "UltrasphericalOperator.h"
-#include <math.h>
+#include <cmath>
 #include "AdaptiveQR.h"
 // TODO: Better to construct the Hankel vector in reverse so that it can be pop_backed as the ConvertMult vector is formed.
 
@@ -20,7 +20,7 @@ double DerivativeOperator::getEntry(unsigned long row, unsigned long col)
 {
     if (from == 0) {
         if (row == col - to)
-            return pow(2,to-1)*factorial(to-1)*(to + row);
+            return pow((double)2,(double)(to-1))*factorial(to-1)*(to + row);
         else
             return 0;
 

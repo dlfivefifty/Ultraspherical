@@ -8,10 +8,11 @@
 
 #include "AdaptiveQR.h"
 
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iomanip>
+#include <iostream>
 
 
 void printvec(vector<double> c)

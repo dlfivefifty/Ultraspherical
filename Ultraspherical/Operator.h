@@ -10,7 +10,7 @@
 #define Ultraspherical_Operator_h
 
 
-#include <iostream>
+//#include <iostream>
 #include <vector>
 
 using namespace std; 

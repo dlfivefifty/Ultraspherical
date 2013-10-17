@@ -9,7 +9,7 @@
 #ifndef Ultraspherical_BandedOperator_extras_h
 #define Ultraspherical_BandedOperator_extras_h
 
-#include <iostream>
+//#include <iostream>
 #include <vector>
 
 #include "Operator.h"

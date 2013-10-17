@@ -12,10 +12,10 @@
 #include "UltrasphericalOperator.h"
 #include "OlversAlgorithm.h"
 #include "AdaptiveQR.h"
-#include <time.h>
-#include <math.h>
+//#include <time.h>
+//#include <math.h>
 
-
+#include <cmath>
 //void smallbandExample()
 //{
 //    cout << "SMALL BAND" <<endl;
@@ -237,7 +237,7 @@ void airyExample()
         clock_t t1; clock_t t2;
         vector<double> a;
         a.push_back(0);
-        a.push_back(-pow(10, k));
+        a.push_back(-pow((double)10, (double)k));
         
         vector<double> b;
         b.push_back(left[k]);

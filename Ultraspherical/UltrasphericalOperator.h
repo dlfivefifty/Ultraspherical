@@ -3,7 +3,7 @@
 #ifndef Ultraspherical_Multiplication_Matrix_h
 #define Ultraspherical_Multiplication_Matrix_h
 
-#include <iostream>
+//#include <iostream>
 #include "FilledBandedOperator.h" 
 #include "Operator.h"
 #include <vector>

@@ -11,6 +11,7 @@
 #include "AdaptiveQR.h"
 
 #include <cmath>
+//#include <iostream>
 
 
 
@@ -172,12 +173,12 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
     B.push_back((*A[0])*1);  //Hack to copy A[0]
     B.push_back(*((*B[0])*A[1]) + (*I)*(-beta(0)*gamma(1)));
     
-#define dabs(d) d < 0? -d : d
+    
     
     
 
-    
-    for (unsigned long i = 2;  norm(r[i-2])/dabs(B[i-2]->getEntry(0,0)) > 1.0E-16; ++i) {
+    double err = norm(r[0])/fabs(B[0]->getEntry(0,0));
+    for (unsigned long i = 2;  err > 1.0E-30; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         
         if (i < n)
@@ -191,6 +192,9 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
         
         A.push_back((*S) + (*I)*S->getEntry(i,i));
         B.push_back(*((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i)));
+        
+        
+        err = norm(r[i-1])/fabs(B[i-1]->getEntry(0,0));
     }
     
     const long OpLength = r.size();

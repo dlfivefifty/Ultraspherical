@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <iomanip>
-#include <math.h>
+#include <cmath>
 
 
 
