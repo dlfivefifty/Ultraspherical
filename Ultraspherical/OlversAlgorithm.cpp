@@ -11,8 +11,8 @@
 #include "AdaptiveQR.h"
 
 #include <cmath>
-//#include <iostream>
-
+#include <iostream>
+#include <iomanip>
 
 
 Operator *ConstantOperator(double c)
@@ -180,7 +180,7 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
     
 
     double err = norm(r[0])/fabs(B[0]->getEntry(0,0));
-    for (unsigned long i = 2;  err > 1.0E-16; ++i) {
+    for (unsigned long i = 2;  err > 1.0E-20; ++i) {
         r[i - 1] =  vectorTimes(r[i-1], gamma(i));
         
         if (i < n)
@@ -195,9 +195,13 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
         A.push_back((*S) + (*I)*S->getEntry(i,i));
         B.push_back(*((*B[i-1])*A[i]) + (*B[i-2])*(-beta(i-1)*gamma(i)));
         
-        FilledBandedOperator fillop = FilledBandedOperator(-1-((int)i-1), Rdiag(i-1));
+        Rdiag(i-1)->print();
         
-        err = norm(QRSolve(&fillop, *r[i-1]));
+        FilledBandedOperator fillop = FilledBandedOperator(-1-((int)i-1), Rdiag(i-1));
+        vector<double> *uc = QRSolve(&fillop, *r[i-1]);
+        cout << std::setprecision(16) << (*r[i-1])[0] << " " << (*uc) [0] <<endl;
+        err = norm(uc);
+        delete uc;
     }
     
     const long OpLength = r.size();
@@ -232,7 +236,7 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
         
         
         //TODO: better tol
-        vectorDrop(r[i],norm(r[i])*10E-20);
+        vectorDrop(r[i],norm(r[i])*10E-30);
         
         fillop = FilledBandedOperator(-1-i, Rdiag(i));
         u[i] = QRSolve(&fillop, *r[i]);
@@ -242,7 +246,7 @@ vector<vector<double> *> *adaptiveSylvester(Operator *Sin, vector<vector<double>
     
     i = 0;
     r[i] = vectorPlus(r[i],vectorTimes((u[i+1]),-beta(i)*gamma(i+1)));
-    vectorDrop(r[i],norm(r[i])*10E-20);
+    vectorDrop(r[i],norm(r[i])*10E-30);
     
     fillop = FilledBandedOperator(-1-i, Rdiag(i));
     u[i] = QRSolve(&fillop, *r[i]);

@@ -24,6 +24,7 @@
 		17EBCB79157CCC3D00C466D4 /* Ultraspherical.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 17EBCB78157CCC3D00C466D4 /* Ultraspherical.1 */; };
 		17EBCB84157CCD3600C466D4 /* FilledBandedOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17EBCB83157CCD3600C466D4 /* FilledBandedOperator.cpp */; };
 		17EBCB89157CCFAC00C466D4 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17EBCB88157CCFAC00C466D4 /* Accelerate.framework */; };
+		17F163C0180F912F00E60A43 /* OlversAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 170A9CD51806AE0F0048407B /* OlversAlgorithm.cpp */; };
 		17FB5EEA1598343B0080C627 /* UltrasphericalOperator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17FB5EE8159830DA0080C627 /* UltrasphericalOperator.cpp */; };
 /* End PBXBuildFile section */
 
@@ -134,9 +135,9 @@
 			isa = PBXGroup;
 			children = (
 				17EBCB75157CCC3D00C466D4 /* Ultraspherical */,
+				170A9CD41806ADCA0048407B /* Olver's Algorithm */,
 				177909D615BBF0A9008759E4 /* MathLink */,
 				177CE3EA15BC21F900067F87 /* Matlab */,
-				170A9CD41806ADCA0048407B /* Olver's Algorithm */,
 				17EBCB88157CCFAC00C466D4 /* Accelerate.framework */,
 				17EBCB73157CCC3D00C466D4 /* Products */,
 			);
@@ -258,6 +259,7 @@
 				177909C115BBF007008759E4 /* UltrasphericalOperator.cpp in Sources */,
 				177909C215BBF007008759E4 /* AdaptiveQR.cpp in Sources */,
 				170A9CD3180427180048407B /* Operator.cpp in Sources */,
+				17F163C0180F912F00E60A43 /* OlversAlgorithm.cpp in Sources */,
 				177909D815BBF0E1008759E4 /* ultrasolve.tm.c in Sources */,
 				177909DA15BBF0FB008759E4 /* UltrasphericalMathLink.cpp in Sources */,
 			);

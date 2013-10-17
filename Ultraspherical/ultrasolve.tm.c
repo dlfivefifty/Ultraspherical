@@ -1,6 +1,6 @@
 /*
- * This file automatically produced by mprep from:
- *	ultrasolve.tm
+ * This file automatically produced by /Applications/Mathematica.app/SystemFiles/Links/MathLink/DeveloperKit/MacOSX-x86-64/CompilerAdditions/mprep from:
+ *	Ultraspherical/ultrasolve.tm
  * mprep Revision 16 Copyright (c) Wolfram Research, Inc. 1990-2009
  */
 
@@ -287,10 +287,18 @@ MLYDEFN( devyield_result, MLDefaultYielder, ( MLINK mlp, MLYieldParameters yp))
 #endif /* (DARWIN_MATHLINK && CARBON_MPREP */
 
 /********************************* end header *********************************/
+
+
+# line 2 "Ultraspherical/ultrasolve.tm"
 void ultraSolve P(( double *, long, double *, long, double *, long, double *, long));
 
+# line 296 "Ultraspherical/ultrasolve.tm.c"
+
+
+# line 15 "Ultraspherical/ultrasolve.tm"
 void poissonSolve P(( void ));
 
+# line 302 "Ultraspherical/ultrasolve.tm.c"
 
 
 void ultraSolve P(( double * _tp1, long _tpl1, double * _tp2, long _tpl2, double * _tp3, long _tpl3, double * _tp4, long _tpl4));

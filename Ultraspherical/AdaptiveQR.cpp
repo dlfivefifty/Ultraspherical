@@ -41,7 +41,8 @@ vector<double> *QRSolve(FilledBandedOperator *B,vector<double> c)
     
 //    cout<<"colsize"<<B->columnSize(0)<<endl;
     
-    while (error > 1E-20  || row1 < cn) {
+    //TODO:better error
+    while (error > 1E-100  || row1 < cn) {
         
         col++;
         row1 = col;
@@ -76,8 +77,8 @@ vector<double> *QRSolve(FilledBandedOperator *B,vector<double> c)
     }
     
 
-//    B->print();
-//        printvec(c);       
+    
+    //Back substitition:
     
     
     vector<double> *r = new vector<double>;

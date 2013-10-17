@@ -82,7 +82,7 @@ void poissonSolve( void)
 {
 //    ultraSolve(ain,n,bin,m,bc,k,fin,fn);
     
-    vector<vector<double> *> fin;
+    vector<vector<double> *> F;
     
     const char *head;
     int n,m;
@@ -102,40 +102,32 @@ void poissonSolve( void)
             fk->push_back(d);
         }
         
-        fin.push_back(fk);
+        F.push_back(fk);
     }
 
-
-    MLPutFunction(stdlink, "List", (int)fin.size());
-
-    for (vector<double> * j : fin) {
-        MLPutFunction(stdlink, "List",(int)j->size());
-        for (double i : *j)
-            MLPutDouble(stdlink, i);
-    }
-
-
     
     
-//    
-//    f.push_back(0.0625);
-//    f.push_back(0.0625);
-    
-//    vector<vector<double> *> *uret = poisson(&f);
-//    
-//    
-//    double cret[3];
-//    
-//  //  MLPutReal64List(stdlink, cret, (int)3);
-//    
-//    cret[0] = 1;
-//    MLPutFunction(stdlink, "List", (int)uret->size());
-//    
-//    for (vector<double> * j : *uret) {
+//
+//    MLPutFunction(stdlink, "List", (int)F.size());
+//
+//    for (vector<double> * j : F) {
 //        MLPutFunction(stdlink, "List",(int)j->size());
 //        for (double i : *j)
 //            MLPutDouble(stdlink, i);
 //    }
+
+
+    
+    vector<vector<double> *> *uret = poisson(&F);
+//    
+
+    MLPutFunction(stdlink, "List", (int)uret->size());
+    
+    for (vector<double> * j : *uret) {
+        MLPutFunction(stdlink, "List",(int)j->size());
+        for (double i : *j)
+            MLPutDouble(stdlink, i);
+    }
 
 }
 
