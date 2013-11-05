@@ -60,6 +60,7 @@ ConversionMatrix;
 ToCSeries;
 CSeries;
 USeries;
+Ultraop;
 Begin["Private`"];
 
 
@@ -757,6 +758,16 @@ ConversionMatrix[\[Lambda]_Integer,n_Integer]:=ConversionMatrix[0->\[Lambda],n];
 ToCSeries[k_,u_]:=ConversionMatrix[k,Length[u]].u;
 CSeries[k_,f_]:=ConversionMatrix[k,Length[f]].DCT[f];
 USeries[f_]:=f//DCT//ToChebyshevUSeries;
+
+
+Ultraop[opi_,u_,n_Integer]:=Ultraop[opi,u,{n,n}];
+Ultraop[opi_,u_,{r_Integer,p_Integer}]:=Module[{k,m,op,n},
+n=Max[r,p];
+op=opi/.u[1]->{OneVector[n]};
+op=op/.u[-1]->{AlternatingVector[n]};
+m=Reap[op//.Derivative[k_][_]:>Sow[k]]//Last//Max;
+PadRight[Join@@(op/.{Derivative[m][u]:>DerivativeMatrix[m,n],Derivative[k_][u]:>ConversionMatrix[k->m,n].DerivativeMatrix[k,n],u:>ConversionMatrix[m,n]}),{r,p}]
+];
 
 
 End[];
