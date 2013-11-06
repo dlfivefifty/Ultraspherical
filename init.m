@@ -754,19 +754,27 @@ ConversionMatrix[\[Lambda]_Integer->j_Integer,n_Integer]/;j==\[Lambda]+1:=Sparse
 ConversionMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]:=ConversionMatrix[\[Lambda]+1->\[Mu],n].ConversionMatrix[\[Lambda]->\[Lambda]+1,n];
 ConversionMatrix[\[Lambda]_Integer,n_Integer]:=ConversionMatrix[0->\[Lambda],n];
 
+DerivativeMatrix[\[Lambda]_Integer->\[Mu]_Integer,Line[{a_,b_}],n_Integer]:=(2/(b-a))^(\[Mu]-\[Lambda]) DerivativeMatrix[\[Lambda]->\[Mu],n];
+DerivativeMatrix[\[Mu]_Integer,Line[{a_,b_}],n_Integer]:=(2/(b-a))^\[Mu] DerivativeMatrix[\[Mu],n];
 
 ToCSeries[k_,u_]:=ConversionMatrix[k,Length[u]].u;
 CSeries[k_,f_]:=ConversionMatrix[k,Length[f]].DCT[f];
 USeries[f_]:=f//DCT//ToChebyshevUSeries;
+FromUSeries[ls_List]:=ls//ToChebyshevTSeries;
+FromCSeries[k_Integer,u_List]:=LinearSolve[ConversionMatrix[k,Length[u]],u];
+
 
 
 Ultraop[opi_,u_,n_Integer]:=Ultraop[opi,u,{n,n}];
-Ultraop[opi_,u_,{r_Integer,p_Integer}]:=Module[{k,m,op,n},
+Ultraop[opi_,u_,{r_Integer,p_Integer}]:=Ultraop[opi,u,UnitInterval,{r,p}];
+Ultraop[opi_,u_,Line[{a_,b_}],n_Integer]:=Ultraop[opi,u,Line[{a,b}],{n,n}];
+Ultraop[opi_?((!ListQ[#])&),u_,Line[{a_,b_}],{r_Integer,p_Integer}]:=Ultraop[{opi},u,Line[{a,b}],{r,p}];
+Ultraop[opi_List,u_,Line[{a_,b_}],{r_Integer,p_Integer}]:=Module[{k,m,op,n},
 n=Max[r,p];
-op=opi/.u[1]->{OneVector[n]};
-op=op/.u[-1]->{AlternatingVector[n]};
+op=opi/.u[_?(#~NEqual~b&)]->{OneVector[n]};
+op=op/.u[_?(#~NEqual~a&)]->{AlternatingVector[n]};
 m=Reap[op//.Derivative[k_][_]:>Sow[k]]//Last//Max;
-PadRight[Join@@(op/.{Derivative[m][u]:>DerivativeMatrix[m,n],Derivative[k_][u]:>ConversionMatrix[k->m,n].DerivativeMatrix[k,n],u:>ConversionMatrix[m,n]}),{r,p}]
+PadRight[Join@@(op/.{Derivative[m][u]:>DerivativeMatrix[m,Line[{a,b}],n],Derivative[k_][u]:>ConversionMatrix[k->m,n].DerivativeMatrix[k,Line[{a,b}],n],u:>ConversionMatrix[m,n]}),{r,p}]
 ];
 
 
