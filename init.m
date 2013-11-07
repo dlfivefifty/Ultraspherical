@@ -61,6 +61,9 @@ ToCSeries;
 CSeries;
 USeries;
 Ultraop;
+PDESolve;
+FromUSeries;FromCSeries;
+Dirichlet;Neumann;
 Begin["Private`"];
 
 
@@ -745,11 +748,11 @@ KellerSolve[\[Epsilon],f//DCT]//InverseDCT//Fun
 ];
 
 
-DerivativeMatrix[0->1,n_Integer]:=SparseArray[DerivativeOperator[1],{n,n}];
+DerivativeMatrix[0->1,n_Integer]:=Module[{i,j},SparseArray[{i_,j_}/;j==i+1:>i,{n,n}]];
 DerivativeMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]/;\[Mu]==\[Lambda]+1:=2 \[Lambda] Module[{i,j},SparseArray[{i_,j_}/;j==i+1->1,{n,n}]];
 DerivativeMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]:=DerivativeMatrix[\[Lambda]+1->\[Mu],n].DerivativeMatrix[\[Lambda]->\[Lambda]+1,n];
 DerivativeMatrix[\[Lambda]_Integer,n_Integer]:=DerivativeMatrix[0->\[Lambda],n];
-ConversionMatrix[0->1,n_Integer]:=SparseArray[ConversionOperator[1],{n,n}];
+ConversionMatrix[0->1,n_Integer]:=Module[{i,j},SparseArray[{{1,1}->1,{i_,i_}->1/2,{i_,j_}/;j==i+2->-(1/2)},{n,n}]];
 ConversionMatrix[\[Lambda]_Integer->j_Integer,n_Integer]/;j==\[Lambda]+1:=SparseArray[Join[Table[{i,i}->\[Lambda]/(i-1+\[Lambda]),{i,n}],Table[{i,i+2}->-(\[Lambda]/(i+1+\[Lambda])),{i,n-2}]],{n,n}];
 ConversionMatrix[\[Lambda]_Integer->\[Mu]_Integer,n_Integer]:=ConversionMatrix[\[Lambda]+1->\[Mu],n].ConversionMatrix[\[Lambda]->\[Lambda]+1,n];
 ConversionMatrix[\[Lambda]_Integer,n_Integer]:=ConversionMatrix[0->\[Lambda],n];
@@ -776,6 +779,228 @@ op=op/.u[_?(#~NEqual~a&)]->{AlternatingVector[n]};
 m=Reap[op//.Derivative[k_][_]:>Sow[k]]//Last//Max;
 PadRight[Join@@(op/.{Derivative[m][u]:>DerivativeMatrix[m,Line[{a,b}],n],Derivative[k_][u]:>ConversionMatrix[k->m,n].DerivativeMatrix[k,Line[{a,b}],n],u:>ConversionMatrix[m,n]}),{r,p}]
 ];
+
+
+NonsingularPermute[A_,n_]:=Module[{k,KK,P},
+k=1;
+KK=A//Length;
+While[MatrixRank[A[[All,k;;k+KK-1]]]<KK,k++];
+P=Join[
+Range[k,k+KK-1],
+Range[1,k-1],
+Range[k+KK,n]];
+IdentityMatrix[n][[P]]\[Transpose]
+];
+NonsingularPermute[A_?VectorQ,n_]:=Module[{k,KK,P},
+k=1;
+While[A[[k]]//NZeroQ,k++];
+P=Join[
+{k},
+Range[1,k-1],
+Range[k+1,n]];
+IdentityMatrix[n][[P]]\[Transpose]
+];
+NonsingularPermute[{},n_]:=IdentityMatrix[n];
+
+
+FormMatrix[({
+ {X11_?MatrixQ, X12_?MatrixQ},
+ {X21_?MatrixQ, X22_?MatrixQ}
+})]:=BlockMatrix[({
+ {X11, X12},
+ {X21, X22}
+})];
+FormMatrix[({
+ {{}, {}},
+ {X21_?MatrixQ, X22_?MatrixQ}
+})]:=Join[X21\[Transpose],X22\[Transpose]]\[Transpose];
+FormMatrix[({
+ {{}, {}},
+ {X21_?VectorQ, X22_?MatrixQ}
+})]:=Join[{X21},X22\[Transpose]]\[Transpose];
+FormMatrix[({
+ {X11_?VectorQ, X12_?VectorQ},
+ {X21_?MatrixQ, X22_?MatrixQ}
+})]:=Join[
+{Join[X11,X12]},
+Join[X21\[Transpose],X22\[Transpose]]\[Transpose]];
+FormMatrix[({
+ {X11_?VectorQ, X12_?MatrixQ},
+ {X21_?VectorQ, X22_?MatrixQ}
+})]:=Join[{Join[X11,X21]},Join[X12,X22]\[Transpose]]\[Transpose];
+FormMatrix[({
+ {X11_?VectorQ, X12_?VectorQ},
+ {X21_?VectorQ, X22_?MatrixQ}
+})]:=Join[{Join[X11,X21]},Join[{X12},X22]\[Transpose]]\[Transpose];
+FormMatrix[({
+ {{}, X12_?MatrixQ},
+ {{}, X22_?MatrixQ}
+})]:=Join[X12,X22];
+FormMatrix[({
+ {{}, X12_?VectorQ},
+ {{}, X22_?MatrixQ}
+})]:=Join[{X12},X22];
+
+
+NumBC[Bx_?MatrixQ]:=Bx//Length;
+NumBC[_?VectorQ]:=1;
+NumBC[{}]:=0;
+
+
+
+
+RegularizeBCs[{{},{}},Lxin_,Mxin_,n_]:={{},{},Lxin,Mxin,IdentityMatrix[n]};
+RegularizeBCs[{Bxin_?VectorQ,Gxin_?VectorQ},Lxin_,Mxin_,n_]:=Module[{Px,Bx,Kx,Lx,Mx,Qx,Rx,Gx},
+Kx=Bxin//NumBC;
+Px=NonsingularPermute[Bxin,n];
+Rx=Bxin.Px;
+Lx=PadRight[Lxin,{n-Kx,n}].Px;Mx=PadRight[Mxin,{n-Kx,n}].Px;
+Gx=1/Rx[[1]] ( Gxin);
+Rx=1/Rx[[1]] Rx;
+
+{Rx,Gx,Lx,Mx,Px}
+];
+
+RegularizeBCs[{Bxin_?MatrixQ,Gxin_?MatrixQ},Lxin_,Mxin_,n_]:=Module[{Px,Bx,Kx,Lx,Mx,Qx,Rx,Gx},
+Kx=Bxin//NumBC;
+Px=NonsingularPermute[Bxin,n];
+Bx=Bxin.Px;
+Lx=PadRight[Lxin,{n-Kx,n}].Px;Mx=PadRight[Mxin,{n-Kx,n}].Px;
+{Qx,Rx}=Bx//QRDecomposition;
+Gx=Inverse[Rx[[All,;;Kx]]].Qx.( Gxin);
+Rx=Inverse[Rx[[All,;;Kx]]].Rx;
+
+{Rx,Gx,Lx,Mx,Px}
+];
+
+
+ReduceDOFs[{{},{},0},Mxin_,My_,Fin_]:={Mxin,Fin};
+
+ReduceDOFs[{Rx_?VectorQ,Gx_?VectorQ,1},Mxin_,My_,Fin_]:=Module[{F,k,Mx},
+F=Fin;
+Mx=Mxin;
+F=F-Outer[Times,Mx[[All,1]],(Gx.My\[Transpose])];
+Mx=Mx-Outer[Times,Mx[[All,1]],Rx];
+{Mx,F}
+];
+ReduceDOFs[{Rx_?MatrixQ,Gx_?MatrixQ,Kx_},Mxin_,My_,Fin_]:=Module[{F,k,Mx},
+F=Fin;
+Mx=Mxin;
+Do[F=F-Outer[Times,Mx[[All,k]],(Gx.My\[Transpose])[[k]]];
+Mx=Mx-Outer[Times,Mx[[All,k]],Rx[[k]]];
+,{k,Kx}];
+{Mx,F}
+];
+
+
+
+
+ReformX[X22_,{{},{},Kx_},{{},{},Ky_}]:=X22;
+ReformX[X22_,{{},{},Kx_},{Ry_?MatrixQ,Gy_?MatrixQ,Ky_}]:=Module[{X11,X12,X21},
+X11=X12={};
+X21=Gy[[All,Kx+1;;]]\[Transpose]-X22.Ry[[All,Ky+1;;]]\[Transpose];
+FormMatrix[({
+ {X11, X12},
+ {X21, X22}
+})]
+];
+
+ReformX[X22_,{{},{},Kx_},{Ry_?VectorQ,Gy_?VectorQ,Ky_}]:=Module[{X11,X12,X21},
+X11=X12={};
+X21=Gy[[Kx+1;;]]-X22.Ry[[Ky+1;;]];
+FormMatrix[({
+ {X11, X12},
+ {X21, X22}
+})]
+];
+
+ReformX[X22_,{Rx_?VectorQ,Gx_?VectorQ,Kx_},{Ry_?MatrixQ,Gy_?MatrixQ,Ky_}]:=Module[{X11,X12,X21},
+X12=Gx[[Ky+1;;]]-Rx[[Kx+1;;]].X22;
+X21=Gy[[All,Kx+1;;]]\[Transpose]-X22.Ry[[All,Ky+1;;]]\[Transpose];
+X11=Gx[[;;Ky]]-Rx[[Kx+1;;]].X21;
+If[!(X11~NEqual~(Gy[[All,1]]-X12.Ry[[All,Ky+1;;]]\[Transpose])),
+Message[PDESolve::incompatiblebcs,Norm[X11-(Gy[[All,;;Ky]]\[Transpose]-X12.Ry[[All,Ky+1;;]]\[Transpose])]]];
+
+FormMatrix[({
+ {X11, X12},
+ {X21, X22}
+})]
+];
+
+
+
+ReformX[X22_,{Rx_?MatrixQ,Gx_?MatrixQ,Kx_},{Ry_?MatrixQ,Gy_?MatrixQ,Ky_}]:=Module[{X11,X11alt,X12,X21},
+X12=Gx[[All,Ky+1;;]]-Rx[[All,Kx+1;;]].X22;
+X21=Gy[[All,Kx+1;;]]\[Transpose]-X22.Ry[[All,Ky+1;;]]\[Transpose];
+X11=Gx[[All,;;Ky]]-Rx[[All,Kx+1;;]].X21;
+X11alt=Gy[[All,;;Kx]]\[Transpose]-X12.Ry[[All,Ky+1;;]]\[Transpose];
+If[!(X11~NEqual~X11alt),Message[PDESolve::incompatiblebcs,Norm[X11-X11alt]]];
+
+FormMatrix[({
+ {X11, X12},
+ {X21, X22}
+})]
+];
+
+ReformX[X22_,{Rx_?MatrixQ,Gx_?MatrixQ,Kx_},{{},{},Ky_}]:=ReformX[X22\[Transpose],{{},{},Ky},{Rx\[Transpose],Gx\[Transpose],Kx}]\[Transpose];
+ReformX[X22_,{Rx_?VectorQ,Gx_?VectorQ,Kx_},{{},{},Ky_}]:=ReformX[X22\[Transpose],{{},{},Ky},{Rx,Gx,Kx}]\[Transpose];
+
+
+
+
+
+PDESolve[A_,{},{},Fin_]:=PDESolve[A,{{},{}},{{},{}},Fin];
+PDESolve[A_,{},by_,Fin_]:=PDESolve[A,{{},{}},by,Fin];
+
+
+PDESolve[A_,{Bxin_,gx:{__IFun}},by_,Fin_]:=PDESolve[A,{Bxin,PadRight[DCT@#,Dimensions[Fin][[2]]]&/@gx},by,Fin];
+PDESolve[A_,{Bxin_,gx_IFun},by_,Fin_]:=PDESolve[A,{Bxin,PadRight[DCT@gx,Dimensions[Fin][[2]]]},by,Fin];
+PDESolve[A_,bx_,{Byin_,gy:{__IFun}},Fin_]:=PDESolve[A,bx,{Byin,PadRight[DCT@#,Dimensions[Fin][[1]]]&/@gy},Fin];
+PDESolve[A_,bx_,{Byin_,gy_IFun},Fin_]:=PDESolve[A,bx,{Byin,PadRight[DCT@gy,Dimensions[Fin][[1]]]},Fin];
+
+PDESolve[A_,{Bxin_,gx:{__LFun}},by_,Fin_]:=PDESolve[A,{Bxin,ToList@FFT@SetLength[#,Dimensions[Fin][[2]]]&/@gx},by,Fin];
+PDESolve[A_,bx_,{Byin_,gy:{__LFun}},Fin_]:=PDESolve[A,bx,{Byin,ToList@FFT@SetLength[#,Dimensions[Fin][[1]]]&/@gy},Fin];
+PDESolve[A_,{Bxin_,gx_LFun},by_,Fin_]:=PDESolve[A,{Bxin,ToList@FFT@SetLength[gx,Dimensions[Fin][[2]]]},by,Fin];
+PDESolve[A_,bx_,{Byin_,gy_LFun},Fin_]:=PDESolve[A,bx,{Byin,ToList@FFT@SetLength[gy,Dimensions[Fin][[1]]]},Fin];
+
+PDESolve::incompatiblebcs="Incompatible boundary conditions: differs by `1`";
+
+PDESolve[({
+ {Lxin_, Lyin_},
+ {Mxin_, Myin_}
+}),{Bxin_,Gxin_List},{Byin_,Gyin_List},Fin_]:=Module[{Bx,By,Px,Py,Lx,Ly,Mx,My,Qx,Rx,Qy,Ry,Kx,Ky,Gx,Gy,F,X11,X22,X12,X21,n,m},
+
+Ky=Byin//NumBC;
+Kx=Bxin//NumBC;
+{n,m}=Dimensions[Fin];
+
+
+{Rx,Gx,Lx,Mx,Px}=RegularizeBCs[{Bxin,Gxin},Lxin,Mxin,n];
+{Ry,Gy,Ly,My,Py}=RegularizeBCs[{Byin,Gyin},Lyin,Myin,m];
+
+F=PadRight[Fin,{n-Kx,m-Ky}];
+
+If[Gx!={},Gx =Gx.Py];
+If[Gy!={},Gy =Gy.Px\[Transpose]];
+
+{Mx,F}=ReduceDOFs[{Rx,Gx,Kx},Mx,My,F];
+{Lx,F}=ReduceDOFs[{Rx,Gx,Kx},Lx,Ly,F];
+{My,F}=ReduceDOFs[{Ry,Gy,Ky},My,Mx,F\[Transpose]]//{#[[1]],#[[2]]\[Transpose]}&;
+{Ly,F}=ReduceDOFs[{Ry,Gy,Ky},Ly,Lx,F\[Transpose]]//{#[[1]],#[[2]]\[Transpose]}&;
+
+	
+X22=LyapunovSolve[{Lx[[All,Kx+1;;]],Mx[[All,Kx+1;;]]},{My[[All,Ky+1;;]]\[Transpose],Ly[[All,Ky+1;;]]\[Transpose]},F];
+
+
+
+Px.ReformX[X22,{Rx,Gx,Kx},{Ry,Gy,Ky}].Py\[Transpose]
+];
+
+
+
+
+Dirichlet[n_]:={ AlternatingVector[n],OneVector[n]}//N;
+Neumann[n_]:={NeumannOperator[-1][[1,;;n]],NeumannOperator[1][[1,;;n]]}//N;
 
 
 End[];
