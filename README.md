@@ -1,3 +1,10 @@
+THIS PACKAGE IS DEPRECATED
+==========================
+
+Please use the Julia implementation found in [`ApproxFun`](https://github.com/dlfivefifty/ApproxFun.jl)
+or the Matlab implementation in [`Chebfun`](http://www.chebfun.org).  We leave the original
+Readme below.  
+
 Ultraspherical
 ==============
 
